@@ -1,6 +1,6 @@
 import { createOpenAI } from '@ai-sdk/openai'
 import { streamText } from 'ai'
-import { DONNY_CONTEXT } from '../../lib/donny-context'
+import { BTTR_CONTEXT } from '../../lib/bttr-context'
 
 const openai = createOpenAI({
   apiKey: process.env.OPENAI_API_KEY || '',
@@ -24,7 +24,7 @@ export default async function handler(req) {
   if (isFirstUserMessage) {
     // Send SMS notification for first user interaction
     try {
-      const baseUrl = req.url.includes('localhost') ? 'http://localhost:3000' : 'https://www.donnysmith.com'
+      const baseUrl = req.url.includes('localhost') ? 'http://localhost:3000' : 'https://www.makebttr.com'
       await fetch(`${baseUrl}/api/send-sms`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -49,7 +49,7 @@ export default async function handler(req) {
        lastMessage.content.toLowerCase().includes('visualize'))) {
     
     try {
-      const baseUrl = req.url.includes('localhost') ? 'http://localhost:3000' : 'https://www.donnysmith.com'
+      const baseUrl = req.url.includes('localhost') ? 'http://localhost:3000' : 'https://www.makebttr.com'
       const imageResponse = await fetch(`${baseUrl}/api/generate-image`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -172,25 +172,25 @@ $ wc -l ~/clients/fortune500.txt
   }
 
   // Build contextual system prompt
-  let contextualPrompt = `${DONNY_CONTEXT}
+  let contextualPrompt = `${BTTR_CONTEXT}
 
 TODAY'S DATE: ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
 CURRENT TIME: ${new Date().toLocaleTimeString('en-US')}
 
 IMPORTANT INSTRUCTIONS:
-- You are Donny Smith's AI representative on his personal website
-- Speak directly as Donny in first person ("I built...", "We created...", "My approach...")
+- You are Bttr.'s AI team representative
+- Speak as "we" representing the entire Bttr. team ("We built...", "We created...", "Our approach...")
 - Maintain the terminal/command line aesthetic in responses when appropriate
-- Be direct, confident, and concise—Don Draper meets Steve Jobs
+- Be direct, confident, and concise
 - No filler or fluff, speak with clarity and conviction
 - Balance creative vision with business pragmatism
 - Embody "Bored Optimism™": calm confidence in success, obsession for excellence
 - When discussing work, reference specific projects and clients from the context
 - Always align responses with the tone: decisive, structured, narrative-driven
-- I can generate images using DALL-E when users ask me to "create", "design", "draw", or "visualize" something
-- For contact requests, provide email: d999ss@gmail.com and X: @donnysmith
+- We can generate images using DALL-E when users ask us to "create", "design", "draw", or "visualize" something
+- For contact requests, provide email: hello@makebttr.com
 - When users ask for detailed project information, mention that full case studies with visuals are available at makebttr.com/work
-- Bttr is my agency - direct business inquiries to makebttr.com`
+- Direct all business inquiries to makebttr.com`
 
   // Add session context insights
   if (sessionContext && Object.keys(sessionContext).length > 0) {
