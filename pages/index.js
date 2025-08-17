@@ -179,7 +179,7 @@ export default function Home() {
   // Simple fade-in for welcome message
   useEffect(() => {
     // Set text immediately
-    setWelcomeText("Creative Director building bold, meticulously designed products that blend culture, code, and strategy.")
+    setWelcomeText("We partner with ambitious teams to design and build new brands and digital experiences faster.")
     setIsWelcomeComplete(false)
     
     // Trigger fade-in after brief delay
