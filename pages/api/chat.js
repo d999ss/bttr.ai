@@ -115,15 +115,13 @@ drwxr-xr-x  Allergan Aesthetics - Medical practice experiences
 $ open makebttr.com/work
 → View full portfolio at makebttr.com`,
 
-      '/contact': `**Let's build**
+      '/contact': `**Let's build together**
 
-I work with leaders and teams to turn ambitious ideas into exceptional digital products. From defining the vision to designing the experience to launching at scale — every step is intentional, fast, and built for impact.
+We partner with leaders and teams to turn ambitious ideas into exceptional digital products. From defining the vision to designing the experience to launching at scale — every step is intentional, fast, and built for impact.
 
-[donny@makebttr.com](mailto:donny@makebttr.com)
+[hello@makebttr.com](mailto:hello@makebttr.com)
 
-[makebttr.com](https://makebttr.com)
-
-[@donnysmith](https://x.com/donnysmith)`,
+[makebttr.com](https://makebttr.com)`,
 
       '/philosophy': `$ cat ~/philosophy.md
 # Design Philosophy

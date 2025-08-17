@@ -23,12 +23,12 @@ export default function Home() {
   
   // Rotating placeholder messages
   const placeholderMessages = [
-    "Ask if I am available for new projects",
-    "Ask if I am taking on new clients",
-    "Ask if I am available for consulting work",
-    "Ask if I can help with your next project",
+    "Ask if we're available for new projects",
+    "Ask if we're taking on new clients",
+    "Ask if we're available for consulting work",
+    "Ask if we can help with your next project",
     "Ask about Bttr and our services",
-    "Ask about my design process",
+    "Ask about our design process",
     "Ask about our product strategy approach"
   ]
   
