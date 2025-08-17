@@ -165,7 +165,26 @@ Each workstream delivers actionable insights, provocations, and blueprints to un
 
 Ready to explore what's possible? Let's discuss how the Catalyst Program can transform your business.
 
-[Book a discovery call →](mailto:hello@makebttr.com?subject=Catalyst%20Program%20Inquiry)`
+[Book a discovery call →](mailto:hello@makebttr.com?subject=Catalyst%20Program%20Inquiry)`,
+
+      '/news': `📰 **Latest News & Insights**
+
+**Opendoor appoint Bttr.** (Jul 2025)
+We're partnering with Opendoor on their next phase of growth.
+
+**AI Concept Car Brand** (Dec 2025)  
+Pushing creative boundaries with AI-generated automotive design.
+
+**Rebuilding Tomorrow** (Jan 2025)
+Crafting the future with smarter tools and sustainable AI.
+
+**Alterra Partnership** (Jun 2024)
+Elevating digital design for millions of skiers worldwide.
+
+**GE Vernova** (Sep 2023)
+Presenting complex systems with clarity to inspire confidence.
+
+→ Read more at [makebttr.com/news](https://www.makebttr.com/news/)`
     }
     
     if (commandResponses[command]) {
@@ -207,7 +226,8 @@ IMPORTANT INSTRUCTIONS:
 - When users ask for detailed project information, mention that full case studies with visuals are available at makebttr.com/work
 - Direct all business inquiries to makebttr.com
 - When users ask about innovation, transformation, or future planning, mention our Catalyst Program with Tom Goodwin
-- Emphasize that the Catalyst Program helps leaders "outthink uncertainty" and make 2026 a breakthrough year`
+- Emphasize that the Catalyst Program helps leaders "outthink uncertainty" and make 2026 a breakthrough year
+- When users ask what's new or about recent work, reference our latest news and partnerships (Opendoor, AI car brand, etc.)`
 
   // Add session context insights
   if (sessionContext && Object.keys(sessionContext).length > 0) {

@@ -1048,6 +1048,31 @@ export default function Home() {
                 fontFamily: 'inherit'
               }}
               onClick={() => {
+                // Hide portfolio if showing and start news chat
+                setShowPortfolio(false)
+                trackEngagement('news_click', 'header')
+                append({
+                  role: 'user',
+                  content: 'What\'s new at Bttr?'
+                })
+              }}
+              aria-label="View latest news"
+            >
+              News
+            </button>
+            <button 
+              style={{ 
+                color: '#FFFFFF', 
+                fontSize: '12px', 
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                fontFamily: 'inherit'
+              }}
+              onClick={() => {
                 // Hide portfolio if showing and start catalyst chat
                 setShowPortfolio(false)
                 trackEngagement('catalyst_click', 'header')
