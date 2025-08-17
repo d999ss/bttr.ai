@@ -1,4 +1,4 @@
-# Bttr AI Assistant
+# Bttr. AI Assistant
 
 An AI assistant for makebttr.com that helps visitors explore creative solutions and make things better with AI.
 
