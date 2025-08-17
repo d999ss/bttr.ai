@@ -1021,10 +1021,10 @@ export default function Home() {
               onClick={handleNameClick}
               style={{ 
                 color: '#FFFFFF', 
-                fontSize: '12px', 
+                fontSize: '16px', 
                 whiteSpace: 'nowrap', 
                 margin: 0, 
-                fontWeight: 'normal',
+                fontWeight: '600',
                 fontFamily: 'inherit',
                 cursor: 'pointer',
                 transition: 'opacity 0.2s ease'
