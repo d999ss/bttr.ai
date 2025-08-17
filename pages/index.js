@@ -201,10 +201,10 @@ export default function Home() {
     setWelcomeText("We partner with ambitious teams to design and build new brands and digital experiences faster.")
     setIsWelcomeComplete(false)
     
-    // Trigger fade-in after brief delay
+    // Trigger fade-in after luxurious pause
     const fadeTimer = setTimeout(() => {
       setIsWelcomeComplete(true)
-    }, 300)
+    }, 800)
     
     return () => {
       clearTimeout(fadeTimer)
