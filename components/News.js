@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const newsItems = [
   {
@@ -69,13 +69,23 @@ const newsItems = [
 
 export default function News({ onNewsClick }) {
   const [hoveredItem, setHoveredItem] = useState(null)
+  const [isMobile, setIsMobile] = useState(false)
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   return (
     <div style={{ 
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-      gap: '20px',
-      marginTop: '20px',
+      gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(280px, 1fr))',
+      gap: isMobile ? '12px' : '20px',
+      marginTop: isMobile ? '16px' : '20px',
       animation: 'fadeIn 0.6s ease-out'
     }}>
       {newsItems.map((item) => (
@@ -88,7 +98,7 @@ export default function News({ onNewsClick }) {
             backgroundColor: hoveredItem === item.id ? '#1a1a1a' : '#0d0d0d',
             border: '1px solid #333',
             borderRadius: '8px',
-            padding: '20px',
+            padding: isMobile ? '16px' : '20px',
             cursor: 'pointer',
             transition: 'all 0.3s ease',
             transform: hoveredItem === item.id ? 'translateY(-2px)' : 'translateY(0)',

@@ -18,6 +18,7 @@ export default function Home() {
   const [isMobileInputVisible, setIsMobileInputVisible] = useState(true) // Default to true, will be set properly in useEffect
   const [showPortfolio, setShowPortfolio] = useState(false)
   const [showNews, setShowNews] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [chatStarted, setChatStarted] = useState(false)
   const [placeholderText, setPlaceholderText] = useState('')
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -535,19 +536,9 @@ export default function Home() {
             background: #264F78;
             color: #D4D4D4;
           }
-          input::placeholder {
-            color: #808080;
-          }
-          input::-webkit-input-placeholder {
-            color: #808080;
-          }
-          input::-moz-placeholder {
-            color: #808080;
-          }
+          /* Removed global placeholder styles - handled by .input-field::placeholder */
           @media (max-width: 768px) {
-            body, div, span, button, input[type="text"], textarea {
-              font-size: 16px !important;
-            }
+            /* Removed global font-size override that was breaking headline */
             .mobile-hide {
               display: none !important;
             }
@@ -593,10 +584,9 @@ export default function Home() {
               }
             }
             
-            /* Prevent zoom on focus */
-            .input-field:focus {
-              font-size: 16px !important;
-            }
+            /* Input field uses consistent styling across breakpoints */
+            
+            /* Mobile input uses main .input-field styles */
             
             /* Better mobile viewport handling */
             html {
@@ -613,12 +603,12 @@ export default function Home() {
           }
         `}
         {`
-          /* Optimized iOS input with proper spacing */
+          /* ChatGPT-style input with optimized spacing */
           :root {
-            --h: 32px;
-            --btn-size: 27px; /* 15% smaller than 32px */
+            --h: 40px;
+            --btn-size: 32px;
             --gap: 8px;
-            --radius: 16px;
+            --radius: 20px;
             --border: 2px;
             --safe-l: env(safe-area-inset-left);
             --safe-r: env(safe-area-inset-right);
@@ -669,6 +659,8 @@ export default function Home() {
             }
           }
           
+          /* Removed conflicting input field styles - defined in main .input-field */
+          
           /* Nav content container width matching */
           .nav-content-container {
             width: 100%;
@@ -704,6 +696,27 @@ export default function Home() {
               display: none !important;
             }
             
+            /* Ensure mobile navigation shows */
+            .mobile-show {
+              display: flex !important;
+            }
+            
+            /* Mobile header - ChatGPT style spacing */
+            .mobile-header {
+              display: flex !important;
+              visibility: visible !important;
+              opacity: 1 !important;
+              height: 48px !important;
+              padding: 0 14px !important;
+            }
+            
+            /* Mobile menu dropdown - show on mobile only */
+            .mobile-menu-dropdown {
+              display: block !important;
+              visibility: visible !important;
+              opacity: 1 !important;
+            }
+            
             /* Mobile content takes full viewport */
             .mobile-content {
               height: 100vh !important;
@@ -726,14 +739,16 @@ export default function Home() {
             
             .mobile-welcome .welcome-message {
               font-family: 'SuisseBPIntl', 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-              font-size: 24px !important;
-              line-height: 1.3 !important;
-              letter-spacing: -0.4px !important;
+              font-size: 56px !important;
+              line-height: 1.05 !important;
+              letter-spacing: -1.2px !important;
               font-weight: 500 !important;
               white-space: normal !important;
-              max-width: 90% !important;
-              margin: 0 auto !important;
-              max-width: 320px !important;
+              text-align: left !important;
+              margin: 0 !important;
+              max-width: 100% !important;
+              word-wrap: break-word !important;
+              hyphens: auto !important;
             }
             
             /* Mobile-only input animations */
@@ -784,8 +799,9 @@ export default function Home() {
             max-height: var(--h);
             width: 100%;
             box-sizing: border-box;
-            padding: 0 45px 0 14px; /* Add right padding for button space */
-            font: 12px 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 0 45px 0 14px; /* Remove vertical padding for perfect centering */
+            font-family: 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 16px;
             letter-spacing: -0.19px;
             color: #FFFFFF;
             background: rgba(0, 0, 0, 0.2);
@@ -796,8 +812,11 @@ export default function Home() {
             outline: none;
             resize: none;
             overflow: hidden;
-            line-height: var(--h);
+            line-height: var(--h); /* Line height equals container height for vertical centering */
             text-align: left;
+            vertical-align: middle;
+            display: flex;
+            align-items: center;
             caret-color: white;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
           }
@@ -847,6 +866,16 @@ export default function Home() {
           /* Desktop chat container - full width */
           @media (min-width: 768px) {
             .mobile-show {
+              display: none !important;
+            }
+            
+            /* Hide mobile header on desktop */
+            .mobile-header {
+              display: none !important;
+            }
+            
+            /* Hide mobile menu dropdown on desktop */
+            .mobile-menu-dropdown {
               display: none !important;
             }
             .desktop-constrained {
@@ -905,6 +934,22 @@ export default function Home() {
           
           .portfolio-enter {
             animation: fadeInUp 0.4s ease-out;
+          }
+          
+          /* Mobile Portfolio and News spacing - ChatGPT style */
+          @media (max-width: 767px) {
+            .message-container.portfolio-enter {
+              margin-top: 14px !important;
+              margin-bottom: 20px !important;
+              padding-left: 0 !important;
+              padding-right: 0 !important;
+            }
+            
+            .message-container.portfolio-enter > div {
+              margin-top: 0 !important;
+              margin-bottom: 0 !important;
+              padding-bottom: 20px !important;
+            }
           }
           
           /* Large welcome message on desktop */
@@ -1138,15 +1183,207 @@ export default function Home() {
           </div>
         </header>
 
+        {/* Mobile Navigation Header */}
+        <header className="mobile-header" role="banner" style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          width: '100%',
+          zIndex: 9998,
+          background: 'rgba(0, 0, 0, 0.1)',
+          backdropFilter: 'blur(20px) saturate(150%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          height: '48px',
+          padding: '0 14px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          boxSizing: 'border-box'
+        }}>
+          {/* Mobile Logo */}
+          <h1 
+            onClick={handleNameClick}
+            style={{ 
+              color: '#FFFFFF', 
+              fontSize: '16px', 
+              whiteSpace: 'nowrap', 
+              margin: 0, 
+              fontWeight: 'normal',
+              fontFamily: 'inherit',
+              cursor: 'pointer',
+              transition: 'opacity 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.opacity = '0.7'}
+            onMouseLeave={(e) => e.target.style.opacity = '1'}
+          >
+            Bttr.
+          </h1>
+          
+          {/* Hamburger Menu Button */}
+          <button 
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            style={{ 
+              color: '#FFFFFF', 
+              background: 'none',
+              border: 'none',
+              padding: '8px',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              width: '24px',
+              height: '18px'
+            }}
+            aria-label="Toggle mobile menu"
+          >
+            <div style={{ 
+              width: '100%', 
+              height: '2px', 
+              backgroundColor: '#FFFFFF',
+              transition: 'all 0.3s ease',
+              transform: showMobileMenu ? 'rotate(45deg) translate(6px, 6px)' : 'rotate(0)',
+              transformOrigin: 'center'
+            }}></div>
+            <div style={{ 
+              width: '100%', 
+              height: '2px', 
+              backgroundColor: '#FFFFFF',
+              transition: 'all 0.3s ease',
+              opacity: showMobileMenu ? 0 : 1
+            }}></div>
+            <div style={{ 
+              width: '100%', 
+              height: '2px', 
+              backgroundColor: '#FFFFFF',
+              transition: 'all 0.3s ease',
+              transform: showMobileMenu ? 'rotate(-45deg) translate(6px, -6px)' : 'rotate(0)',
+              transformOrigin: 'center'
+            }}></div>
+          </button>
+        </header>
+
+        {/* Mobile Menu Dropdown */}
+        {showMobileMenu && (
+          <div className="mobile-menu-dropdown" style={{
+            position: 'fixed',
+            top: '48px',
+            left: 0,
+            right: 0,
+            zIndex: 9997,
+            background: 'rgba(0, 0, 0, 0.95)',
+            backdropFilter: 'blur(20px) saturate(150%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            padding: '20px 16px',
+            animation: 'fadeInDown 0.3s ease-out'
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <button 
+                style={{ 
+                  color: '#FFFFFF', 
+                  fontSize: '16px',
+                  background: 'none',
+                  border: 'none',
+                  padding: '12px 0',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  fontFamily: 'inherit',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+                }}
+                onClick={() => {
+                  setShowMobileMenu(false)
+                  setShowNews(false)
+                  setShowPortfolio(!showPortfolio)
+                  trackEngagement('portfolio_toggle', showPortfolio ? 'close' : 'open')
+                }}
+              >
+                Work
+              </button>
+              <button 
+                style={{ 
+                  color: '#FFFFFF', 
+                  fontSize: '16px',
+                  background: 'none',
+                  border: 'none',
+                  padding: '12px 0',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  fontFamily: 'inherit',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+                }}
+                onClick={() => {
+                  setShowMobileMenu(false)
+                  setShowPortfolio(false)
+                  setShowNews(!showNews)
+                  trackEngagement('news_toggle', showNews ? 'close' : 'open')
+                }}
+              >
+                News
+              </button>
+              <button 
+                style={{ 
+                  color: '#FFFFFF', 
+                  fontSize: '16px',
+                  background: 'none',
+                  border: 'none',
+                  padding: '12px 0',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  fontFamily: 'inherit',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+                }}
+                onClick={() => {
+                  setShowMobileMenu(false)
+                  setShowPortfolio(false)
+                  setShowNews(false)
+                  trackEngagement('catalyst_click', 'header')
+                  append({
+                    role: 'user',
+                    content: 'Tell me about the Catalyst Program'
+                  })
+                }}
+              >
+                Catalyst
+              </button>
+              <button 
+                style={{ 
+                  color: '#FFFFFF', 
+                  fontSize: '16px',
+                  background: 'none',
+                  border: 'none',
+                  padding: '12px 0',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  fontFamily: 'inherit'
+                }}
+                onClick={() => {
+                  setShowMobileMenu(false)
+                  setShowPortfolio(false)
+                  setShowNews(false)
+                  trackEngagement('contact_click', 'header')
+                  append({
+                    role: 'user',
+                    content: 'How can we work together?'
+                  })
+                }}
+              >
+                Inquiries
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Terminal Content - Flows underneath floating overlays */}
         <main className="mobile-content mobile-fullscreen" role="region" aria-label="Chat messages" style={{
           height: '100vh',
           overflowY: 'auto',
           /* Fixed padding that accounts for floating overlays - never changes */
-          paddingTop: '80px',
+          paddingTop: showMobileMenu ? '240px' : '60px',
           paddingBottom: '100px', 
-          paddingLeft: '12px',
-          paddingRight: '12px',
+          paddingLeft: '20px',
+          paddingRight: '20px',
           background: 'transparent',
           WebkitOverflowScrolling: 'touch',
           display: 'flex',
@@ -1190,66 +1427,23 @@ export default function Home() {
             </div>
           )}
           
-          {/* Mobile Chat Messages - hidden on desktop */}
-          {messages.length > 0 && (
-            <div className="mobile-chat mobile-show" role="log" aria-label="Conversation history" aria-live="polite">
-              {messages.map((msg, i) => (
-                <div key={msg.id || i} className="mobile-message message-container">
-                  {msg.role === 'user' ? (
-                    <div style={{
-                      color: 'rgb(123, 123, 123)',
-                      whiteSpace: 'pre-wrap',
-                      wordBreak: 'break-word'
-                    }}>
-                      {msg.content}
-                    </div>
-                  ) : (
-                    <div style={{ color: '#FFFFFF' }}>
-                      <ReactMarkdown
-                        components={{
-                          p: ({children}) => <div style={{ marginBottom: '8px' }}>{children}</div>,
-                          strong: ({children}) => <strong style={{ fontWeight: 'bold' }}>{children}</strong>,
-                          em: ({children}) => <em style={{ fontStyle: 'italic' }}>{children}</em>,
-                          a: ({children, href}) => <a href={href} style={{ color: '#00FFFF', textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer">{children}</a>,
-                          code: ({children}) => <code style={{ background: '#1a1a1a', padding: '2px 4px', borderRadius: '3px' }}>{children}</code>,
-                          pre: ({children}) => <pre style={{ background: '#1a1a1a', padding: '8px', borderRadius: '3px', overflow: 'auto' }}>{children}</pre>,
-                          ul: ({children}) => <ul style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ul>,
-                          ol: ({children}) => <ol style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ol>,
-                          li: ({children}) => <li style={{ marginBottom: '4px' }}>{children}</li>,
-                        }}
-                      >
-                        {msg.content}
-                      </ReactMarkdown>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-          
-          {/* Desktop messages - hidden on mobile */}
-          <div className="mobile-hide">
+          {/* Chat Messages - responsive for both mobile and desktop */}
+          <div>
             {messages.map((msg, i) => (
               <div key={msg.id || i} className="message-container" style={{ marginBottom: '12px' }}>
               {msg.role === 'user' ? (
-                <div style={{
+                <div className="chat-message user-message" style={{
                   color: 'rgb(123, 123, 123)',
                   whiteSpace: 'pre-wrap',
                   wordBreak: 'break-word',
-                  paddingLeft: '0',
-                  fontSize: '12px',
-                  lineHeight: '1.4',
-                  letterSpacing: '-0.19px'
+                  paddingLeft: '0'
                 }}>
                   {msg.content}
                 </div>
               ) : (
-                <div 
+                <div className="chat-message assistant-message"
                   style={{
-                    color: '#FFFFFF',
-                    fontSize: '12px',
-                    lineHeight: '1.4',
-                    letterSpacing: '-0.19px'
+                    color: '#FFFFFF'
                   }}>
                   <ReactMarkdown
                       components={{

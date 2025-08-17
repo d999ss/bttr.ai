@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const projects = [
   {
@@ -149,17 +149,27 @@ const projects = [
 
 export default function Portfolio({ onProjectClick }) {
   const [hoveredProject, setHoveredProject] = useState(null)
+  const [isMobile, setIsMobile] = useState(false)
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   return (
     <div style={{
-      marginTop: '48px',
-      marginBottom: '120px',
-      paddingBottom: '80px'
+      marginTop: isMobile ? '24px' : '48px',
+      marginBottom: isMobile ? '40px' : '120px',
+      paddingBottom: isMobile ? '20px' : '80px'
     }}>
       <h2 style={{
         fontSize: '14px',
         fontWeight: '500',
-        marginBottom: '24px',
+        marginBottom: isMobile ? '16px' : '24px',
         color: '#FFFFFF',
         letterSpacing: '-0.3px'
       }}>
@@ -168,7 +178,7 @@ export default function Portfolio({ onProjectClick }) {
       
       <div style={{
         display: 'grid',
-        gap: '16px'
+        gap: isMobile ? '12px' : '16px'
       }}>
         {projects.map((project) => (
           <button
@@ -180,7 +190,7 @@ export default function Portfolio({ onProjectClick }) {
               background: hoveredProject === project.id ? '#1a1a1a' : 'transparent',
               border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: '8px',
-              padding: '16px',
+              padding: isMobile ? '12px' : '16px',
               textAlign: 'left',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
