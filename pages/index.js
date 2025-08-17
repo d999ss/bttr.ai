@@ -1024,7 +1024,7 @@ export default function Home() {
                 fontSize: '16px', 
                 whiteSpace: 'nowrap', 
                 margin: 0, 
-                fontWeight: '600',
+                fontWeight: 'normal',
                 fontFamily: 'inherit',
                 cursor: 'pointer',
                 transition: 'opacity 0.2s ease'
