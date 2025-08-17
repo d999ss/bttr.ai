@@ -381,26 +381,26 @@ export default function Home() {
     <ErrorBoundary>
       <Head>
         <title>Bttr. AI - Make Things Better with AI</title>
-        <meta name="description" content="Bttr. AI helps you make things better. An AI assistant for creative design, product development, and digital innovation." />
+        <meta name="description" content="Bttr. AI - Your intelligent partner for creative innovation. Chat with our AI assistant about design, technology, and making things better." />
         <meta name="keywords" content="Bttr, AI assistant, product design, UI/UX, creative technology, digital innovation, design systems" />
         <meta name="author" content="Bttr." />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.makebttr.com/" />
+        <meta property="og:url" content="https://bttr-ai.com/" />
         <meta property="og:title" content="Bttr. AI - Make Things Better with AI" />
         <meta property="og:description" content="Building innovative digital experiences at the intersection of design and technology." />
-        <meta property="og:image" content="https://www.makebttr.com/og-image.jpg" />
+        <meta property="og:image" content="https://bttr-ai.com/og-image.jpg" />
         
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://www.makebttr.com/" />
+        <meta property="twitter:url" content="https://bttr-ai.com/" />
         <meta property="twitter:title" content="Bttr. AI - Make Things Better with AI" />
         <meta property="twitter:description" content="Building innovative digital experiences at the intersection of design and technology." />
-        <meta property="twitter:image" content="https://www.makebttr.com/og-image.jpg" />
+        <meta property="twitter:image" content="https://bttr-ai.com/og-image.jpg" />
         
         {/* Canonical URL */}
-        <link rel="canonical" href="https://www.makebttr.com/" />
+        <link rel="canonical" href="https://bttr-ai.com/" />
         
         {/* Structured Data */}
         <script
@@ -412,7 +412,7 @@ export default function Home() {
               "name": "Bttr. AI",
               "jobTitle": "AI Assistant for Creative Innovation",
               "description": "Building innovative digital experiences at the intersection of design and technology",
-              "url": "https://www.makebttr.com",
+              "url": "https://bttr-ai.com",
               "sameAs": [
                 "https://twitter.com/donnysmith",
                 "https://linkedin.com/in/donnysmith",

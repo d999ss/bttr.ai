@@ -24,7 +24,7 @@ export default async function handler(req) {
   if (isFirstUserMessage) {
     // Send SMS notification for first user interaction
     try {
-      const baseUrl = req.url.includes('localhost') ? 'http://localhost:3000' : 'https://www.makebttr.com'
+      const baseUrl = req.url.includes('localhost') ? 'http://localhost:3000' : 'https://bttr-ai.com'
       await fetch(`${baseUrl}/api/send-sms`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -49,7 +49,7 @@ export default async function handler(req) {
        lastMessage.content.toLowerCase().includes('visualize'))) {
     
     try {
-      const baseUrl = req.url.includes('localhost') ? 'http://localhost:3000' : 'https://www.makebttr.com'
+      const baseUrl = req.url.includes('localhost') ? 'http://localhost:3000' : 'https://bttr-ai.com'
       const imageResponse = await fetch(`${baseUrl}/api/generate-image`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

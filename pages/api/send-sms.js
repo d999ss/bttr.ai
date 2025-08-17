@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const smsMessage = await client.messages.create({
       messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
       to: process.env.MY_PHONE_NUMBER,
-      body: `🤖 New chat on makebttr.com\n\nUser: ${userMessage}\n\nTime: ${new Date().toLocaleString()}`
+      body: `🤖 New chat on bttr-ai.com\n\nUser: ${userMessage}\n\nTime: ${new Date().toLocaleString()}`
     })
 
     return res.status(200).json({ 
