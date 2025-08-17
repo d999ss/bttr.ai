@@ -7,7 +7,8 @@ const projects = [
     role: 'Product Design Lead',
     description: 'Enhancing engagement for a leading aesthetic brand',
     tags: ['Healthcare', 'Product Design', 'Brand Strategy'],
-    year: '2024'
+    year: '2024',
+    image: 'https://www.makebttr.com/content/uploads/2025/04/Thumbnail-1600x1600.jpg'
   },
   {
     id: 2,
@@ -15,7 +16,8 @@ const projects = [
     role: 'UX Strategy',
     description: 'Strengthening product recognition and loyalty across a market leader',
     tags: ['Healthcare', 'Consumer Experience', 'Digital Strategy'],
-    year: '2024'
+    year: '2024',
+    image: 'https://www.makebttr.com/content/uploads/2025/04/Featured-image-1600x1600.jpg'
   },
   {
     id: 3,
@@ -23,7 +25,8 @@ const projects = [
     role: 'Product Strategy',
     description: 'Improving the user experience and product strategy for a learning platform',
     tags: ['EdTech', 'UX Design', 'Platform Strategy'],
-    year: '2023'
+    year: '2023',
+    image: 'https://www.makebttr.com/content/uploads/2025/03/20211133-1600x1024.jpg'
   },
   {
     id: 4,
@@ -31,7 +34,8 @@ const projects = [
     role: 'Brand Design',
     description: 'A modern, luxurious identity',
     tags: ['Branding', 'Luxury', 'Visual Identity'],
-    year: '2023'
+    year: '2023',
+    image: 'https://www.makebttr.com/content/uploads/2024/08/SQ-Image-frame-4.jpg'
   },
   {
     id: 5,
@@ -39,7 +43,8 @@ const projects = [
     role: 'Creative Director',
     description: 'Shaping a startup around groundbreaking carbon technology',
     tags: ['Sustainability', 'Brand Strategy', 'Startup'],
-    year: '2022'
+    year: '2022',
+    image: 'https://www.makebttr.com/content/uploads/2023/09/AirCo-HS-1-1-1_00000.png'
   },
   {
     id: 6,
@@ -47,7 +52,8 @@ const projects = [
     role: 'Product Design',
     description: 'Smart-Trailer innovation, designed for a more efficient future',
     tags: ['IoT', 'Transportation', 'Product Innovation'],
-    year: '2022'
+    year: '2022',
+    image: 'https://www.makebttr.com/content/uploads/2024/06/Fleetpulse_Thumb.jpg'
   },
   {
     id: 7,
@@ -55,7 +61,8 @@ const projects = [
     role: 'Platform Architecture',
     description: 'Empowering healthcare practices to manage, grow, and scale',
     tags: ['Healthcare', 'B2B Platform', 'SaaS'],
-    year: '2021'
+    year: '2021',
+    image: 'https://www.makebttr.com/content/uploads/2024/03/Desktop-6-1600x1002.jpg'
   },
   {
     id: 8,
@@ -63,7 +70,8 @@ const projects = [
     role: 'Consumer Experience Lead',
     description: 'A simple, modern, and engaging consumer loyalty program',
     tags: ['Consumer App', 'Loyalty Program', 'Mobile Design'],
-    year: '2021'
+    year: '2021',
+    image: 'https://www.makebttr.com/content/uploads/2024/03/Desktop-1600x1006.jpg'
   },
   {
     id: 9,
@@ -195,10 +203,36 @@ export default function Portfolio({ onProjectClick }) {
               cursor: 'pointer',
               transition: 'all 0.2s ease',
               width: '100%',
-              fontFamily: 'inherit'
+              fontFamily: 'inherit',
+              overflow: 'hidden'
             }}
             aria-label={`View ${project.name} project details`}
           >
+            {/* Project Image */}
+            {project.image && (
+              <div style={{
+                width: '100%',
+                height: isMobile ? '120px' : '140px',
+                borderRadius: '6px',
+                overflow: 'hidden',
+                marginBottom: '12px',
+                background: '#0a0a0a'
+              }}>
+                <img 
+                  src={project.image}
+                  alt={`${project.name} project preview`}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transition: 'transform 0.2s ease',
+                    transform: hoveredProject === project.id ? 'scale(1.02)' : 'scale(1)'
+                  }}
+                  loading="lazy"
+                />
+              </div>
+            )}
+            
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
