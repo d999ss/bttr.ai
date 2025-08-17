@@ -1078,7 +1078,7 @@ export default function Home() {
                 trackEngagement('catalyst_click', 'header')
                 append({
                   role: 'user',
-                  content: '/catalyst'
+                  content: 'Tell me about the Catalyst Program'
                 })
               }}
               aria-label="Learn about Catalyst Program"
@@ -1103,7 +1103,7 @@ export default function Home() {
                 trackEngagement('contact_click', 'header')
                 append({
                   role: 'user',
-                  content: '/contact'
+                  content: 'How can we work together?'
                 })
               }}
               aria-label="Contact for inquiries"
