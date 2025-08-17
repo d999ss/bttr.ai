@@ -119,8 +119,8 @@ export default function News({ onNewsClick }) {
           
           <h3 style={{ 
             color: '#FFFFFF',
-            fontSize: '16px',
-            fontWeight: '600',
+            fontSize: '13px',
+            fontWeight: '500',
             marginBottom: '8px',
             lineHeight: '1.3'
           }}>
