@@ -172,7 +172,9 @@ export default function Portfolio({ onProjectClick }) {
     <div style={{
       marginTop: isMobile ? '24px' : '48px',
       marginBottom: isMobile ? '40px' : '120px',
-      paddingBottom: isMobile ? '20px' : '80px'
+      paddingBottom: isMobile ? '20px' : '80px',
+      marginLeft: isMobile ? '0px' : '0px',
+      marginRight: isMobile ? '0px' : '0px'
     }}>
       <h2 style={{
         fontSize: '14px',

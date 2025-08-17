@@ -546,14 +546,11 @@ export default function Home() {
               display: block !important;
             }
             .mobile-fullscreen {
-              height: calc(100vh - 80px) !important;
-              padding-top: calc(16px + env(safe-area-inset-top)) !important;
-              padding-top: calc(16px + constant(safe-area-inset-top)) !important; /* iOS < 11.2 */
-              padding-bottom: 80px !important;
-              padding-left: calc(16px + env(safe-area-inset-left)) !important;
-              padding-left: calc(16px + constant(safe-area-inset-left)) !important; /* iOS < 11.2 */
-              padding-right: calc(16px + env(safe-area-inset-right)) !important;
-              padding-right: calc(16px + constant(safe-area-inset-right)) !important; /* iOS < 11.2 */
+              height: 100vh !important;
+              padding-top: 80px !important;
+              padding-bottom: 120px !important;
+              padding-left: 24px !important;
+              padding-right: 24px !important;
               display: flex !important;
               flex-direction: column !important;
               justify-content: flex-start !important;
@@ -587,6 +584,8 @@ export default function Home() {
             /* Input field uses consistent styling across breakpoints */
             
             /* Mobile input uses main .input-field styles */
+            
+            /* Removed problematic mobile image margins */
             
             /* Better mobile viewport handling */
             html {
@@ -701,13 +700,13 @@ export default function Home() {
               display: flex !important;
             }
             
-            /* Mobile header - ChatGPT style spacing */
+            /* Mobile header - improved spacing */
             .mobile-header {
               display: flex !important;
               visibility: visible !important;
               opacity: 1 !important;
-              height: 48px !important;
-              padding: 0 14px !important;
+              height: 52px !important;
+              padding: 0 20px !important;
             }
             
             /* Mobile menu dropdown - show on mobile only */
@@ -739,13 +738,13 @@ export default function Home() {
             
             .mobile-welcome .welcome-message {
               font-family: 'SuisseBPIntl', 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-              font-size: 56px !important;
-              line-height: 1.05 !important;
-              letter-spacing: -1.2px !important;
+              font-size: 28px !important;
+              line-height: 25.2px !important;
+              letter-spacing: -0.5px !important;
               font-weight: 500 !important;
               white-space: normal !important;
               text-align: left !important;
-              margin: 0 !important;
+              margin: 0 0 32px 0 !important;
               max-width: 100% !important;
               word-wrap: break-word !important;
               hyphens: auto !important;
@@ -780,11 +779,40 @@ export default function Home() {
               letter-spacing: 0.1px !important;
             }
             
-            /* Override desktop message positioning on mobile */
+            /* Override desktop message positioning on mobile - with proper margins */
             .message-container {
               max-width: 100% !important;
               margin-left: 0 !important;
               margin-right: 0 !important;
+              margin-bottom: 20px !important;
+              padding: 0 !important;
+            }
+            
+            /* Ensure Portfolio and News have proper spacing */
+            .message-container.portfolio-enter {
+              margin-left: 0 !important;
+              margin-right: 0 !important;
+              padding-left: 0 !important;
+              padding-right: 0 !important;
+            }
+            
+            /* Force proper margins on Portfolio/News content */
+            .message-container.portfolio-enter > div {
+              padding-left: 0 !important;
+              padding-right: 0 !important;
+            }
+            
+            /* Better mobile chat message styling */
+            .chat-message {
+              font-size: 17px !important;
+              line-height: 1.5 !important;
+              margin-bottom: 16px !important;
+            }
+            
+            /* Force mobile padding */
+            main.mobile-content {
+              padding-left: 24px !important;
+              padding-right: 24px !important;
             }
           }
 
@@ -936,7 +964,7 @@ export default function Home() {
             animation: fadeInUp 0.4s ease-out;
           }
           
-          /* Mobile Portfolio and News spacing - ChatGPT style */
+          /* Mobile Portfolio and News spacing - with proper margins */
           @media (max-width: 767px) {
             .message-container.portfolio-enter {
               margin-top: 14px !important;
@@ -949,6 +977,8 @@ export default function Home() {
               margin-top: 0 !important;
               margin-bottom: 0 !important;
               padding-bottom: 20px !important;
+              margin-left: 0 !important;
+              margin-right: 0 !important;
             }
           }
           
@@ -957,8 +987,8 @@ export default function Home() {
             .welcome-message {
               font-family: 'SuisseBPIntl', 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
               font-weight: 500 !important;
-              font-size: 42px !important;
-              line-height: 47.5px !important;
+              font-size: 53px !important;
+              line-height: 47.7px !important;
               margin-bottom: 0 !important;
               letter-spacing: -0.8px !important;
               white-space: normal !important;
@@ -1195,8 +1225,8 @@ export default function Home() {
           backdropFilter: 'blur(20px) saturate(150%)',
           WebkitBackdropFilter: 'blur(20px) saturate(150%)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          height: '48px',
-          padding: '0 14px',
+          height: '52px',
+          padding: '0 20px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -1230,37 +1260,13 @@ export default function Home() {
               border: 'none',
               padding: '8px',
               cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              width: '24px',
-              height: '18px'
+              fontSize: '18px',
+              lineHeight: '1',
+              fontFamily: 'monospace'
             }}
             aria-label="Toggle mobile menu"
           >
-            <div style={{ 
-              width: '100%', 
-              height: '2px', 
-              backgroundColor: '#FFFFFF',
-              transition: 'all 0.3s ease',
-              transform: showMobileMenu ? 'rotate(45deg) translate(6px, 6px)' : 'rotate(0)',
-              transformOrigin: 'center'
-            }}></div>
-            <div style={{ 
-              width: '100%', 
-              height: '2px', 
-              backgroundColor: '#FFFFFF',
-              transition: 'all 0.3s ease',
-              opacity: showMobileMenu ? 0 : 1
-            }}></div>
-            <div style={{ 
-              width: '100%', 
-              height: '2px', 
-              backgroundColor: '#FFFFFF',
-              transition: 'all 0.3s ease',
-              transform: showMobileMenu ? 'rotate(-45deg) translate(6px, -6px)' : 'rotate(0)',
-              transformOrigin: 'center'
-            }}></div>
+            {showMobileMenu ? '✕' : '☰'}
           </button>
         </header>
 
@@ -1268,7 +1274,7 @@ export default function Home() {
         {showMobileMenu && (
           <div className="mobile-menu-dropdown" style={{
             position: 'fixed',
-            top: '48px',
+            top: '52px',
             left: 0,
             right: 0,
             zIndex: 9997,
@@ -1380,10 +1386,10 @@ export default function Home() {
           height: '100vh',
           overflowY: 'auto',
           /* Fixed padding that accounts for floating overlays - never changes */
-          paddingTop: showMobileMenu ? '240px' : '60px',
-          paddingBottom: '100px', 
-          paddingLeft: '20px',
-          paddingRight: '20px',
+          paddingTop: showMobileMenu ? '260px' : '80px',
+          paddingBottom: '120px', 
+          paddingLeft: '24px',
+          paddingRight: '24px',
           background: 'transparent',
           WebkitOverflowScrolling: 'touch',
           display: 'flex',
@@ -1430,7 +1436,10 @@ export default function Home() {
           {/* Chat Messages - responsive for both mobile and desktop */}
           <div>
             {messages.map((msg, i) => (
-              <div key={msg.id || i} className="message-container" style={{ marginBottom: '12px' }}>
+              <div key={msg.id || i} className="message-container" style={{ 
+                marginBottom: '12px',
+                marginTop: (i <= 1 && msg.role === 'assistant') ? '32px' : '0px'
+              }}>
               {msg.role === 'user' ? (
                 <div className="chat-message user-message" style={{
                   color: 'rgb(123, 123, 123)',
@@ -1456,6 +1465,24 @@ export default function Home() {
                         ul: ({children}) => <ul style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ul>,
                         ol: ({children}) => <ol style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ol>,
                         li: ({children}) => <li style={{ marginBottom: '4px' }}>{children}</li>,
+                        img: ({src, alt}) => (
+                          <img 
+                            src={src} 
+                            alt={alt} 
+                            className="chat-image"
+                            style={{ 
+                              width: '100%', 
+                              maxWidth: '100%', 
+                              height: 'auto',
+                              borderRadius: '8px',
+                              marginBottom: '12px',
+                              marginTop: '8px',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              background: '#0a0a0a'
+                            }} 
+                            loading="lazy"
+                          />
+                        ),
                       }}
                     >
                     {msg.content}
@@ -1469,6 +1496,7 @@ export default function Home() {
           {isLoading && (
             <div role="status" aria-live="polite" aria-label="AI is thinking" style={{ 
               marginBottom: '8px',
+              marginTop: '32px',
               color: '#FFFFFF',
               fontSize: '12px',
               lineHeight: '1.4',

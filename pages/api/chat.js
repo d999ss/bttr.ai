@@ -150,16 +150,24 @@ Air Company - Carbon transformation technology
 $ wc -l ~/clients/fortune500.txt
 12 Fortune 500 companies served`,
 
-      '/catalyst': `🚀 **The Catalyst Program**
+      '/catalyst': `![Catalyst Program Hero](https://www.makebttr.com/content/uploads/2025/08/01-1.png)
+
+🚀 **The Catalyst Program**
 Outthink uncertainty. Make 2026 your breakthrough year.
 
 We've partnered with Tom Goodwin (#1 Voice in Marketing on LinkedIn) to help ambitious leaders define what's next through our innovation accelerator program.
+
+![Innovation Workstreams](https://www.makebttr.com/content/uploads/2025/08/02.png)
 
 **Four Innovation Workstreams:**
 • Foundations & Future Vision
 • Business Model Innovation  
 • Product & Service Innovation
 • Brand & Marketing Innovation
+
+![Program Strategy](https://www.makebttr.com/content/uploads/2025/08/03.png)
+
+![Tom Goodwin Partnership](https://www.makebttr.com/content/uploads/2025/08/05-1.png)
 
 Each workstream delivers actionable insights, provocations, and blueprints to unlock growth opportunities.
 
@@ -225,7 +233,12 @@ IMPORTANT INSTRUCTIONS:
 - For contact requests, provide email: hello@makebttr.com
 - When users ask for detailed project information, mention that full case studies with visuals are available at makebttr.com/work
 - Direct all business inquiries to makebttr.com
-- When users ask about innovation, transformation, or future planning, mention our Catalyst Program with Tom Goodwin
+- When users ask about innovation, transformation, or future planning, START your response with the Catalyst hero image, then explain the program:
+  Start with: ![Catalyst Program](https://www.makebttr.com/content/uploads/2025/08/01-1.png)
+  Then include relevant images throughout:
+  • ![Innovation Workstreams](https://www.makebttr.com/content/uploads/2025/08/02.png)
+  • ![Program Strategy](https://www.makebttr.com/content/uploads/2025/08/03.png)
+  • ![Tom Goodwin](https://www.makebttr.com/content/uploads/2025/08/05-1.png)
 - Emphasize that the Catalyst Program helps leaders "outthink uncertainty" and make 2026 a breakthrough year
 - When users ask what's new or about recent work, reference our latest news and partnerships (Opendoor, AI car brand, etc.)`
 
