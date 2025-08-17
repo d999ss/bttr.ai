@@ -389,14 +389,14 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://bttr-ai.com/" />
         <meta property="og:title" content="Bttr. AI - Make Things Better with AI" />
-        <meta property="og:description" content="Building innovative digital experiences at the intersection of design and technology." />
+        <meta property="og:description" content="Bttr. A design agency for the AI era." />
         <meta property="og:image" content="https://bttr-ai.com/og-image.jpg" />
         
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://bttr-ai.com/" />
         <meta property="twitter:title" content="Bttr. AI - Make Things Better with AI" />
-        <meta property="twitter:description" content="Building innovative digital experiences at the intersection of design and technology." />
+        <meta property="twitter:description" content="Bttr. A design agency for the AI era." />
         <meta property="twitter:image" content="https://bttr-ai.com/og-image.jpg" />
         
         {/* Canonical URL */}
