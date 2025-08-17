@@ -1073,6 +1073,31 @@ export default function Home() {
                 fontFamily: 'inherit'
               }}
               onClick={() => {
+                // Hide portfolio if showing and start catalyst chat
+                setShowPortfolio(false)
+                trackEngagement('catalyst_click', 'header')
+                append({
+                  role: 'user',
+                  content: '/catalyst'
+                })
+              }}
+              aria-label="Learn about Catalyst Program"
+            >
+              Catalyst
+            </button>
+            <button 
+              style={{ 
+                color: '#FFFFFF', 
+                fontSize: '12px', 
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                fontFamily: 'inherit'
+              }}
+              onClick={() => {
                 // Hide portfolio if showing and start contact chat
                 setShowPortfolio(false)
                 trackEngagement('contact_click', 'header')

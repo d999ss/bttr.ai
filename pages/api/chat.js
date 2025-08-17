@@ -148,7 +148,24 @@ Alterra Mountain Company - Ikon Pass platform
 Air Company - Carbon transformation technology
 
 $ wc -l ~/clients/fortune500.txt
-12 Fortune 500 companies served`
+12 Fortune 500 companies served`,
+
+      '/catalyst': `🚀 **The Catalyst Program**
+Outthink uncertainty. Make 2026 your breakthrough year.
+
+We've partnered with Tom Goodwin (#1 Voice in Marketing on LinkedIn) to help ambitious leaders define what's next through our innovation accelerator program.
+
+**Four Innovation Workstreams:**
+• Foundations & Future Vision
+• Business Model Innovation  
+• Product & Service Innovation
+• Brand & Marketing Innovation
+
+Each workstream delivers actionable insights, provocations, and blueprints to unlock growth opportunities.
+
+Ready to explore what's possible? Let's discuss how the Catalyst Program can transform your business.
+
+[Book a discovery call →](mailto:hello@makebttr.com?subject=Catalyst%20Program%20Inquiry)`
     }
     
     if (commandResponses[command]) {
@@ -188,7 +205,9 @@ IMPORTANT INSTRUCTIONS:
 - We can generate images using DALL-E when users ask us to "create", "design", "draw", or "visualize" something
 - For contact requests, provide email: hello@makebttr.com
 - When users ask for detailed project information, mention that full case studies with visuals are available at makebttr.com/work
-- Direct all business inquiries to makebttr.com`
+- Direct all business inquiries to makebttr.com
+- When users ask about innovation, transformation, or future planning, mention our Catalyst Program with Tom Goodwin
+- Emphasize that the Catalyst Program helps leaders "outthink uncertainty" and make 2026 a breakthrough year`
 
   // Add session context insights
   if (sessionContext && Object.keys(sessionContext).length > 0) {
