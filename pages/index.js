@@ -268,7 +268,7 @@ export default function Home() {
 
   // Remove typewriter animation - just show static placeholder
   useEffect(() => {
-    setPlaceholderText('Ask me anything')
+    setPlaceholderText('Ask us anything')
   }, [])
 
   const handleKeyPress = (e) => {
@@ -1265,7 +1265,7 @@ export default function Home() {
               ref={inputRef}
               className="input-field"
               rows="1"
-              placeholder={placeholderText || "Ask me anything"}
+              placeholder={placeholderText || "Ask us anything"}
               value={input}
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
