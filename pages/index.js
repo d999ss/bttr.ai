@@ -93,16 +93,14 @@ export default function Home() {
     // Mark chat as started for analytics
     setChatStarted(true)
     
-    // Close news and start chat
+    // Close news immediately to prevent flash
     setShowNews(false)
     
-    // Send a message to chat about the selected news item
-    setTimeout(() => {
-      append({
-        role: 'user',
-        content: `Tell me more about "${newsItem.title}"`
-      })
-    }, 100)
+    // Send a message to chat about the selected news item immediately
+    append({
+      role: 'user',
+      content: `Tell me more about "${newsItem.title}"`
+    })
   }
   
   const handleNameClick = () => {
