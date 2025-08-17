@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import ErrorBoundary from '../components/ErrorBoundary'
 import NetworkStatus from '../components/NetworkStatus'
 import Portfolio from '../components/Portfolio'
+import News from '../components/News'
 import { trackEvent, trackEngagement } from '../lib/analytics'
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
   const [isWelcomeComplete, setIsWelcomeComplete] = useState(false)
   const [isMobileInputVisible, setIsMobileInputVisible] = useState(true) // Default to true, will be set properly in useEffect
   const [showPortfolio, setShowPortfolio] = useState(false)
+  const [showNews, setShowNews] = useState(false)
   const [chatStarted, setChatStarted] = useState(false)
   const [placeholderText, setPlaceholderText] = useState('')
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
@@ -52,8 +54,8 @@ export default function Home() {
   })
   
   const scrollToBottom = () => {
-    // Only auto-scroll if there are multiple messages and portfolio is not showing
-    if (messagesEndRef.current && messages.length > 1 && !showPortfolio) {
+    // Only auto-scroll if there are multiple messages and portfolio/news is not showing
+    if (messagesEndRef.current && messages.length > 1 && !showPortfolio && !showNews) {
       // Use requestAnimationFrame to ensure input field positioning is stable
       requestAnimationFrame(() => {
         messagesEndRef.current.scrollIntoView({ 
@@ -83,14 +85,34 @@ export default function Home() {
       })
     }, 100)
   }
+
+  const handleNewsClick = (newsItem) => {
+    // Track news interaction
+    trackEngagement('news_click', newsItem.title)
+    
+    // Mark chat as started for analytics
+    setChatStarted(true)
+    
+    // Close news and start chat
+    setShowNews(false)
+    
+    // Send a message to chat about the selected news item
+    setTimeout(() => {
+      append({
+        role: 'user',
+        content: `Tell me more about "${newsItem.title}"`
+      })
+    }, 100)
+  }
   
   const handleNameClick = () => {
     // Mark chat as started for analytics (layout is now independent)
     setChatStarted(true)
     
-    // Then clear the chat and hide portfolio
+    // Then clear the chat and hide portfolio and news
     setMessages([])
     setShowPortfolio(false)
+    setShowNews(false)
     
     // Skip welcome animation since this is a manual reset
     setIsWelcomeComplete(true)
@@ -291,9 +313,12 @@ export default function Home() {
     
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      // Close portfolio when user starts chatting
+      // Close portfolio and news when user starts chatting
       if (showPortfolio) {
         setShowPortfolio(false)
+      }
+      if (showNews) {
+        setShowNews(false)
       }
       handleSubmit(e)
     }
@@ -1027,7 +1052,8 @@ export default function Home() {
                 fontFamily: 'inherit'
               }}
               onClick={() => {
-                // Toggle portfolio (layout is now independent of state)
+                // Toggle portfolio and hide news
+                setShowNews(false)
                 setShowPortfolio(!showPortfolio)
                 trackEngagement('portfolio_toggle', showPortfolio ? 'close' : 'open')
               }}
@@ -1048,13 +1074,10 @@ export default function Home() {
                 fontFamily: 'inherit'
               }}
               onClick={() => {
-                // Hide portfolio if showing and start news chat
+                // Toggle news and hide portfolio
                 setShowPortfolio(false)
-                trackEngagement('news_click', 'header')
-                append({
-                  role: 'user',
-                  content: 'What\'s new at Bttr?'
-                })
+                setShowNews(!showNews)
+                trackEngagement('news_toggle', showNews ? 'close' : 'open')
               }}
               aria-label="View latest news"
             >
@@ -1073,8 +1096,9 @@ export default function Home() {
                 fontFamily: 'inherit'
               }}
               onClick={() => {
-                // Hide portfolio if showing and start catalyst chat
+                // Hide portfolio and news if showing and start catalyst chat
                 setShowPortfolio(false)
+                setShowNews(false)
                 trackEngagement('catalyst_click', 'header')
                 append({
                   role: 'user',
@@ -1098,8 +1122,9 @@ export default function Home() {
                 fontFamily: 'inherit'
               }}
               onClick={() => {
-                // Hide portfolio if showing and start contact chat
+                // Hide portfolio and news if showing and start contact chat
                 setShowPortfolio(false)
+                setShowNews(false)
                 trackEngagement('contact_click', 'header')
                 append({
                   role: 'user',
@@ -1127,11 +1152,11 @@ export default function Home() {
           WebkitOverflowScrolling: 'touch',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: (messages.length === 0 && !showPortfolio) ? 'center' : 'flex-start'
+          justifyContent: (messages.length === 0 && !showPortfolio && !showNews) ? 'center' : 'flex-start'
         }}>
           
           {/* Welcome Message */}
-          {messages.length === 0 && !showPortfolio && (
+          {messages.length === 0 && !showPortfolio && !showNews && (
             <div className="mobile-welcome message-container">
               <div 
                 className="welcome-message"
@@ -1156,6 +1181,13 @@ export default function Home() {
           {showPortfolio && (
             <div className="message-container portfolio-enter" style={{ marginTop: '24px' }}>
               <Portfolio onProjectClick={handleProjectClick} />
+            </div>
+          )}
+          
+          {/* News Section */}
+          {showNews && (
+            <div className="message-container portfolio-enter" style={{ marginTop: '24px' }}>
+              <News onNewsClick={handleNewsClick} />
             </div>
           )}
           
@@ -1310,9 +1342,12 @@ export default function Home() {
               disabled={isLoading || !input.trim()}
               onClick={(e) => {
                 e.preventDefault()
-                // Close portfolio when user starts chatting
+                // Close portfolio and news when user starts chatting
                 if (showPortfolio) {
                   setShowPortfolio(false)
+                }
+                if (showNews) {
+                  setShowNews(false)
                 }
                 handleSubmit(e)
               }}
