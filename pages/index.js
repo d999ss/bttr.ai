@@ -1025,6 +1025,7 @@ export default function Home() {
                 whiteSpace: 'nowrap', 
                 margin: 0, 
                 fontWeight: 'normal',
+                fontFamily: 'inherit',
                 cursor: 'pointer',
                 transition: 'opacity 0.2s ease'
               }}
