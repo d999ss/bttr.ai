@@ -676,8 +676,8 @@ export default function Home() {
             width: 100%;
             max-width: 864px;
             padding: 8px 32px;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
             box-sizing: border-box;
           }
@@ -1018,7 +1018,7 @@ export default function Home() {
         }}>
           {/* Nav content container - matches conversation/input width */}
           <div className="nav-content-container">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifySelf: 'start' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <h1 
               onClick={handleNameClick}
               style={{ 
@@ -1038,7 +1038,7 @@ export default function Home() {
             </div>
             
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', justifySelf: 'end' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <button 
               style={{ 
                 color: '#FFFFFF', 
