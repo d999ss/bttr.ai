@@ -443,6 +443,20 @@ export default function Home() {
         <meta name="color-scheme" content="dark only" />
         <meta name="supported-color-schemes" content="dark" />
         <style>{`
+          /* Clean system font stack like HillaryCoe.com */
+          div.message-container div.chat-message,
+          div.message-container div.chat-message *,
+          .chat-message,
+          .chat-message *,
+          .assistant-message,
+          .assistant-message *,
+          .user-message,
+          .user-message * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            line-height: 1.4 !important;
+          }
           /* 
             FLOATING OVERLAY ARCHITECTURE:
             - Navigation header: Fixed overlay at top (z-index: 9998)
@@ -546,9 +560,10 @@ export default function Home() {
               display: block !important;
             }
             .mobile-fullscreen {
-              height: 100vh !important;
+              height: 100dvh !important; /* Use dynamic viewport height for iPhone */
+              min-height: -webkit-fill-available !important; /* iOS Safari fix */
               padding-top: 80px !important;
-              padding-bottom: 120px !important;
+              padding-bottom: 80px !important; /* Reduced for keyboard space */
               padding-left: 24px !important;
               padding-right: 24px !important;
               display: flex !important;
@@ -556,6 +571,7 @@ export default function Home() {
               justify-content: flex-start !important;
               overflow-y: auto !important;
               scroll-behavior: smooth !important;
+              -webkit-overflow-scrolling: touch !important; /* Smooth iOS scrolling */
             }
             .mobile-caret {
               font-size: 16px !important;
@@ -590,14 +606,24 @@ export default function Home() {
             /* Better mobile viewport handling */
             html {
               height: 100%;
+              height: 100dvh; /* Dynamic viewport height for iPhone */
               -webkit-text-size-adjust: 100%;
             }
             
             body {
               height: 100%;
+              height: 100dvh; /* Dynamic viewport height for iPhone */
+              min-height: -webkit-fill-available; /* iOS Safari fix */
               -webkit-font-smoothing: antialiased;
               -moz-osx-font-smoothing: grayscale;
               touch-action: manipulation;
+            }
+            
+            /* iOS Safari fixes */
+            @supports (-webkit-touch-callout: none) {
+              .mobile-fullscreen {
+                height: -webkit-fill-available !important;
+              }
             }
           }
         `}
@@ -802,11 +828,22 @@ export default function Home() {
               padding-right: 0 !important;
             }
             
-            /* Better mobile chat message styling */
-            .chat-message {
-              font-size: 17px !important;
-              line-height: 1.5 !important;
+            /* Clean chat message styling */
+            .chat-message, 
+            .chat-message.user-message, 
+            .chat-message.assistant-message,
+            .chat-message * {
               margin-bottom: 16px !important;
+            }
+            
+            .chat-message.assistant-message,
+            .chat-message.assistant-message * {
+              color: #f6f6f6 !important;
+            }
+            
+            .chat-message.user-message,
+            .chat-message.user-message * {
+              color: rgb(123, 123, 123) !important;
             }
             
             /* Force mobile padding */
@@ -1148,28 +1185,6 @@ export default function Home() {
                 fontFamily: 'inherit'
               }}
               onClick={() => {
-                // Toggle news and hide portfolio
-                setShowPortfolio(false)
-                setShowNews(!showNews)
-                trackEngagement('news_toggle', showNews ? 'close' : 'open')
-              }}
-              aria-label="View latest news"
-            >
-              News
-            </button>
-            <button 
-              style={{ 
-                color: '#FFFFFF', 
-                fontSize: '12px', 
-                whiteSpace: 'nowrap',
-                cursor: 'pointer',
-                textDecoration: 'none',
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                fontFamily: 'inherit'
-              }}
-              onClick={() => {
                 // Hide portfolio and news if showing and start catalyst chat
                 setShowPortfolio(false)
                 setShowNews(false)
@@ -1196,6 +1211,28 @@ export default function Home() {
                 fontFamily: 'inherit'
               }}
               onClick={() => {
+                // Toggle news and hide portfolio
+                setShowPortfolio(false)
+                setShowNews(!showNews)
+                trackEngagement('news_toggle', showNews ? 'close' : 'open')
+              }}
+              aria-label="View latest news"
+            >
+              News
+            </button>
+            <button 
+              style={{ 
+                color: '#FFFFFF', 
+                fontSize: '12px', 
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                fontFamily: 'inherit'
+              }}
+              onClick={() => {
                 // Hide portfolio and news if showing and start contact chat
                 setShowPortfolio(false)
                 setShowNews(false)
@@ -1207,7 +1244,7 @@ export default function Home() {
               }}
               aria-label="Contact for inquiries"
             >
-              Inquiries
+              Contact
             </button>
             </div>
           </div>
@@ -1322,11 +1359,15 @@ export default function Home() {
                 onClick={() => {
                   setShowMobileMenu(false)
                   setShowPortfolio(false)
-                  setShowNews(!showNews)
-                  trackEngagement('news_toggle', showNews ? 'close' : 'open')
+                  setShowNews(false)
+                  trackEngagement('catalyst_click', 'header')
+                  append({
+                    role: 'user',
+                    content: 'Tell me about the Catalyst Program'
+                  })
                 }}
               >
-                News
+                Catalyst
               </button>
               <button 
                 style={{ 
@@ -1343,15 +1384,11 @@ export default function Home() {
                 onClick={() => {
                   setShowMobileMenu(false)
                   setShowPortfolio(false)
-                  setShowNews(false)
-                  trackEngagement('catalyst_click', 'header')
-                  append({
-                    role: 'user',
-                    content: 'Tell me about the Catalyst Program'
-                  })
+                  setShowNews(!showNews)
+                  trackEngagement('news_toggle', showNews ? 'close' : 'open')
                 }}
               >
-                Catalyst
+                News
               </button>
               <button 
                 style={{ 
@@ -1375,7 +1412,7 @@ export default function Home() {
                   })
                 }}
               >
-                Inquiries
+                Contact
               </button>
             </div>
           </div>
@@ -1383,11 +1420,12 @@ export default function Home() {
 
         {/* Terminal Content - Flows underneath floating overlays */}
         <main className="mobile-content mobile-fullscreen" role="region" aria-label="Chat messages" style={{
-          height: '100vh',
+          height: '100dvh', /* Dynamic viewport height for iPhone */
+          minHeight: '-webkit-fill-available', /* iOS Safari fix */
           overflowY: 'auto',
           /* Fixed padding that accounts for floating overlays - never changes */
           paddingTop: showMobileMenu ? '260px' : '80px',
-          paddingBottom: '120px', 
+          paddingBottom: '80px', /* Reduced for iPhone keyboard */
           paddingLeft: '24px',
           paddingRight: '24px',
           background: 'transparent',
@@ -1452,7 +1490,7 @@ export default function Home() {
               ) : (
                 <div className="chat-message assistant-message"
                   style={{
-                    color: '#FFFFFF'
+                    color: '#f6f6f6'
                   }}>
                   <ReactMarkdown
                       components={{
