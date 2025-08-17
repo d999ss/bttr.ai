@@ -1,10 +1,10 @@
-# Donny Smith AI Assistant
+# Bttr AI Assistant
 
-An open-source AI agent for donnysmith.com that lets visitors chat with an AI representation of Donny Smith.
+An AI assistant for makebttr.com that helps visitors explore creative solutions and make things better with AI.
 
 ## Features
 
-- **Conversational AI**: Chat with GPT-4 powered assistant that knows Donny's background
+- **Conversational AI**: Chat with GPT-4 powered assistant focused on creative innovation
 - **Contact Integration**: Seamless way to get in touch for business inquiries
 - **Open Source**: Transparent implementation for visitors to explore
 - **Responsive Design**: Works on all devices
@@ -12,7 +12,7 @@ An open-source AI agent for donnysmith.com that lets visitors chat with an AI re
 
 ## What the AI Knows
 
-The assistant is trained on Donny's:
+The assistant is trained on Bttr's:
 - Professional background (digital branding and design firm)
 - Services (brand strategy, visual identity, web design)
 - Interests (AI projects, technology, creative problem-solving)
@@ -51,7 +51,7 @@ This project is designed to deploy seamlessly on Vercel:
 
 To adapt this for your own use:
 
-1. Update the `DONNY_CONTEXT` in `app/api/chat/route.ts`
+1. Update the context in `data/donny-context.md`
 2. Modify the UI components in `app/page.tsx`
 3. Update metadata in `app/layout.tsx`
 4. Customize styling in `app/globals.css`

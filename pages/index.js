@@ -377,27 +377,27 @@ export default function Home() {
   return (
     <ErrorBoundary>
       <Head>
-        <title>Donny Smith - Product Designer & Creative Technologist</title>
-        <meta name="description" content="Donny Smith is a product designer and creative technologist building innovative digital experiences. Specializing in AI, design systems, and user interfaces." />
-        <meta name="keywords" content="Donny Smith, product design, UI/UX, creative technology, AI, design systems, web development" />
-        <meta name="author" content="Donny Smith" />
+        <title>Bttr AI - Make Things Better with AI</title>
+        <meta name="description" content="Bttr AI helps you make things better. An AI assistant for creative design, product development, and digital innovation." />
+        <meta name="keywords" content="Bttr, AI assistant, product design, UI/UX, creative technology, digital innovation, design systems" />
+        <meta name="author" content="Bttr" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.donnysmith.com/" />
-        <meta property="og:title" content="Donny Smith - Product Designer & Creative Technologist" />
+        <meta property="og:url" content="https://www.makebttr.com/" />
+        <meta property="og:title" content="Bttr AI - Make Things Better with AI" />
         <meta property="og:description" content="Building innovative digital experiences at the intersection of design and technology." />
-        <meta property="og:image" content="https://www.donnysmith.com/og-image.jpg" />
+        <meta property="og:image" content="https://www.makebttr.com/og-image.jpg" />
         
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://www.donnysmith.com/" />
-        <meta property="twitter:title" content="Donny Smith - Product Designer & Creative Technologist" />
+        <meta property="twitter:url" content="https://www.makebttr.com/" />
+        <meta property="twitter:title" content="Bttr AI - Make Things Better with AI" />
         <meta property="twitter:description" content="Building innovative digital experiences at the intersection of design and technology." />
-        <meta property="twitter:image" content="https://www.donnysmith.com/og-image.jpg" />
+        <meta property="twitter:image" content="https://www.makebttr.com/og-image.jpg" />
         
         {/* Canonical URL */}
-        <link rel="canonical" href="https://www.donnysmith.com/" />
+        <link rel="canonical" href="https://www.makebttr.com/" />
         
         {/* Structured Data */}
         <script
@@ -406,10 +406,10 @@ export default function Home() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Person",
-              "name": "Donny Smith",
-              "jobTitle": "Product Designer & Creative Technologist",
+              "name": "Bttr AI",
+              "jobTitle": "AI Assistant for Creative Innovation",
               "description": "Building innovative digital experiences at the intersection of design and technology",
-              "url": "https://www.donnysmith.com",
+              "url": "https://www.makebttr.com",
               "sameAs": [
                 "https://twitter.com/donnysmith",
                 "https://linkedin.com/in/donnysmith",
@@ -1028,7 +1028,7 @@ export default function Home() {
               onMouseEnter={(e) => e.target.style.opacity = '0.7'}
               onMouseLeave={(e) => e.target.style.opacity = '1'}
             >
-              Donny Smith
+              BTTR
             </h1>
             </div>
             

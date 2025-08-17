@@ -1,7 +1,7 @@
 {
-  "name": "donnysmith-ai",
+  "name": "bttr-ai",
   "version": "1.0.0",
-  "description": "AI agent for donnysmith.com - meet Donny through his AI assistant",
+  "description": "AI assistant for makebttr.com - helping you make things better",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
