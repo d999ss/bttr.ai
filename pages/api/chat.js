@@ -174,7 +174,12 @@ Each workstream delivers actionable insights, provocations, and blueprints to un
 
 Ready to explore what's possible? Let's discuss how the Catalyst Program can transform your business.
 
-[Book a discovery call →](mailto:hello@makebttr.com?subject=Catalyst%20Program%20Inquiry)`,
+<div class="conversation-buttons" style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
+<button onclick="window.open('https://calendly.com/bttr/catalyst-discovery', '_blank')" style="background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%); border: none; color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer;">📅 Book Discovery Call</button>
+<button onclick="window.open('mailto:hello@makebttr.com?subject=Catalyst%20Program%20Inquiry', '_blank')" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; backdrop-filter: blur(10px);">✉️ Email Us</button>
+<button onclick="window.selectSuggestion('Tell me more about the program timeline')" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; backdrop-filter: blur(10px);">⏱️ Program Timeline</button>
+<button onclick="window.selectSuggestion('What companies have you worked with?')" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; backdrop-filter: blur(10px);">🏢 See Client List</button>
+</div>`,
 
       '/news': `📰 **Latest News & Insights**
 

@@ -727,20 +727,6 @@ Just type any of these questions or click one of the suggestion buttons below to
             overflow: hidden !important;
           }
           
-          /* Clean system font stack like HillaryCoe.com */
-          div.message-container div.chat-message,
-          div.message-container div.chat-message *,
-          .chat-message,
-          .chat-message *,
-          .assistant-message,
-          .assistant-message *,
-          .user-message,
-          .user-message * {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
-            font-size: 14px !important;
-            font-weight: 400 !important;
-            line-height: 1.4 !important;
-          }
           /* 
             FLOATING OVERLAY ARCHITECTURE:
             - Navigation header: Fixed overlay at top (z-index: 9998)
@@ -1203,23 +1189,7 @@ Just type any of these questions or click one of the suggestion buttons below to
               padding-right: 0 !important;
             }
             
-            /* Clean chat message styling */
-            .chat-message, 
-            .chat-message.user-message, 
-            .chat-message.assistant-message,
-            .chat-message * {
-              margin-bottom: 16px !important;
-            }
             
-            .chat-message.assistant-message,
-            .chat-message.assistant-message * {
-              color: #f6f6f6 !important;
-            }
-            
-            .chat-message.user-message,
-            .chat-message.user-message * {
-              color: rgb(123, 123, 123) !important;
-            }
             
             /* Force mobile padding */
             main.mobile-content {
