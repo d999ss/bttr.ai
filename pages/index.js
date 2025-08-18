@@ -114,6 +114,8 @@ export default function Home() {
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
   const inactivityTimerRef = useRef(null)
+  const videoRef = useRef(null)
+  const blurredVideoRef = useRef(null)
   const [sessionContext, setSessionContext] = useState({})
   const [welcomeText, setWelcomeText] = useState('')
   const [isWelcomeComplete, setIsWelcomeComplete] = useState(false)
@@ -195,6 +197,16 @@ export default function Home() {
       })
     }
   }, [messages.length, showPortfolio, showNews])
+
+  // Function to pause background videos on user interaction
+  const pauseBackgroundVideos = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current.pause()
+    }
+    if (blurredVideoRef.current) {
+      blurredVideoRef.current.pause()
+    }
+  }, [])
   
   const handleProjectClick = useCallback((project) => {
     // Track portfolio interaction
@@ -408,6 +420,7 @@ Just type any of these questions or click one of the suggestion buttons below to
     
     // Add global function for suggestion button clicks
     window.selectSuggestion = (suggestion) => {
+      pauseBackgroundVideos()
       trackEngagement('suggestion_click', suggestion)
       append({
         role: 'user',
@@ -547,6 +560,8 @@ Just type any of these questions or click one of the suggestion buttons below to
     
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
+      // Pause videos on user interaction
+      pauseBackgroundVideos()
       // Close portfolio and news when user starts chatting
       if (showPortfolio) {
         setShowPortfolio(false)
@@ -1417,7 +1432,7 @@ Just type any of these questions or click one of the suggestion buttons below to
         style={{
           minHeight: '100vh',
           height: '100vh',
-          background: 'linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url(/BK1.png) center center / cover no-repeat',
+          background: 'transparent',
           color: '#FFFFFF',
           fontFamily: "'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
           fontSize: '12px',
@@ -1434,17 +1449,57 @@ Just type any of these questions or click one of the suggestion buttons below to
           position: 'relative'
         }}>
         
-        {/* Background overlay */}
+        {/* Video Background */}
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 0
+          }}
+        >
+          <source src="/motion.mp4" type="video/mp4" />
+        </video>
+        
+        {/* Dark overlay on video */}
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url(/BK1.png) center center / cover no-repeat',
-          filter: 'blur(15px)',
+          background: 'rgba(0, 0, 0, 0.4)',
           zIndex: 1
         }} />
+        
+        {/* Blurred video overlay */}
+        <video
+          ref={blurredVideoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            filter: 'blur(15px)',
+            zIndex: 2
+          }}
+        >
+          <source src="/motion.mp4" type="video/mp4" />
+        </video>
         
         <div style={{
           width: '100%',
@@ -1482,6 +1537,7 @@ Just type any of these questions or click one of the suggestion buttons below to
                 color: '#FFFFFF', 
                 fontSize: '16px', 
                 whiteSpace: 'nowrap', 
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.4)',
                 margin: 0, 
                 fontWeight: 'normal',
                 fontFamily: 'inherit',
@@ -1581,6 +1637,7 @@ Just type any of these questions or click one of the suggestion buttons below to
               }}
               onClick={() => {
                 // Hide portfolio and news if showing and start contact chat
+                pauseBackgroundVideos()
                 setShowPortfolio(false)
                 setShowNews(false)
                 trackEngagement('contact_click', 'header')
@@ -1736,6 +1793,7 @@ Just type any of these questions or click one of the suggestion buttons below to
                   fontFamily: 'inherit'
                 }}
                 onClick={() => {
+                  pauseBackgroundVideos()
                   setShowMobileMenu(false)
                   setShowPortfolio(false)
                   setShowNews(false)
@@ -1819,7 +1877,8 @@ Just type any of these questions or click one of the suggestion buttons below to
                 style={{
                   color: '#FFFFFF',
                   textAlign: 'center',
-                  maxWidth: '100%'
+                  maxWidth: '100%',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.4)'
                 }}>
                 <div style={{ 
                   position: 'relative',
@@ -1846,6 +1905,7 @@ Just type any of these questions or click one of the suggestion buttons below to
                     <button
                       key={index}
                       onClick={() => {
+                        pauseBackgroundVideos()
                         trackEngagement('suggestion_click', suggestion)
                         append({
                           role: 'user',
@@ -1860,6 +1920,7 @@ Just type any of these questions or click one of the suggestion buttons below to
                         color: '#FFFFFF',
                         fontSize: '12px',
                         fontFamily: 'inherit',
+                        textShadow: '0 1px 2px rgba(0, 0, 0, 0.4)',
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
                         backdropFilter: 'blur(10px)',
@@ -1904,11 +1965,12 @@ Just type any of these questions or click one of the suggestion buttons below to
             {messages.map((msg, i) => (
               <div key={msg.id || i} className="message-container" style={{ 
                 marginBottom: '12px',
-                marginTop: (i <= 1 && msg.role === 'assistant') ? '32px' : '0px'
+                marginTop: (i <= 1 && msg.role === 'assistant') ? '32px' : (msg.role === 'user' ? '24px' : '0px')
               }}>
               {msg.role === 'user' ? (
                 <div className="chat-message user-message" style={{
-                  color: 'rgb(123, 123, 123)',
+                  color: 'rgb(160, 160, 160)',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.4)',
                   whiteSpace: 'pre-wrap',
                   wordBreak: 'break-word',
                   paddingLeft: '0'
@@ -1966,6 +2028,7 @@ Just type any of these questions or click one of the suggestion buttons below to
                 <button
                   key={index}
                   onClick={() => {
+                    pauseBackgroundVideos()
                     trackEngagement('reset_suggestion_click', suggestion)
                     setShowResetButtons(false)
                     append({
@@ -1981,6 +2044,7 @@ Just type any of these questions or click one of the suggestion buttons below to
                     color: '#FFFFFF',
                     fontSize: '12px',
                     fontFamily: 'inherit',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.4)',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
                     backdropFilter: 'blur(10px)',
@@ -2019,6 +2083,7 @@ Just type any of these questions or click one of the suggestion buttons below to
                 <button
                   key={index}
                   onClick={() => {
+                    pauseBackgroundVideos()
                     trackEngagement('contact_suggestion_click', suggestion)
                     setShowContactSuggestions(false)
                     append({
@@ -2034,6 +2099,7 @@ Just type any of these questions or click one of the suggestion buttons below to
                     color: '#FFFFFF',
                     fontSize: '12px',
                     fontFamily: 'inherit',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.4)',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
                     backdropFilter: 'blur(10px)',
@@ -2064,6 +2130,7 @@ Just type any of these questions or click one of the suggestion buttons below to
               color: '#FFFFFF',
               fontSize: '12px',
               lineHeight: '1.4',
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.4)',
               display: 'flex',
               alignItems: 'center',
               gap: '4px',
