@@ -947,7 +947,27 @@ export default function Home() {
           }
 
           .input-field::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.4) !important;
+          }
+          .input-field::-webkit-input-placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+          }
+          .input-field::-moz-placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+            opacity: 1;
+          }
+          .input-field:-ms-input-placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+          }
+          
+          /* Ensure consistent placeholder color on mobile */
+          @media (max-width: 767px) {
+            .input-field::placeholder {
+              color: rgba(255, 255, 255, 0.4) !important;
+            }
+            .input-field::-webkit-input-placeholder {
+              color: rgba(255, 255, 255, 0.4) !important;
+            }
           }
 
           .input-field:focus {
