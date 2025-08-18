@@ -1068,25 +1068,6 @@ export default function Home() {
       
       <NetworkStatus />
       
-      {/* EMERGENCY LIME HEADER - SHOULD ALWAYS SHOW */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        width: '100%',
-        height: '60px',
-        background: 'lime',
-        zIndex: 999999,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'black',
-        fontSize: '24px',
-        fontWeight: 'bold'
-      }}>
-        🚨 EMERGENCY HEADER - iOS SAFARI TEST 🚨
-      </div>
       
       <div 
         onClick={handlePageClick}
