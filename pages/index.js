@@ -433,7 +433,7 @@ export default function Home() {
         />
         
         {/* Viewport and Mobile */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
         <meta name="theme-color" content="#000000" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="color-scheme" content="dark only" />
@@ -710,13 +710,13 @@ export default function Home() {
               display: flex !important;
             }
             
-            /* Mobile header - improved spacing */
+            /* Mobile header - improved spacing with safe areas */
             .mobile-header {
               display: flex !important;
               visibility: visible !important;
               opacity: 1 !important;
-              height: 52px !important;
-              padding: 0 20px !important;
+              height: calc(52px + env(safe-area-inset-top)) !important;
+              padding: env(safe-area-inset-top) 20px 0 20px !important;
               position: fixed !important;
               top: 0 !important;
               left: 0 !important;
@@ -732,8 +732,9 @@ export default function Home() {
                 display: flex !important;
                 visibility: visible !important;
                 opacity: 1 !important;
-                background: rgba(255, 0, 0, 0.8) !important; /* Red debug background */
-                border: 2px solid yellow !important; /* Yellow debug border */
+                background: rgba(0, 0, 0, 0.3) !important;
+                backdrop-filter: blur(20px) !important;
+                -webkit-backdrop-filter: blur(20px) !important;
               }
             }
             
@@ -747,8 +748,7 @@ export default function Home() {
             /* Mobile content takes full viewport */
             .mobile-content {
               height: 100vh !important;
-              height: 100dvh !important; /* Dynamic viewport height */
-              padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left) !important;
+              padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
               display: flex !important;
               flex-direction: column !important;
               overflow: hidden !important;
@@ -1075,13 +1075,14 @@ export default function Home() {
         aria-label="Chat interface"
         style={{
           minHeight: '100vh',
+          height: '100vh',
           background: 'url(/BK1.png) center center / cover no-repeat',
           color: '#FFFFFF',
           fontFamily: "'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
           fontSize: '12px',
           lineHeight: '1.2',
           letterSpacing: '-0.19px',
-          padding: 0,
+          padding: 'env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0',
           margin: 0,
           cursor: 'text',
           display: 'flex',
@@ -1252,40 +1253,8 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Mobile Navigation Header - ALWAYS VISIBLE */}
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          width: '100%',
-          zIndex: 99999,
-          background: 'red',
-          height: '52px',
-          padding: '0 20px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          boxSizing: 'border-box',
-          color: 'white',
-          fontSize: '18px',
-          fontWeight: 'bold'
-        }}>
-          TEST HEADER - SHOULD ALWAYS BE VISIBLE
-        </div>
-
-        {/* Original mobile header for debugging */}
+        {/* Mobile Navigation Header */}
         <header className="mobile-header mobile-show" role="banner" style={{
-          position: 'fixed',
-          top: '60px',
-          left: 0,
-          right: 0,
-          width: '100%',
-          zIndex: 9999,
-          background: 'rgba(0, 255, 0, 0.9)',
-          height: '52px',
-          padding: '0 20px',
-          display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           boxSizing: 'border-box'
@@ -1444,7 +1413,7 @@ export default function Home() {
           height: '100vh',
           overflowY: 'auto',
           /* Fixed padding that accounts for floating overlays - never changes */
-          paddingTop: showMobileMenu ? '260px' : '80px',
+          paddingTop: showMobileMenu ? 'calc(260px + env(safe-area-inset-top))' : 'calc(80px + env(safe-area-inset-top))',
           paddingBottom: '120px',
           paddingLeft: '24px',
           paddingRight: '24px',
