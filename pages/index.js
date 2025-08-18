@@ -10,6 +10,106 @@ import News from '../components/News'
 import { trackEvent, trackEngagement } from '../lib/analytics'
 import { generateCaseStudySummary, generateFullCaseStudy } from '../data/case-studies'
 
+// Component that waits 3 seconds for images to load before showing content
+function AssistantMessageWithImageWait({ content }) {
+  const [showContent, setShowContent] = useState(false)
+  
+  const hasImages = content.includes('![')
+
+  useEffect(() => {
+    if (!hasImages) {
+      setShowContent(true)
+      return
+    }
+
+    // Give images 3 seconds to load, then show content
+    const timer = setTimeout(() => {
+      setShowContent(true)
+    }, 3000)
+
+    return () => clearTimeout(timer)
+  }, [hasImages])
+
+  if (!showContent) {
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        minHeight: '40px'
+      }}>
+        <div className="pulse-dot" style={{ animationDelay: '0s' }}></div>
+        <div className="pulse-dot" style={{ animationDelay: '0.2s' }}></div>
+        <div className="pulse-dot" style={{ animationDelay: '0.4s' }}></div>
+        <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.6)' }}>
+          Loading content...
+        </span>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{
+      opacity: 1,
+      animation: 'fadeIn 0.3s ease-in'
+    }}>
+    <ReactMarkdown
+      components={{
+        p: ({children}) => <div style={{ marginBottom: '8px' }}>{children}</div>,
+        strong: ({children}) => <strong style={{ fontWeight: 'bold' }}>{children}</strong>,
+        em: ({children}) => <em style={{ fontStyle: 'italic' }}>{children}</em>,
+        a: ({children, href}) => <a href={href} style={{ color: '#00FFFF', textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer">{children}</a>,
+        code: ({children}) => <code style={{ background: '#1a1a1a', padding: '2px 4px', borderRadius: '3px' }}>{children}</code>,
+        pre: ({children}) => <pre style={{ background: '#1a1a1a', padding: '8px', borderRadius: '3px', overflow: 'auto' }}>{children}</pre>,
+        ul: ({children}) => <ul style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ul>,
+        ol: ({children}) => <ol style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ol>,
+        li: ({children}) => <li style={{ marginBottom: '4px' }}>{children}</li>,
+        div: ({children, className}) => {
+          if (className === 'conversation-buttons') {
+            return <div className="conversation-buttons">{children}</div>
+          }
+          return <div className={className}>{children}</div>
+        },
+        img: ({src, alt}) => {          
+          return (
+            <div style={{
+              position: 'relative',
+              width: '100%',
+              marginBottom: '12px',
+              marginTop: '8px',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              background: '#0a0a0a',
+              minHeight: '200px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <img 
+                src={src} 
+                alt={alt} 
+                className="chat-image"
+                style={{ 
+                  width: '100%', 
+                  maxWidth: '100%', 
+                  height: 'auto',
+                  transition: 'opacity 0.3s ease'
+                }} 
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+          )
+        },
+      }}
+    >
+      {content}
+    </ReactMarkdown>
+    </div>
+  )
+}
+
 export default function Home() {
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
@@ -25,6 +125,7 @@ export default function Home() {
   const [placeholderText, setPlaceholderText] = useState('')
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
   const [showResetButtons, setShowResetButtons] = useState(false)
+  const [showContactSuggestions, setShowContactSuggestions] = useState(false)
   
   // Memoized conversation suggestions
   const conversationSuggestions = useMemo(() => [
@@ -36,6 +137,18 @@ export default function Home() {
     "Tell me about the Catalyst Program",
     "What makes Bttr different?",
     "How do you approach strategy?"
+  ], [])
+
+  // Memoized contact suggestions
+  const contactSuggestions = useMemo(() => [
+    "What's your availability for new projects?",
+    "Can we schedule a discovery call?",
+    "What information do you need from us?",
+    "How do you handle project timelines?",
+    "What's your onboarding process?",
+    "Can you share some client references?",
+    "What's included in your strategy phase?",
+    "How do you price different project types?"
   ], [])
   
   // Rotating placeholder messages
@@ -134,6 +247,7 @@ export default function Home() {
     setMessages([])
     setShowPortfolio(false)
     setShowNews(false)
+    setShowContactSuggestions(false)
     
     // Skip welcome animation since this is a manual reset
     setIsWelcomeComplete(true)
@@ -197,6 +311,21 @@ Just type any of these questions or click one of the suggestion buttons below to
       }
     }
   }, [messages, append])
+
+  // Check for completed contact response and show suggestions
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1]
+    if (lastMessage && 
+        lastMessage.role === 'assistant' && 
+        lastMessage.content.includes('To explore collaboration opportunities') &&
+        lastMessage.content.includes('We look forward to discussing how we can create impactful solutions together.') &&
+        !isLoading) {
+      // Show contact suggestions after the complete message is loaded
+      setTimeout(() => {
+        setShowContactSuggestions(true)
+      }, 500)
+    }
+  }, [messages, isLoading])
 
   // Update session context based on conversation
   const updateSessionContext = (newMessages) => {
@@ -425,6 +554,9 @@ Just type any of these questions or click one of the suggestion buttons below to
       if (showNews) {
         setShowNews(false)
       }
+      if (showContactSuggestions) {
+        setShowContactSuggestions(false)
+      }
       handleSubmit(e)
     }
   }
@@ -647,25 +779,31 @@ Just type any of these questions or click one of the suggestion buttons below to
             51%, 100% { opacity: 0; }
           }
           
-          @keyframes pulse {
+          @keyframes simple-pulse {
             0%, 100% {
-              transform: scale(0.8);
-              opacity: 0.5;
+              opacity: 0.3;
             }
             50% {
-              transform: scale(1.2);
+              opacity: 1;
+            }
+          }
+          
+          @keyframes fadeIn {
+            0% {
+              opacity: 0;
+            }
+            100% {
               opacity: 1;
             }
           }
           
           
           .pulse-dot {
-            width: 12px;
-            height: 12px;
+            width: 6px;
+            height: 6px;
             background: #FFFFFF;
             border-radius: 50%;
-            filter: blur(3px);
-            animation: pulse 1.5s ease-in-out infinite;
+            animation: simple-pulse 1.2s ease-in-out infinite;
           }
           
           .conversation-buttons {
@@ -1280,7 +1418,7 @@ Just type any of these questions or click one of the suggestion buttons below to
         style={{
           minHeight: '100vh',
           height: '100vh',
-          background: 'url(/BK1.png) center center / cover no-repeat',
+          background: 'linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url(/BK1.png) center center / cover no-repeat',
           color: '#FFFFFF',
           fontFamily: "'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
           fontSize: '12px',
@@ -1304,7 +1442,7 @@ Just type any of these questions or click one of the suggestion buttons below to
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'url(/BK1.png) center center / cover no-repeat',
+          background: 'linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url(/BK1.png) center center / cover no-repeat',
           filter: 'blur(15px)',
           zIndex: 1
         }} />
@@ -1783,93 +1921,31 @@ Just type any of these questions or click one of the suggestion buttons below to
                   style={{
                     color: '#f6f6f6'
                   }}>
-                  <ReactMarkdown
-                      components={{
-                        p: ({children}) => <div style={{ marginBottom: '8px' }}>{children}</div>,
-                        strong: ({children}) => <strong style={{ fontWeight: 'bold' }}>{children}</strong>,
-                        em: ({children}) => <em style={{ fontStyle: 'italic' }}>{children}</em>,
-                        a: ({children, href}) => <a href={href} style={{ color: '#00FFFF', textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer">{children}</a>,
-                        code: ({children}) => <code style={{ background: '#1a1a1a', padding: '2px 4px', borderRadius: '3px' }}>{children}</code>,
-                        pre: ({children}) => <pre style={{ background: '#1a1a1a', padding: '8px', borderRadius: '3px', overflow: 'auto' }}>{children}</pre>,
-                        ul: ({children}) => <ul style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ul>,
-                        ol: ({children}) => <ol style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ol>,
-                        li: ({children}) => <li style={{ marginBottom: '4px' }}>{children}</li>,
-                        div: ({children, className}) => {
-                          if (className === 'conversation-buttons') {
-                            return (
-                              <div className="conversation-buttons">
-                                {children}
-                              </div>
-                            )
-                          }
-                          return <div className={className}>{children}</div>
-                        },
-                        img: ({src, alt}) => {
-                          const [imageLoaded, setImageLoaded] = React.useState(false)
-                          const [imageError, setImageError] = React.useState(false)
-                          
-                          return (
-                            <div style={{
-                              position: 'relative',
-                              width: '100%',
-                              marginBottom: '12px',
-                              marginTop: '8px',
-                              borderRadius: '8px',
-                              overflow: 'hidden',
-                              border: '1px solid rgba(255, 255, 255, 0.1)',
-                              background: '#0a0a0a',
-                              minHeight: '200px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center'
-                            }}>
-                              {!imageLoaded && !imageError && (
-                                <div style={{
-                                  position: 'absolute',
-                                  top: '50%',
-                                  left: '50%',
-                                  transform: 'translate(-50%, -50%)',
-                                  color: 'rgba(255, 255, 255, 0.3)',
-                                  fontSize: '12px'
-                                }}>
-                                  Loading image...
-                                </div>
-                              )}
-                              {imageError ? (
-                                <div style={{
-                                  color: 'rgba(255, 255, 255, 0.5)',
-                                  textAlign: 'center',
-                                  padding: '40px 20px',
-                                  fontSize: '12px'
-                                }}>
-                                  📷 Image temporarily unavailable
-                                </div>
-                              ) : (
-                                <img 
-                                  src={src} 
-                                  alt={alt} 
-                                  className="chat-image"
-                                  style={{ 
-                                    width: '100%', 
-                                    maxWidth: '100%', 
-                                    height: 'auto',
-                                    display: imageLoaded ? 'block' : 'none',
-                                    opacity: imageLoaded ? 1 : 0,
-                                    transition: 'opacity 0.3s ease'
-                                  }} 
-                                  loading="lazy"
-                                  decoding="async"
-                                  onLoad={() => setImageLoaded(true)}
-                                  onError={() => setImageError(true)}
-                                />
-                              )}
-                            </div>
-                          )
-                        },
-                      }}
-                    >
-                    {msg.content}
-                  </ReactMarkdown>
+                  {msg.content.includes('![') ? (
+                    <AssistantMessageWithImageWait content={msg.content} />
+                  ) : (
+                    <ReactMarkdown
+                        components={{
+                          p: ({children}) => <div style={{ marginBottom: '8px' }}>{children}</div>,
+                          strong: ({children}) => <strong style={{ fontWeight: 'bold' }}>{children}</strong>,
+                          em: ({children}) => <em style={{ fontStyle: 'italic' }}>{children}</em>,
+                          a: ({children, href}) => <a href={href} style={{ color: '#00FFFF', textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer">{children}</a>,
+                          code: ({children}) => <code style={{ background: '#1a1a1a', padding: '2px 4px', borderRadius: '3px' }}>{children}</code>,
+                          pre: ({children}) => <pre style={{ background: '#1a1a1a', padding: '8px', borderRadius: '3px', overflow: 'auto' }}>{children}</pre>,
+                          ul: ({children}) => <ul style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ul>,
+                          ol: ({children}) => <ol style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ol>,
+                          li: ({children}) => <li style={{ marginBottom: '4px' }}>{children}</li>,
+                          div: ({children, className}) => {
+                            if (className === 'conversation-buttons') {
+                              return <div className="conversation-buttons">{children}</div>
+                            }
+                            return <div className={className}>{children}</div>
+                          },
+                        }}
+                      >
+                        {msg.content}
+                      </ReactMarkdown>
+                  )}
                 </div>
               )}
             </div>
@@ -1929,6 +2005,59 @@ Just type any of these questions or click one of the suggestion buttons below to
             </div>
           )}
           
+          {/* Contact Suggestion Buttons */}
+          {showContactSuggestions && (
+            <div className="conversation-suggestions" style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '12px',
+              justifyContent: 'flex-start',
+              maxWidth: '100%',
+              marginTop: '16px',
+              marginBottom: '20px'
+            }}>
+              {contactSuggestions.map((suggestion, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    trackEngagement('contact_suggestion_click', suggestion)
+                    setShowContactSuggestions(false)
+                    append({
+                      role: 'user',
+                      content: suggestion
+                    })
+                  }}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '24px',
+                    padding: '8px 16px',
+                    color: '#FFFFFF',
+                    fontSize: '12px',
+                    fontFamily: 'inherit',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                    whiteSpace: 'nowrap'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.15)'
+                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)'
+                    e.target.style.transform = 'translateY(-1px)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.1)'
+                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)'
+                    e.target.style.transform = 'translateY(0)'
+                  }}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          )}
+          
           {isLoading && (
             <div role="status" aria-live="polite" aria-label="AI is thinking" style={{ 
               marginBottom: '8px',
@@ -1938,9 +2067,12 @@ Just type any of these questions or click one of the suggestion buttons below to
               lineHeight: '1.4',
               display: 'flex',
               alignItems: 'center',
+              gap: '4px',
               height: '17px'
             }}>
-              <div className="pulse-dot" style={{ display: 'inline-block' }}></div>
+              <div className="pulse-dot" style={{ animationDelay: '0s' }}></div>
+              <div className="pulse-dot" style={{ animationDelay: '0.2s' }}></div>
+              <div className="pulse-dot" style={{ animationDelay: '0.4s' }}></div>
               <span className="sr-only">Loading response...</span>
             </div>
           )}
