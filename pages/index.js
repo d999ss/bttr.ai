@@ -372,48 +372,70 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
         .catch(() => {}) // Silently fail if SW registration fails
     }
     
-    // Load Unicorn Studio background
-    const loadUnicornBackground = () => {
-      // Check if script already exists
-      if (document.querySelector('script[src*="unicornstudio.com"]')) {
-        return
+    // Simple liquid animation with CSS
+    const createLiquidAnimation = () => {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      const container = document.getElementById('unicorn-liquid-bg')
+      
+      if (!container) return
+      
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+      canvas.style.width = '100%'
+      canvas.style.height = '100%'
+      canvas.style.position = 'absolute'
+      canvas.style.top = '0'
+      canvas.style.left = '0'
+      
+      container.appendChild(canvas)
+      
+      // Simple animated gradient liquid effect
+      let time = 0
+      
+      const animate = () => {
+        time += 0.01
+        
+        // Create gradient that moves like liquid
+        const gradient = ctx.createLinearGradient(
+          0, 0, 
+          canvas.width, canvas.height
+        )
+        
+        // Animated colors for liquid effect
+        const hue1 = 220 + Math.sin(time) * 20
+        const hue2 = 280 + Math.cos(time * 1.3) * 30
+        const hue3 = 320 + Math.sin(time * 0.7) * 25
+        
+        gradient.addColorStop(0, `hsl(${hue1}, 70%, 20%)`)
+        gradient.addColorStop(0.5, `hsl(${hue2}, 60%, 15%)`)
+        gradient.addColorStop(1, `hsl(${hue3}, 80%, 10%)`)
+        
+        ctx.fillStyle = gradient
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+        
+        requestAnimationFrame(animate)
       }
       
-      const script = document.createElement('script')
-      script.src = 'https://cdn.unicornstudio.com/3.0.0/unicornStudio.umd.js'
-      script.async = true
-      script.onload = () => {
-        if (window.UnicornStudio) {
-          try {
-            window.UnicornStudio.init({
-              projectId: 'liquid',
-              target: '#unicorn-liquid-bg',
-              viewport: {
-                width: window.innerWidth,
-                height: window.innerHeight
-              }
-            })
-          } catch (error) {
-            console.log('Unicorn Studio init error:', error)
-          }
+      animate()
+      
+      // Handle resize
+      const handleResize = () => {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+      }
+      
+      window.addEventListener('resize', handleResize)
+      
+      return () => {
+        window.removeEventListener('resize', handleResize)
+        if (container && canvas) {
+          container.removeChild(canvas)
         }
       }
-      document.head.appendChild(script)
     }
     
-    loadUnicornBackground()
-    
-    // Handle window resize for background
-    const handleResize = () => {
-      if (window.UnicornStudio && window.UnicornStudio.resize) {
-        window.UnicornStudio.resize({
-          width: window.innerWidth,
-          height: window.innerHeight
-        })
-      }
-    }
-    
-    window.addEventListener('resize', handleResize)
+    const cleanupLiquid = createLiquidAnimation()
     
     // Add global function for suggestion button clicks
     window.selectSuggestion = (suggestion) => {
@@ -463,7 +485,9 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
     return () => {
       document.removeEventListener('touchmove', preventDocumentScroll)
       document.removeEventListener('scroll', preventDocumentScrollEvent)
-      window.removeEventListener('resize', handleResize)
+      if (cleanupLiquid) {
+        cleanupLiquid()
+      }
     }
     
     // For mobile, don't auto-focus to prevent keyboard popup on load
