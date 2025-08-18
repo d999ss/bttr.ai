@@ -869,10 +869,10 @@ Just type any of these questions or click one of the suggestion buttons below to
             }
             .mobile-fullscreen {
               height: 100vh !important;
-              padding-top: 80px !important;
-              padding-bottom: 120px !important;
-              padding-left: 24px !important;
-              padding-right: 24px !important;
+              padding-top: 60px !important;
+              padding-bottom: 80px !important;
+              padding-left: 20px !important;
+              padding-right: 20px !important;
               display: flex !important;
               flex-direction: column !important;
               justify-content: flex-start !important;
@@ -1378,7 +1378,7 @@ Just type any of these questions or click one of the suggestion buttons below to
             
             /* Center content vertically when only welcome message is shown */
             .mobile-fullscreen {
-              min-height: calc(100vh - 140px) !important;
+              min-height: calc(100vh - 100px) !important;
             }
           }
         `}</style>
@@ -1774,10 +1774,10 @@ Just type any of these questions or click one of the suggestion buttons below to
             justifyContent: 'center',
             padding: 0
           } : {
-            /* Chat mode: Normal flow with overlay clearance */
+            /* Chat mode: Normal flow with minimal overlay clearance */
             justifyContent: 'flex-start',
-            paddingTop: showMobileMenu ? 'calc(200px + env(safe-area-inset-top))' : 'calc(60px + env(safe-area-inset-top))',
-            paddingBottom: 'calc(120px + env(safe-area-inset-bottom))'
+            paddingTop: showMobileMenu ? 'calc(140px + env(safe-area-inset-top))' : 'calc(40px + env(safe-area-inset-top))',
+            paddingBottom: 'calc(80px + env(safe-area-inset-bottom))'
           })
         }}>
           <div style={{
@@ -1794,7 +1794,7 @@ Just type any of these questions or click one of the suggestion buttons below to
               justifyContent: 'center',
               alignItems: 'center'
             } : {
-              /* Chat mode: Normal flow */
+              /* Chat mode: Normal flow with input field matching padding */
               padding: '0 32px',
               justifyContent: 'flex-start',
               minHeight: 'auto'
