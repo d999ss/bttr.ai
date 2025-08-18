@@ -921,7 +921,7 @@ export default function Home() {
             max-height: var(--h);
             width: 100%;
             box-sizing: border-box;
-            padding: 12px 45px 12px 14px; /* Add vertical padding for better text positioning */
+            padding: 0 45px 0 14px; /* Reset to no vertical padding for proper centering */
             font-family: 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-size: 16px;
             letter-spacing: -0.19px;
@@ -937,11 +937,9 @@ export default function Home() {
             outline: none;
             resize: none;
             overflow: hidden;
-            line-height: 1.4; /* Better line height for text readability */
+            line-height: var(--h); /* Line height equals container height for perfect vertical centering */
             text-align: left;
             vertical-align: middle;
-            display: flex;
-            align-items: center;
             caret-color: white;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
           }
