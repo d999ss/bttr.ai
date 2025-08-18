@@ -958,6 +958,16 @@ export default function Home() {
             --geist-placeholder: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(80px) saturate(150%);
           }
+          
+          /* Ensure perfect centering on all viewport sizes */
+          @media (min-height: 400px) {
+            .mobile-welcome {
+              display: flex !important;
+              align-items: center !important;
+              justify-content: center !important;
+              text-align: center !important;
+            }
+          }
 
           
           /* Desktop chat container - full width */
@@ -1450,27 +1460,43 @@ export default function Home() {
           left: 0,
           right: 0,
           bottom: 0,
-          /* Fixed padding that accounts for floating overlays - minimal for perfect centering */
-          paddingTop: showMobileMenu ? 'calc(200px + env(safe-area-inset-top))' : (messages.length === 0 && !showPortfolio && !showNews) ? 'calc(20px + env(safe-area-inset-top))' : 'calc(60px + env(safe-area-inset-top))',
-          paddingBottom: (messages.length === 0 && !showPortfolio && !showNews) ? 'calc(20px + env(safe-area-inset-bottom))' : 'calc(120px + env(safe-area-inset-bottom))',
           background: 'transparent',
           WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'smooth',
           touchAction: 'pan-y',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: (messages.length === 0 && !showPortfolio && !showNews) ? 'center' : 'flex-start',
-          alignItems: 'center'
+          alignItems: 'center',
+          /* Dynamic spacing based on content type */
+          ...(messages.length === 0 && !showPortfolio && !showNews ? {
+            /* Welcome message: True viewport centering */
+            justifyContent: 'center',
+            padding: 0
+          } : {
+            /* Chat mode: Normal flow with overlay clearance */
+            justifyContent: 'flex-start',
+            paddingTop: showMobileMenu ? 'calc(200px + env(safe-area-inset-top))' : 'calc(60px + env(safe-area-inset-top))',
+            paddingBottom: 'calc(120px + env(safe-area-inset-bottom))'
+          })
         }}>
           <div style={{
             width: '100%',
             maxWidth: '1200px',
-            padding: '0 32px',
             boxSizing: 'border-box',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: (messages.length === 0 && !showPortfolio && !showNews) ? 'center' : 'flex-start',
-            minHeight: (messages.length === 0 && !showPortfolio && !showNews) ? '100%' : 'auto'
+            /* Dynamic styling based on content type */
+            ...(messages.length === 0 && !showPortfolio && !showNews ? {
+              /* Welcome message: Use full viewport height with padding for floating elements */
+              minHeight: '100vh',
+              padding: 'calc(60px + env(safe-area-inset-top)) 32px calc(60px + env(safe-area-inset-bottom))',
+              justifyContent: 'center'
+            } : {
+              /* Chat mode: Normal flow */
+              padding: '0 32px',
+              justifyContent: 'flex-start',
+              minHeight: 'auto'
+            })
           }}>
           
           {/* Welcome Message */}
