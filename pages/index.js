@@ -200,7 +200,7 @@ export default function Home() {
   // Simple fade-in for welcome message
   useEffect(() => {
     // Set text immediately
-    setWelcomeText("We partner with ambitious teams to design and build new brands and digital experiences faster.")
+    setWelcomeText("When AI defines the future. We design the brands and experiences that thrive in it.")
     setIsWelcomeComplete(false)
     
     // Trigger fade-in after luxurious pause
@@ -729,7 +729,7 @@ export default function Home() {
           /* Global content container for perfect alignment */
           .content-container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 864px;
             padding: 0 32px;
             margin: 0 auto;
             box-sizing: border-box;
@@ -738,7 +738,7 @@ export default function Home() {
           /* Nav content container width matching */
           .nav-content-container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 864px;
             padding: 8px 32px;
             display: flex;
             justify-content: space-between;
@@ -844,19 +844,34 @@ export default function Home() {
               flex: 1 !important;
               display: flex !important;
               align-items: center !important;
-              justify-content: center !important;
+              justify-content: flex-start !important;
               padding: 20px !important;
-              text-align: center !important;
+              text-align: left !important;
             }
             
             .mobile-welcome .welcome-message {
               font-family: 'SuisseBPIntl', 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-              font-size: 28px !important;
-              line-height: 25.2px !important;
-              letter-spacing: -0.5px !important;
+              font-size: 42px !important;
+              line-height: 40px !important;
+              letter-spacing: -0.7px !important;
               font-weight: 500 !important;
               white-space: normal !important;
               text-align: left !important;
+              margin: 0 !important;
+              max-width: 100% !important;
+              word-wrap: break-word !important;
+              hyphens: auto !important;
+            }
+            
+            /* Mobile welcome message styling */
+            .mobile-welcome .welcome-message {
+              font-family: 'SuisseBPIntl', 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+              font-size: 28px !important;
+              line-height: 32px !important;
+              letter-spacing: -0.5px !important;
+              font-weight: 500 !important;
+              white-space: normal !important;
+              text-align: center !important;
               margin: 0 !important;
               max-width: 100% !important;
               word-wrap: break-word !important;
@@ -959,13 +974,13 @@ export default function Home() {
             backdrop-filter: blur(80px) saturate(150%);
           }
           
-          /* Ensure perfect centering on all viewport sizes */
+          /* Ensure perfect vertical centering with left text alignment */
           @media (min-height: 400px) {
             .mobile-welcome {
               display: flex !important;
               align-items: center !important;
-              justify-content: center !important;
-              text-align: center !important;
+              justify-content: flex-start !important;
+              text-align: left !important;
             }
           }
 
@@ -1007,13 +1022,13 @@ export default function Home() {
               margin-left: 0 !important;
               margin-right: 0 !important;
             }
-            /* Welcome message should be centered */
+            /* Welcome message should be left-aligned */
             .mobile-welcome.message-container {
               max-width: none !important;
-              margin-left: auto !important;
-              margin-right: auto !important;
+              margin-left: 0 !important;
+              margin-right: 0 !important;
               display: flex !important;
-              justify-content: center !important;
+              justify-content: flex-start !important;
             }
           }
           
@@ -1061,19 +1076,35 @@ export default function Home() {
             }
           }
           
-          /* Large welcome message on desktop */
-          @media (min-width: 768px) {
+          /* Medium breakpoint - match donnysmith.com sizing */
+          @media (min-width: 768px) and (max-width: 1023px) {
             .welcome-message {
               font-family: 'SuisseBPIntl', 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
               font-weight: 500 !important;
-              font-size: 53px !important;
-              line-height: 47.7px !important;
+              font-size: 32px !important;
+              line-height: 36px !important;
               margin: 0 !important;
-              letter-spacing: -0.8px !important;
+              letter-spacing: -0.6px !important;
               white-space: normal !important;
               width: 100% !important;
               box-sizing: border-box !important;
             }
+          }
+          
+          /* Desktop welcome message - match donnysmith.com */
+          @media (min-width: 1024px) {
+            .welcome-message {
+              font-family: 'SuisseBPIntl', 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+              font-weight: 500 !important;
+              font-size: 36px !important;
+              line-height: 40px !important;
+              margin: 0 !important;
+              letter-spacing: -0.7px !important;
+              white-space: normal !important;
+              width: 100% !important;
+              box-sizing: border-box !important;
+            }
+          }
             
             /* Center content vertically when only welcome message is shown */
             .mobile-fullscreen {
@@ -1481,16 +1512,17 @@ export default function Home() {
         }}>
           <div style={{
             width: '100%',
-            maxWidth: '1200px',
+            maxWidth: '864px',
             boxSizing: 'border-box',
             display: 'flex',
             flexDirection: 'column',
             /* Dynamic styling based on content type */
             ...(messages.length === 0 && !showPortfolio && !showNews ? {
-              /* Welcome message: Use full viewport height with padding for floating elements */
+              /* Welcome message: Center positioning like donnysmith.com */
               minHeight: '100vh',
-              padding: 'calc(60px + env(safe-area-inset-top)) 32px calc(60px + env(safe-area-inset-bottom))',
-              justifyContent: 'center'
+              padding: '80px 32px 140px 32px',
+              justifyContent: 'center',
+              alignItems: 'center'
             } : {
               /* Chat mode: Normal flow */
               padding: '0 32px',
@@ -1501,14 +1533,21 @@ export default function Home() {
           
           {/* Welcome Message */}
           {messages.length === 0 && !showPortfolio && !showNews && (
-            <div className="mobile-welcome message-container">
+            <div className="mobile-welcome message-container" style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
               <div 
                 className="welcome-message"
                 role="status"
                 aria-live="polite"
                 aria-atomic="true"
                 style={{
-                  color: '#FFFFFF'
+                  color: '#FFFFFF',
+                  textAlign: 'center',
+                  maxWidth: '100%'
                 }}>
                 <div style={{ 
                   position: 'relative',
@@ -1639,7 +1678,7 @@ export default function Home() {
           role="form" 
           aria-label="Chat input"
         >
-          <div style={{ maxWidth: '1200px', width: '100%', padding: '16px 32px', margin: '0 auto', boxSizing: 'border-box' }}>
+          <div style={{ maxWidth: '864px', width: '100%', padding: '16px 32px', margin: '0 auto', boxSizing: 'border-box' }}>
             <Input
               ref={inputRef}
               placeholder={placeholderText || "Ask us anything"}
