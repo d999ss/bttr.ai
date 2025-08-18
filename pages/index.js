@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
 import { useChat } from '@ai-sdk/react'
 import ReactMarkdown from 'react-markdown'
-import { Input, GeistProvider, CssBaseline } from '@geist-ui/core'
+import { GeistProvider, CssBaseline, Input, Grid, Text, Container } from '@geist-ui/core'
 import ErrorBoundary from '../components/ErrorBoundary'
 import NetworkStatus from '../components/NetworkStatus'
 import Portfolio from '../components/Portfolio'
@@ -926,6 +926,9 @@ export default function Home() {
             border: none !important;
             outline: none !important;
             box-shadow: none !important;
+            position: relative !important;
+            z-index: 1 !important;
+            caret-color: white !important;
           }
           
           /* Override any pseudo-elements or focus states */
@@ -935,6 +938,22 @@ export default function Home() {
             border: none !important;
             outline: none !important;
             box-shadow: none !important;
+            caret-color: white !important;
+          }
+          
+          /* Standard input placeholder styling */
+          .field-wrap input::placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+          }
+          .field-wrap input::-webkit-input-placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+          }
+          .field-wrap input::-moz-placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+            opacity: 1;
+          }
+          .field-wrap input:-ms-input-placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
           }
 
           
@@ -1581,46 +1600,24 @@ export default function Home() {
           role="form" 
           aria-label="Chat input"
         >
-          <label className="sr-only" htmlFor="chat-input">Message</label>
-          <div className="field-wrap">
-            <Input 
+          <Container style={{ maxWidth: '864px', width: '100%', padding: '16px 32px', margin: '0 auto' }}>
+            <Input
               ref={inputRef}
               placeholder={placeholderText || "Ask us anything"}
               value={input}
               onChange={(e) => handleInputChange(e)}
               onKeyDown={handleKeyPress}
               disabled={isLoading}
-              autoComplete="off"
-              autoCorrect="on"
-              spellCheck="true"
-              htmlType="text"
               width="100%"
-              scale={1.2}
+              font="16px"
               style={{
                 backgroundColor: 'rgba(0, 0, 0, 0.1)',
                 backdropFilter: 'blur(20px) saturate(150%)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '12px',
-                color: '#FFFFFF',
-                fontFamily: "'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                fontSize: '16px',
-                outline: 'none',
-                boxShadow: 'none'
-              }}
-              css={{
-                '& input': {
-                  border: 'none !important',
-                  outline: 'none !important',
-                  boxShadow: 'none !important'
-                },
-                '& input:focus': {
-                  border: 'none !important',
-                  outline: 'none !important',
-                  boxShadow: 'none !important'
-                }
+                borderRadius: '12px'
               }}
             />
-          </div>
+          </Container>
         </div>
         
         {/* Keyboard-safe spacing script */}
