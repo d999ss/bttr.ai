@@ -219,9 +219,12 @@ export default function Home() {
     document.documentElement.scrollTop = 0
     document.body.scrollTop = 0
     
-    // Prevent any default scroll behavior
+    // Prevent any default scroll behavior but allow input interactions
     const preventScroll = (e) => {
-      if (e.target.tagName !== 'MAIN') {
+      if (e.target.tagName !== 'MAIN' && 
+          e.target.tagName !== 'TEXTAREA' && 
+          e.target.tagName !== 'INPUT' &&
+          !e.target.closest('.input-bar')) {
         e.preventDefault()
       }
     }
@@ -672,10 +675,10 @@ export default function Home() {
 
           .input-bar {
             position: fixed !important;
-            bottom: 0 !important;
+            bottom: env(safe-area-inset-bottom) !important;
             left: 0 !important;
             right: 0 !important;
-            z-index: 9999 !important;
+            z-index: 999999 !important;
             padding: 16px;
             background: transparent;
             width: 100% !important;
@@ -685,6 +688,8 @@ export default function Home() {
             /* Complete isolation from content flow */
             margin: 0 !important;
             top: auto !important;
+            visibility: visible !important;
+            opacity: 1 !important;
           }
           
           @media (min-width: 768px) {
@@ -894,6 +899,9 @@ export default function Home() {
           .field-wrap {
             position: relative;
             width: 100%;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
           }
 
           .input-field {
@@ -906,12 +914,15 @@ export default function Home() {
             font-family: 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-size: 16px;
             letter-spacing: -0.19px;
-            color: #FFFFFF;
-            background: rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(20px) saturate(150%);
-            -webkit-backdrop-filter: blur(20px) saturate(150%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #FFFFFF !important;
+            background: rgba(0, 0, 0, 0.1) !important;
+            backdrop-filter: blur(20px) saturate(150%) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
             border-radius: var(--radius);
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
             outline: none;
             resize: none;
             overflow: hidden;
