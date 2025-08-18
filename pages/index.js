@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
 import { useChat } from '@ai-sdk/react'
 import ReactMarkdown from 'react-markdown'
-import { GeistProvider, CssBaseline, Input, Grid, Text, Container } from '@geist-ui/core'
+import { GeistProvider, CssBaseline, Input, Grid, Text } from '@geist-ui/core'
 import ErrorBoundary from '../components/ErrorBoundary'
 import NetworkStatus from '../components/NetworkStatus'
 import Portfolio from '../components/Portfolio'
@@ -1600,7 +1600,7 @@ export default function Home() {
           role="form" 
           aria-label="Chat input"
         >
-          <Container style={{ maxWidth: '864px', width: '100%', padding: '16px 32px', margin: '0 auto' }}>
+          <div style={{ maxWidth: '864px', width: '100%', padding: '16px 32px', margin: '0 auto', boxSizing: 'border-box' }}>
             <Input
               ref={inputRef}
               placeholder={placeholderText || "Ask us anything"}
@@ -1617,7 +1617,7 @@ export default function Home() {
                 borderRadius: '12px'
               }}
             />
-          </Container>
+          </div>
         </div>
         
         {/* Keyboard-safe spacing script */}
