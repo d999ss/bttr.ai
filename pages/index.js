@@ -433,12 +433,8 @@ export default function Home() {
         />
         
         {/* Viewport and Mobile */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content="#000000" />
-        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#000000" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="color-scheme" content="dark only" />
         <meta name="supported-color-schemes" content="dark" />
@@ -560,10 +556,9 @@ export default function Home() {
               display: block !important;
             }
             .mobile-fullscreen {
-              height: 100dvh !important; /* Use dynamic viewport height for iPhone */
-              min-height: -webkit-fill-available !important; /* iOS Safari fix */
+              height: 100vh !important;
               padding-top: 80px !important;
-              padding-bottom: 80px !important; /* Reduced for keyboard space */
+              padding-bottom: 120px !important;
               padding-left: 24px !important;
               padding-right: 24px !important;
               display: flex !important;
@@ -571,7 +566,6 @@ export default function Home() {
               justify-content: flex-start !important;
               overflow-y: auto !important;
               scroll-behavior: smooth !important;
-              -webkit-overflow-scrolling: touch !important; /* Smooth iOS scrolling */
             }
             .mobile-caret {
               font-size: 16px !important;
@@ -606,24 +600,14 @@ export default function Home() {
             /* Better mobile viewport handling */
             html {
               height: 100%;
-              height: 100dvh; /* Dynamic viewport height for iPhone */
               -webkit-text-size-adjust: 100%;
             }
             
             body {
               height: 100%;
-              height: 100dvh; /* Dynamic viewport height for iPhone */
-              min-height: -webkit-fill-available; /* iOS Safari fix */
               -webkit-font-smoothing: antialiased;
               -moz-osx-font-smoothing: grayscale;
               touch-action: manipulation;
-            }
-            
-            /* iOS Safari fixes */
-            @supports (-webkit-touch-callout: none) {
-              .mobile-fullscreen {
-                height: -webkit-fill-available !important;
-              }
             }
           }
         `}
@@ -869,10 +853,8 @@ export default function Home() {
             font-size: 16px;
             letter-spacing: -0.19px;
             color: #FFFFFF;
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: var(--radius);
             outline: none;
             resize: none;
@@ -1086,16 +1068,15 @@ export default function Home() {
           position: 'relative'
         }}>
         
-        {/* Background overlay - darken and blur */}
+        {/* Background overlay */}
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(0, 0, 0, 0.5)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
+          background: 'url(/BK1.png) center center / cover no-repeat',
+          filter: 'blur(2px)',
           zIndex: 1
         }} />
         
@@ -1420,12 +1401,11 @@ export default function Home() {
 
         {/* Terminal Content - Flows underneath floating overlays */}
         <main className="mobile-content mobile-fullscreen" role="region" aria-label="Chat messages" style={{
-          height: '100dvh', /* Dynamic viewport height for iPhone */
-          minHeight: '-webkit-fill-available', /* iOS Safari fix */
+          height: '100vh',
           overflowY: 'auto',
           /* Fixed padding that accounts for floating overlays - never changes */
           paddingTop: showMobileMenu ? '260px' : '80px',
-          paddingBottom: '80px', /* Reduced for iPhone keyboard */
+          paddingBottom: '120px',
           paddingLeft: '24px',
           paddingRight: '24px',
           background: 'transparent',
