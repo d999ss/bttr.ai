@@ -372,7 +372,7 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
         .catch(() => {}) // Silently fail if SW registration fails
     }
     
-    // Load Unicorn Studio Liquid background with correct project ID
+    // Load Unicorn Studio Liquid background with retry logic
     const loadUnicornStudio = () => {
       const container = document.getElementById('unicorn-liquid-bg')
       if (!container) return
@@ -380,22 +380,49 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
       // Set the project ID immediately
       container.setAttribute('data-us-project', 'lHlDvoJDIXCxxXVqTNOC')
       
-      // Check if script already exists
-      const existingScript = document.querySelector('script[src*="unicorn.studio"]')
-      if (existingScript) {
-        // If script exists, just try to reinitialize
+      let retryCount = 0
+      const maxRetries = 3
+      
+      const initUnicornStudio = () => {
         if (window.UnicornStudio) {
           try {
             window.UnicornStudio.destroy()
             window.UnicornStudio.init().then(scenes => {
-              console.log('Unicorn Studio Liquid reloaded:', scenes)
+              console.log('Unicorn Studio Liquid loaded:', scenes)
+              container.style.opacity = '1'
             }).catch(error => {
-              console.log('Unicorn Studio reinit error:', error)
+              console.log('Unicorn Studio init error:', error)
+              // Retry if failed
+              if (retryCount < maxRetries) {
+                retryCount++
+                console.log(`Retrying Unicorn Studio init (${retryCount}/${maxRetries})`)
+                setTimeout(initUnicornStudio, 1000)
+              }
             })
           } catch (error) {
-            console.log('Unicorn Studio reinitialization error:', error)
+            console.log('Unicorn Studio initialization error:', error)
+            // Retry if failed
+            if (retryCount < maxRetries) {
+              retryCount++
+              console.log(`Retrying Unicorn Studio init (${retryCount}/${maxRetries})`)
+              setTimeout(initUnicornStudio, 1000)
+            }
+          }
+        } else {
+          // UnicornStudio not loaded yet, retry
+          if (retryCount < maxRetries) {
+            retryCount++
+            console.log(`UnicornStudio not ready, retrying (${retryCount}/${maxRetries})`)
+            setTimeout(initUnicornStudio, 1000)
           }
         }
+      }
+      
+      // Check if script already exists
+      const existingScript = document.querySelector('script[src*="unicorn.studio"]')
+      if (existingScript) {
+        // Script exists, try to initialize
+        setTimeout(initUnicornStudio, 100)
         return
       }
       
@@ -405,27 +432,21 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
       script.src = 'https://cdn.unicorn.studio/v1.2.3/unicornStudio.umd.js'
       
       script.onload = () => {
-        if (window.UnicornStudio) {
-          try {
-            // Small delay to ensure DOM is ready
-            setTimeout(() => {
-              window.UnicornStudio.destroy()
-              window.UnicornStudio.init().then(scenes => {
-                console.log('Unicorn Studio Liquid loaded:', scenes)
-                // Ensure container shows the animation
-                container.style.opacity = '1'
-              }).catch(error => {
-                console.log('Unicorn Studio init error:', error)
-              })
-            }, 100)
-          } catch (error) {
-            console.log('Unicorn Studio initialization error:', error)
-          }
-        }
+        console.log('Unicorn Studio script loaded')
+        setTimeout(initUnicornStudio, 200)
       }
       
       script.onerror = () => {
         console.log('Failed to load Unicorn Studio script')
+        // Try to reload the script
+        if (retryCount < maxRetries) {
+          retryCount++
+          console.log(`Retrying script load (${retryCount}/${maxRetries})`)
+          setTimeout(() => {
+            const newScript = script.cloneNode()
+            document.head.appendChild(newScript)
+          }, 1000)
+        }
       }
       
       document.head.appendChild(script)
