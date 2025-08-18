@@ -56,11 +56,11 @@ function AssistantMessageWithImageWait({ content }) {
     <ReactMarkdown
       components={{
         p: ({children}) => <div style={{ marginBottom: '8px' }}>{children}</div>,
-        strong: ({children}) => <strong style={{ fontWeight: 'bold' }}>{children}</strong>,
+        strong: ({children}) => <strong style={{ fontWeight: '600' }}>{children}</strong>,
         em: ({children}) => <em style={{ fontStyle: 'italic' }}>{children}</em>,
-        a: ({children, href}) => <a href={href} style={{ color: '#00FFFF', textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer">{children}</a>,
-        code: ({children}) => <code style={{ background: '#1a1a1a', padding: '2px 4px', borderRadius: '3px' }}>{children}</code>,
-        pre: ({children}) => <pre style={{ background: '#1a1a1a', padding: '8px', borderRadius: '3px', overflow: 'auto' }}>{children}</pre>,
+        a: ({children, href}) => <a href={href} style={{ color: '#FFFFFF', textDecoration: 'underline', fontWeight: '500' }} target="_blank" rel="noopener noreferrer">{children}</a>,
+        code: ({children}) => <code style={{ background: 'rgba(0, 0, 0, 0.3)', padding: '2px 4px', borderRadius: '3px', fontSize: '13px' }}>{children}</code>,
+        pre: ({children}) => <pre style={{ background: 'rgba(0, 0, 0, 0.3)', padding: '8px', borderRadius: '6px', overflow: 'auto', fontSize: '13px' }}>{children}</pre>,
         ul: ({children}) => <ul style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ul>,
         ol: ({children}) => <ol style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ol>,
         li: ({children}) => <li style={{ marginBottom: '4px' }}>{children}</li>,
@@ -1316,6 +1316,42 @@ Just type any of these questions or click one of the suggestion buttons below to
             }
           }
           
+          @keyframes slideInFromRight {
+            0% {
+              opacity: 0;
+              transform: translateX(20px) scale(0.9);
+            }
+            100% {
+              opacity: 1;
+              transform: translateX(0) scale(1);
+            }
+          }
+          
+          @keyframes slideInFromLeft {
+            0% {
+              opacity: 0;
+              transform: translateX(-20px) scale(0.9);
+            }
+            100% {
+              opacity: 1;
+              transform: translateX(0) scale(1);
+            }
+          }
+          
+          @keyframes messagePop {
+            0% {
+              transform: scale(0.8);
+              opacity: 0;
+            }
+            70% {
+              transform: scale(1.05);
+            }
+            100% {
+              transform: scale(1);
+              opacity: 1;
+            }
+          }
+          
           @keyframes fadeInDown {
             0% {
               opacity: 0;
@@ -1941,23 +1977,46 @@ Just type any of these questions or click one of the suggestion buttons below to
           <div>
             {messages.map((msg, i) => (
               <div key={msg.id || i} className="message-container" style={{ 
-                marginBottom: '12px',
-                marginTop: (i <= 1 && msg.role === 'assistant') ? '32px' : (msg.role === 'user' ? '24px' : '0px')
+                marginBottom: '8px',
+                marginTop: (i === 0) ? '32px' : '0px',
+                display: 'flex',
+                justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                width: '100%'
               }}>
               {msg.role === 'user' ? (
                 <div className="chat-message user-message" style={{
-                  color: 'rgb(160, 160, 160)',
-                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.4)',
+                  background: 'linear-gradient(135deg, #007AFF 0%, #0051D5 100%)',
+                  color: '#FFFFFF',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
                   whiteSpace: 'pre-wrap',
                   wordBreak: 'break-word',
-                  paddingLeft: '0'
+                  padding: '10px 14px',
+                  borderRadius: '18px',
+                  maxWidth: '70%',
+                  fontSize: '14px',
+                  lineHeight: '1.4',
+                  boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+                  animation: 'slideInFromRight 0.3s ease-out',
+                  transformOrigin: 'bottom right'
                 }}>
                   {msg.content}
                 </div>
               ) : (
                 <div className="chat-message assistant-message"
                   style={{
-                    color: '#f6f6f6'
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                    color: '#FFFFFF',
+                    padding: '10px 14px',
+                    borderRadius: '18px',
+                    maxWidth: '70%',
+                    fontSize: '14px',
+                    lineHeight: '1.4',
+                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    animation: 'slideInFromLeft 0.3s ease-out',
+                    transformOrigin: 'bottom left'
                   }}>
                   {msg.content.includes('![') ? (
                     <AssistantMessageWithImageWait content={msg.content} />
@@ -1965,11 +2024,11 @@ Just type any of these questions or click one of the suggestion buttons below to
                     <ReactMarkdown
                         components={{
                           p: ({children}) => <div style={{ marginBottom: '8px' }}>{children}</div>,
-                          strong: ({children}) => <strong style={{ fontWeight: 'bold' }}>{children}</strong>,
+                          strong: ({children}) => <strong style={{ fontWeight: '600' }}>{children}</strong>,
                           em: ({children}) => <em style={{ fontStyle: 'italic' }}>{children}</em>,
-                          a: ({children, href}) => <a href={href} style={{ color: '#00FFFF', textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer">{children}</a>,
-                          code: ({children}) => <code style={{ background: '#1a1a1a', padding: '2px 4px', borderRadius: '3px' }}>{children}</code>,
-                          pre: ({children}) => <pre style={{ background: '#1a1a1a', padding: '8px', borderRadius: '3px', overflow: 'auto' }}>{children}</pre>,
+                          a: ({children, href}) => <a href={href} style={{ color: '#FFFFFF', textDecoration: 'underline', fontWeight: '500' }} target="_blank" rel="noopener noreferrer">{children}</a>,
+                          code: ({children}) => <code style={{ background: 'rgba(0, 0, 0, 0.3)', padding: '2px 4px', borderRadius: '3px', fontSize: '13px' }}>{children}</code>,
+                          pre: ({children}) => <pre style={{ background: 'rgba(0, 0, 0, 0.3)', padding: '8px', borderRadius: '6px', overflow: 'auto', fontSize: '13px' }}>{children}</pre>,
                           ul: ({children}) => <ul style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ul>,
                           ol: ({children}) => <ol style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ol>,
                           li: ({children}) => <li style={{ marginBottom: '4px' }}>{children}</li>,
