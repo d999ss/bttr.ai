@@ -1464,6 +1464,23 @@ Just type any of these questions or click one of the suggestion buttons below to
           zIndex: 1
         }} />
         
+        {/* Blurred background overlay */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundImage: 'url(/BK1.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            filter: 'blur(15px)',
+            zIndex: 2
+          }}
+        />
+        
         <div style={{
           width: '100%',
           maxWidth: '100vw',
