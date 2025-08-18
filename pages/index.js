@@ -460,6 +460,31 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
     
     const cleanupUnicorn = loadUnicornStudio()
     
+    // Re-initialize Unicorn Studio on page visibility change (handles navigation)
+    const handleVisibilityChange = () => {
+      if (!document.hidden && window.UnicornStudio) {
+        console.log('Page became visible, re-initializing liquid background')
+        setTimeout(() => {
+          const container = document.getElementById('unicorn-liquid-bg')
+          if (container) {
+            try {
+              window.UnicornStudio.destroy()
+              window.UnicornStudio.init().then(scenes => {
+                console.log('Unicorn Studio Liquid re-initialized on visibility:', scenes)
+                container.style.opacity = '1'
+              }).catch(error => {
+                console.log('Unicorn Studio visibility reinit error:', error)
+              })
+            } catch (error) {
+              console.log('Unicorn Studio visibility reinitialization error:', error)
+            }
+          }
+        }, 500)
+      }
+    }
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
     // Add global function for suggestion button clicks
     window.selectSuggestion = (suggestion) => {
       trackEngagement('suggestion_click', suggestion)
@@ -508,6 +533,7 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
     return () => {
       document.removeEventListener('touchmove', preventDocumentScroll)
       document.removeEventListener('scroll', preventDocumentScrollEvent)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
       if (cleanupUnicorn) {
         cleanupUnicorn()
       }
