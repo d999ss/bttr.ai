@@ -906,7 +906,9 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
             right: 0 !important;
             z-index: 999999 !important;
             padding: 16px;
-            background: transparent;
+            background: rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(80px) saturate(150%);
+            -webkit-backdrop-filter: blur(80px) saturate(150%);
             width: 100% !important;
             box-sizing: border-box;
             pointer-events: auto;
