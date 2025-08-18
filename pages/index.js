@@ -114,8 +114,6 @@ export default function Home() {
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
   const inactivityTimerRef = useRef(null)
-  const videoRef = useRef(null)
-  const blurredVideoRef = useRef(null)
   const [sessionContext, setSessionContext] = useState({})
   const [welcomeText, setWelcomeText] = useState('')
   const [isWelcomeComplete, setIsWelcomeComplete] = useState(false)
@@ -199,14 +197,6 @@ export default function Home() {
   }, [messages.length, showPortfolio, showNews])
 
   // Function to pause background videos on user interaction
-  const pauseBackgroundVideos = useCallback(() => {
-    if (videoRef.current) {
-      videoRef.current.pause()
-    }
-    if (blurredVideoRef.current) {
-      blurredVideoRef.current.pause()
-    }
-  }, [])
   
   const handleProjectClick = useCallback((project) => {
     // Track portfolio interaction
@@ -420,7 +410,6 @@ Just type any of these questions or click one of the suggestion buttons below to
     
     // Add global function for suggestion button clicks
     window.selectSuggestion = (suggestion) => {
-      pauseBackgroundVideos()
       trackEngagement('suggestion_click', suggestion)
       append({
         role: 'user',
@@ -560,8 +549,7 @@ Just type any of these questions or click one of the suggestion buttons below to
     
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      // Pause videos on user interaction
-      pauseBackgroundVideos()
+      // User interaction
       // Close portfolio and news when user starts chatting
       if (showPortfolio) {
         setShowPortfolio(false)
@@ -1449,27 +1437,23 @@ Just type any of these questions or click one of the suggestion buttons below to
           position: 'relative'
         }}>
         
-        {/* Video Background */}
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
+        {/* Static Image Background */}
+        <div
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
+            backgroundImage: 'url(/BK1.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             zIndex: 0
           }}
-        >
-          <source src="/motion.mp4" type="video/mp4" />
-        </video>
+        />
         
-        {/* Dark overlay on video */}
+        {/* Dark overlay on image */}
         <div style={{
           position: 'absolute',
           top: 0,
@@ -1479,27 +1463,6 @@ Just type any of these questions or click one of the suggestion buttons below to
           background: 'rgba(0, 0, 0, 0.4)',
           zIndex: 1
         }} />
-        
-        {/* Blurred video overlay */}
-        <video
-          ref={blurredVideoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            filter: 'blur(15px)',
-            zIndex: 2
-          }}
-        >
-          <source src="/motion.mp4" type="video/mp4" />
-        </video>
         
         <div style={{
           width: '100%',
@@ -1637,7 +1600,6 @@ Just type any of these questions or click one of the suggestion buttons below to
               }}
               onClick={() => {
                 // Hide portfolio and news if showing and start contact chat
-                pauseBackgroundVideos()
                 setShowPortfolio(false)
                 setShowNews(false)
                 trackEngagement('contact_click', 'header')
@@ -1793,7 +1755,6 @@ Just type any of these questions or click one of the suggestion buttons below to
                   fontFamily: 'inherit'
                 }}
                 onClick={() => {
-                  pauseBackgroundVideos()
                   setShowMobileMenu(false)
                   setShowPortfolio(false)
                   setShowNews(false)
@@ -1905,8 +1866,7 @@ Just type any of these questions or click one of the suggestion buttons below to
                     <button
                       key={index}
                       onClick={() => {
-                        pauseBackgroundVideos()
-                        trackEngagement('suggestion_click', suggestion)
+                            trackEngagement('suggestion_click', suggestion)
                         append({
                           role: 'user',
                           content: suggestion
@@ -2028,7 +1988,6 @@ Just type any of these questions or click one of the suggestion buttons below to
                 <button
                   key={index}
                   onClick={() => {
-                    pauseBackgroundVideos()
                     trackEngagement('reset_suggestion_click', suggestion)
                     setShowResetButtons(false)
                     append({
@@ -2083,7 +2042,6 @@ Just type any of these questions or click one of the suggestion buttons below to
                 <button
                   key={index}
                   onClick={() => {
-                    pauseBackgroundVideos()
                     trackEngagement('contact_suggestion_click', suggestion)
                     setShowContactSuggestions(false)
                     append({
