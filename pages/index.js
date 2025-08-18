@@ -917,6 +917,25 @@ export default function Home() {
             visibility: visible !important;
             opacity: 1 !important;
           }
+          
+          /* Override Geist UI Input internal borders and outlines */
+          .field-wrap input,
+          .field-wrap .geist-input,
+          .field-wrap .geist-input-wrapper,
+          .field-wrap .geist-input input {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+          }
+          
+          /* Override any pseudo-elements or focus states */
+          .field-wrap input:focus,
+          .field-wrap .geist-input:focus,
+          .field-wrap .geist-input input:focus {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+          }
 
           
           /* Desktop chat container - full width */
@@ -1584,7 +1603,21 @@ export default function Home() {
                 borderRadius: '12px',
                 color: '#FFFFFF',
                 fontFamily: "'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                fontSize: '16px'
+                fontSize: '16px',
+                outline: 'none',
+                boxShadow: 'none'
+              }}
+              css={{
+                '& input': {
+                  border: 'none !important',
+                  outline: 'none !important',
+                  boxShadow: 'none !important'
+                },
+                '& input:focus': {
+                  border: 'none !important',
+                  outline: 'none !important',
+                  boxShadow: 'none !important'
+                }
               }}
             />
           </div>
