@@ -801,7 +801,9 @@ export default function Home() {
               padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
               display: flex !important;
               flex-direction: column !important;
-              overflow: hidden !important;
+              overflow-y: auto !important;
+              overflow-x: hidden !important;
+              -webkit-overflow-scrolling: touch !important;
             }
             
             /* Welcome message mobile styling */
@@ -1141,6 +1143,7 @@ export default function Home() {
           padding: 0,
           overflow: 'hidden',
           position: 'relative',
+          touchAction: 'manipulation',
           margin: 0,
           cursor: 'text',
           display: 'flex',
@@ -1482,6 +1485,8 @@ export default function Home() {
           paddingRight: '24px',
           background: 'transparent',
           WebkitOverflowScrolling: 'touch',
+          scrollBehavior: 'smooth',
+          touchAction: 'pan-y',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: (messages.length === 0 && !showPortfolio && !showNews) ? 'center' : 'flex-start'
