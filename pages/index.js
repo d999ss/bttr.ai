@@ -878,6 +878,16 @@ export default function Home() {
               hyphens: auto !important;
             }
             
+            /* Mobile conversation suggestions */
+            .conversation-suggestions {
+              padding: 0 16px !important;
+            }
+            
+            .conversation-suggestions button {
+              font-size: 14px !important;
+              padding: 10px 16px !important;
+            }
+            
             /* Mobile-only input animations */
             @media (max-width: 767px) {
               .input-bar.mobile-hidden {
@@ -1536,8 +1546,10 @@ export default function Home() {
             <div className="mobile-welcome message-container" style={{
               width: '100%',
               display: 'flex',
+              flexDirection: 'column',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              gap: '32px'
             }}>
               <div 
                 className="welcome-message"
@@ -1557,6 +1569,66 @@ export default function Home() {
                   {welcomeText}
                 </div>
               </div>
+              
+              {/* Conversation Suggestions */}
+              {isWelcomeComplete && (
+                <div className="conversation-suggestions" style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '12px',
+                  justifyContent: 'center',
+                  maxWidth: '600px',
+                  opacity: isWelcomeComplete ? 1 : 0,
+                  transform: isWelcomeComplete ? 'translateY(0)' : 'translateY(20px)',
+                  transition: 'all 1s ease-out 0.5s'
+                }}>
+                  {[
+                    "Tell me about your design process",
+                    "How can AI improve our brand?",
+                    "Show me your latest work",
+                    "What's your pricing like?",
+                    "Can you help with our rebrand?",
+                    "Tell me about the Catalyst Program"
+                  ].map((suggestion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        trackEngagement('suggestion_click', suggestion)
+                        append({
+                          role: 'user',
+                          content: suggestion
+                        })
+                      }}
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.1)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        borderRadius: '24px',
+                        padding: '8px 16px',
+                        color: '#FFFFFF',
+                        fontSize: '12px',
+                        fontFamily: 'inherit',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        whiteSpace: 'nowrap'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.background = 'rgba(255, 255, 255, 0.15)'
+                        e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)'
+                        e.target.style.transform = 'translateY(-1px)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = 'rgba(255, 255, 255, 0.1)'
+                        e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)'
+                        e.target.style.transform = 'translateY(0)'
+                      }}
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           
