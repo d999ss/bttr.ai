@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import Head from 'next/head'
 import { useChat } from '@ai-sdk/react'
 import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 import { GeistProvider, CssBaseline, Input, Grid, Text } from '@geist-ui/core'
 import ErrorBoundary from '../components/ErrorBoundary'
 import NetworkStatus from '../components/NetworkStatus'
@@ -10,50 +11,16 @@ import News from '../components/News'
 import { trackEvent, trackEngagement } from '../lib/analytics'
 import { generateCaseStudySummary, generateFullCaseStudy } from '../data/case-studies'
 
-// Component that waits 3 seconds for images to load before showing content
+// Component for image content
 function AssistantMessageWithImageWait({ content }) {
-  const [showContent, setShowContent] = useState(false)
-  
-  const hasImages = content.includes('![')
-
-  useEffect(() => {
-    if (!hasImages) {
-      setShowContent(true)
-      return
-    }
-
-    // Give images 3 seconds to load, then show content
-    const timer = setTimeout(() => {
-      setShowContent(true)
-    }, 3000)
-
-    return () => clearTimeout(timer)
-  }, [hasImages])
-
-  if (!showContent) {
-    return (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        minHeight: '40px'
-      }}>
-        <div className="pulse-dot" style={{ animationDelay: '0s' }}></div>
-        <div className="pulse-dot" style={{ animationDelay: '0.2s' }}></div>
-        <div className="pulse-dot" style={{ animationDelay: '0.4s' }}></div>
-        <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.6)' }}>
-          Loading content...
-        </span>
-      </div>
-    )
-  }
-
+  // Removed the loading delay - content shows immediately
   return (
     <div style={{
       opacity: 1,
       animation: 'fadeIn 0.3s ease-in'
     }}>
     <ReactMarkdown
+      rehypePlugins={[rehypeRaw]}
       components={{
         p: ({children}) => <div style={{ marginBottom: '8px' }}>{children}</div>,
         strong: ({children}) => <strong style={{ fontWeight: '600' }}>{children}</strong>,
@@ -175,7 +142,8 @@ export default function Home() {
     api: '/api/chat',
     initialMessages: [],
     body: {
-      sessionContext: sessionContext
+      sessionContext: sessionContext,
+      stream: false
     },
     onError: (error) => {
       console.error('Chat error:', error)
@@ -264,11 +232,7 @@ export default function Home() {
         role: 'assistant',
         content: `What's up! 👋
 
-Here are some things you can ask me about:
-
-${conversationSuggestions.map(suggestion => `• ${suggestion}`).join('\n')}
-
-Just type any of these questions or click one of the suggestion buttons below to get started!`
+Ready to explore what we can build together? Pick a topic below or ask me anything!`
       })
       
       // Show reset buttons after message
@@ -1209,7 +1173,7 @@ Just type any of these questions or click one of the suggestion buttons below to
           /* Simple Geist Input theming */
           .input-bar .geist-input {
             --geist-form-color: #FFFFFF;
-            --geist-background: rgba(0, 0, 0, 0.6);
+            --geist-background: #1a1a1a;
             --geist-border: rgba(255, 255, 255, 0.25);
             --geist-border-hover: rgba(255, 255, 255, 0.4);
             --geist-border-focus: rgba(255, 255, 255, 0.6);
@@ -1946,76 +1910,85 @@ Just type any of these questions or click one of the suggestion buttons below to
           {/* Chat Messages - responsive for both mobile and desktop */}
           <div>
             {messages.map((msg, i) => (
-              <div key={msg.id || i} className="message-container" style={{ 
-                marginBottom: '8px',
-                marginTop: (i === 0) ? '32px' : '0px',
-                display: 'flex',
-                justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                width: '100%'
-              }}>
-              {msg.role === 'user' ? (
-                <div className="chat-message user-message" style={{
-                  background: 'linear-gradient(135deg, #007AFF 0%, #0051D5 100%)',
-                  color: '#FFFFFF',
-                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-word',
-                  padding: '10px 14px',
-                  borderRadius: '18px',
-                  maxWidth: '70%',
-                  fontSize: '14px',
-                  lineHeight: '1.4',
-                  boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-                  animation: 'slideInFromRight 0.3s ease-out',
-                  transformOrigin: 'bottom right'
+              msg.role === 'user' ? (
+                <div key={msg.id || i} className="message-container" style={{ 
+                  marginBottom: '8px',
+                  marginTop: (i === 0) ? '32px' : '0px',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  width: '100%'
                 }}>
-                  {msg.content}
-                </div>
-              ) : (
-                <div className="chat-message assistant-message"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    backdropFilter: 'blur(10px)',
-                    WebkitBackdropFilter: 'blur(10px)',
+                  <div className="chat-message user-message" style={{
+                    background: 'linear-gradient(135deg, #007AFF 0%, #0051D5 100%)',
                     color: '#FFFFFF',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
                     padding: '10px 14px',
                     borderRadius: '18px',
                     maxWidth: '70%',
                     fontSize: '14px',
                     lineHeight: '1.4',
-                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    animation: 'slideInFromLeft 0.3s ease-out',
-                    transformOrigin: 'bottom left'
+                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+                    animation: 'slideInFromRight 0.3s ease-out',
+                    transformOrigin: 'bottom right'
                   }}>
-                  {msg.content.includes('![') ? (
-                    <AssistantMessageWithImageWait content={msg.content} />
-                  ) : (
-                    <ReactMarkdown
-                        components={{
-                          p: ({children}) => <div style={{ marginBottom: '8px' }}>{children}</div>,
-                          strong: ({children}) => <strong style={{ fontWeight: '600' }}>{children}</strong>,
-                          em: ({children}) => <em style={{ fontStyle: 'italic' }}>{children}</em>,
-                          a: ({children, href}) => <a href={href} style={{ color: '#FFFFFF', textDecoration: 'underline', fontWeight: '500' }} target="_blank" rel="noopener noreferrer">{children}</a>,
-                          code: ({children}) => <code style={{ background: 'rgba(0, 0, 0, 0.3)', padding: '2px 4px', borderRadius: '3px', fontSize: '13px' }}>{children}</code>,
-                          pre: ({children}) => <pre style={{ background: 'rgba(0, 0, 0, 0.3)', padding: '8px', borderRadius: '6px', overflow: 'auto', fontSize: '13px' }}>{children}</pre>,
-                          ul: ({children}) => <ul style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ul>,
-                          ol: ({children}) => <ol style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ol>,
-                          li: ({children}) => <li style={{ marginBottom: '4px' }}>{children}</li>,
-                          div: ({children, className}) => {
-                            if (className === 'conversation-buttons') {
-                              return <div className="conversation-buttons">{children}</div>
-                            }
-                            return <div className={className}>{children}</div>
-                          },
-                        }}
-                      >
-                        {msg.content}
-                      </ReactMarkdown>
-                  )}
+                    {msg.content}
+                  </div>
                 </div>
-              )}
-            </div>
+              ) : (
+                <div key={msg.id || i} className="message-container" style={{ 
+                  marginBottom: '8px',
+                  marginTop: (i === 0) ? '32px' : '0px',
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  width: '100%'
+                }}>
+                  <div className="chat-message assistant-message"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.1)',
+                      backdropFilter: 'blur(10px)',
+                      WebkitBackdropFilter: 'blur(10px)',
+                      color: '#FFFFFF',
+                      padding: '10px 14px',
+                      borderRadius: '18px',
+                      maxWidth: '70%',
+                      fontSize: '14px',
+                      lineHeight: '1.4',
+                      boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      animation: 'slideInFromLeft 0.3s ease-out',
+                      transformOrigin: 'bottom left'
+                    }}>
+                    {msg.content.includes('![') ? (
+                      <AssistantMessageWithImageWait content={msg.content} />
+                    ) : (
+                      <ReactMarkdown
+                          rehypePlugins={[rehypeRaw]}
+                          components={{
+                            p: ({children}) => <div style={{ marginBottom: '8px' }}>{children}</div>,
+                            strong: ({children}) => <strong style={{ fontWeight: '600' }}>{children}</strong>,
+                            em: ({children}) => <em style={{ fontStyle: 'italic' }}>{children}</em>,
+                            a: ({children, href}) => <a href={href} style={{ color: '#FFFFFF', textDecoration: 'underline', fontWeight: '500' }} target="_blank" rel="noopener noreferrer">{children}</a>,
+                            code: ({children}) => <code style={{ background: 'rgba(0, 0, 0, 0.3)', padding: '2px 4px', borderRadius: '3px', fontSize: '13px' }}>{children}</code>,
+                            pre: ({children}) => <pre style={{ background: 'rgba(0, 0, 0, 0.3)', padding: '8px', borderRadius: '6px', overflow: 'auto', fontSize: '13px' }}>{children}</pre>,
+                            ul: ({children}) => <ul style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ul>,
+                            ol: ({children}) => <ol style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ol>,
+                            li: ({children}) => <li style={{ marginBottom: '4px' }}>{children}</li>,
+                            div: ({children, className}) => {
+                              if (className === 'conversation-buttons') {
+                                return <div className="conversation-buttons">{children}</div>
+                              }
+                              return <div className={className}>{children}</div>
+                            },
+                          }}
+                        >
+                          {msg.content}
+                        </ReactMarkdown>
+                    )}
+                  </div>
+                </div>
+              )
           ))}
           </div>
           

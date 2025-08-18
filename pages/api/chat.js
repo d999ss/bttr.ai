@@ -1,5 +1,5 @@
 import { createOpenAI } from '@ai-sdk/openai'
-import { streamText } from 'ai'
+import { streamText, generateText } from 'ai'
 import { BTTR_CONTEXT } from '../../lib/bttr-context'
 
 const openai = createOpenAI({
@@ -15,7 +15,7 @@ export default async function handler(req) {
     return new Response('Method not allowed', { status: 405 })
   }
 
-  const { messages, sessionContext } = await req.json()
+  const { messages, sessionContext, stream } = await req.json()
   
   // Check if this is the user's first real message (not the welcome message)
   const userMessages = messages.filter(msg => msg.role === 'user')
@@ -284,6 +284,30 @@ SESSION CONTEXT:
       contextualPrompt += `
 - This is a deeper conversation - you can be more specific and skip basic introductions`
     }
+  }
+
+  // Check if streaming is disabled
+  if (stream === false) {
+    const result = await generateText({
+      model: openai('gpt-4o-mini'),
+      system: contextualPrompt,
+      messages,
+    })
+
+    // Return in the format expected by AI SDK's useChat
+    const encoder = new TextEncoder()
+    const stream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(encoder.encode(`0:"${result.text.replace(/\n/g, '\\n').replace(/"/g, '\\"')}"\n`))
+        controller.close()
+      }
+    })
+    
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+      },
+    })
   }
 
   const result = await streamText({
