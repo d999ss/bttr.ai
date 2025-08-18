@@ -547,13 +547,13 @@ export default function Home() {
             color: #D4D4D4;
           }
           /* Removed global placeholder styles - handled by .input-field::placeholder */
-          @media (max-width: 768px) {
+          @media (max-width: 1024px) {
             /* Removed global font-size override that was breaking headline */
             .mobile-hide {
               display: none !important;
             }
             .mobile-show {
-              display: block !important;
+              display: flex !important;
             }
             .mobile-fullscreen {
               height: 100vh !important;
@@ -699,7 +699,7 @@ export default function Home() {
           
           
           /* Mobile-first redesign */
-          @media (max-width: 767px) {
+          @media (max-width: 1024px) {
             /* Hide desktop header on mobile */
             .mobile-hide {
               display: none !important;
@@ -717,6 +717,24 @@ export default function Home() {
               opacity: 1 !important;
               height: 52px !important;
               padding: 0 20px !important;
+              position: fixed !important;
+              top: 0 !important;
+              left: 0 !important;
+              right: 0 !important;
+              z-index: 9999 !important;
+              width: 100% !important;
+              box-sizing: border-box !important;
+            }
+            
+            /* Force mobile header to show on mobile devices */
+            @media (max-width: 1024px) {
+              .mobile-header {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                background: rgba(255, 0, 0, 0.8) !important; /* Red debug background */
+                border: 2px solid yellow !important; /* Yellow debug border */
+              }
             }
             
             /* Mobile menu dropdown - show on mobile only */
@@ -853,8 +871,10 @@ export default function Home() {
             font-size: 16px;
             letter-spacing: -0.19px;
             color: #FFFFFF;
-            background: rgba(0, 0, 0, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: var(--radius);
             outline: none;
             resize: none;
@@ -911,7 +931,7 @@ export default function Home() {
           }
           
           /* Desktop chat container - full width */
-          @media (min-width: 768px) {
+          @media (min-width: 1025px) {
             .mobile-show {
               display: none !important;
             }
@@ -1047,6 +1067,26 @@ export default function Home() {
       </noscript>
       
       <NetworkStatus />
+      
+      {/* EMERGENCY LIME HEADER - SHOULD ALWAYS SHOW */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        width: '100%',
+        height: '60px',
+        background: 'lime',
+        zIndex: 999999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'black',
+        fontSize: '24px',
+        fontWeight: 'bold'
+      }}>
+        🚨 EMERGENCY HEADER - iOS SAFARI TEST 🚨
+      </div>
       
       <div 
         onClick={handlePageClick}
@@ -1231,18 +1271,37 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Mobile Navigation Header */}
-        <header className="mobile-header" role="banner" style={{
+        {/* Mobile Navigation Header - ALWAYS VISIBLE */}
+        <div style={{
           position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           width: '100%',
-          zIndex: 9998,
-          background: 'rgba(0, 0, 0, 0.1)',
-          backdropFilter: 'blur(20px) saturate(150%)',
-          WebkitBackdropFilter: 'blur(20px) saturate(150%)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          zIndex: 99999,
+          background: 'red',
+          height: '52px',
+          padding: '0 20px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          boxSizing: 'border-box',
+          color: 'white',
+          fontSize: '18px',
+          fontWeight: 'bold'
+        }}>
+          TEST HEADER - SHOULD ALWAYS BE VISIBLE
+        </div>
+
+        {/* Original mobile header for debugging */}
+        <header className="mobile-header mobile-show" role="banner" style={{
+          position: 'fixed',
+          top: '60px',
+          left: 0,
+          right: 0,
+          width: '100%',
+          zIndex: 9999,
+          background: 'rgba(0, 255, 0, 0.9)',
           height: '52px',
           padding: '0 20px',
           display: 'flex',
