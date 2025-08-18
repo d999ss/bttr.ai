@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import Head from 'next/head'
 import { useChat } from '@ai-sdk/react'
 import ReactMarkdown from 'react-markdown'
@@ -8,6 +8,7 @@ import NetworkStatus from '../components/NetworkStatus'
 import Portfolio from '../components/Portfolio'
 import News from '../components/News'
 import { trackEvent, trackEngagement } from '../lib/analytics'
+import { generateCaseStudySummary, generateFullCaseStudy } from '../data/case-studies'
 
 export default function Home() {
   const messagesEndRef = useRef(null)
@@ -23,9 +24,22 @@ export default function Home() {
   const [chatStarted, setChatStarted] = useState(false)
   const [placeholderText, setPlaceholderText] = useState('')
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
+  const [showResetButtons, setShowResetButtons] = useState(false)
+  
+  // Memoized conversation suggestions
+  const conversationSuggestions = useMemo(() => [
+    "Tell me about your design process",
+    "How can AI improve our brand?",
+    "Show me your latest work",
+    "What's your pricing like?",
+    "Can you help with our rebrand?",
+    "Tell me about the Catalyst Program",
+    "What makes Bttr different?",
+    "How do you approach strategy?"
+  ], [])
   
   // Rotating placeholder messages
-  const placeholderMessages = [
+  const placeholderMessages = useMemo(() => [
     "Ask if we're available for new projects",
     "Ask if we're taking on new clients",
     "Ask if we're available for consulting work",
@@ -33,7 +47,7 @@ export default function Home() {
     "Ask about Bttr and our services",
     "Ask about our design process",
     "Ask about our product strategy approach"
-  ]
+  ], [])
   
   const { 
     messages, 
@@ -55,21 +69,21 @@ export default function Home() {
     }
   })
   
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     // Only auto-scroll if there are multiple messages and portfolio/news is not showing
     if (messagesEndRef.current && messages.length > 1 && !showPortfolio && !showNews) {
       // Use requestAnimationFrame to ensure input field positioning is stable
       requestAnimationFrame(() => {
-        messagesEndRef.current.scrollIntoView({ 
+        messagesEndRef.current?.scrollIntoView({ 
           behavior: 'smooth',
           block: 'end',
           inline: 'nearest'
         })
       })
     }
-  }
+  }, [messages.length, showPortfolio, showNews])
   
-  const handleProjectClick = (project) => {
+  const handleProjectClick = useCallback((project) => {
     // Track portfolio interaction
     trackEngagement('project_click', project.name)
     
@@ -79,14 +93,21 @@ export default function Home() {
     // Close portfolio and start chat
     setShowPortfolio(false)
     
-    // Send a message to chat about the selected project
+    // Generate case study summary first
+    const caseStudySummary = generateCaseStudySummary(project.id, project.name)
+    
+    // Send summary as assistant message
     setTimeout(() => {
       append({
-        role: 'user',
-        content: `Tell me more about the ${project.name} project`
+        role: 'assistant',
+        content: caseStudySummary
       })
+      
+      // Store project ID for potential "Learn More" request
+      window.currentProjectId = project.id
+      window.currentProjectName = project.name
     }, 100)
-  }
+  }, [append, setChatStarted, setShowPortfolio])
 
   const handleNewsClick = (newsItem) => {
     // Track news interaction
@@ -105,7 +126,7 @@ export default function Home() {
     })
   }
   
-  const handleNameClick = () => {
+  const handleNameClick = useCallback(() => {
     // Mark chat as started for analytics (layout is now independent)
     setChatStarted(true)
     
@@ -121,14 +142,23 @@ export default function Home() {
     // Track interaction
     trackEngagement('name_click', 'header')
     
-    // Send "what's up" message from assistant after a brief delay
+    // Send "what's up" message with conversation starters
     setTimeout(() => {
       append({
         role: 'assistant',
-        content: "What's up! 👋"
+        content: `What's up! 👋
+
+Here are some things you can ask me about:
+
+${conversationSuggestions.map(suggestion => `• ${suggestion}`).join('\n')}
+
+Just type any of these questions or click one of the suggestion buttons below to get started!`
       })
+      
+      // Show reset buttons after message
+      setShowResetButtons(true)
     }, 300)
-  }
+  }, [append, setMessages, setShowPortfolio, setShowNews, setChatStarted, setIsWelcomeComplete, setWelcomeText])
 
   // Load session context from localStorage
   useEffect(() => {
@@ -141,6 +171,32 @@ export default function Home() {
       }
     }
   }, [])
+
+  // Check for "tell me more" or "learn more" in user messages
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1]
+    if (lastMessage?.role === 'user' && 
+        (lastMessage.content.toLowerCase().includes('tell me more') || 
+         lastMessage.content.toLowerCase().includes('learn more') ||
+         lastMessage.content.toLowerCase().includes('more details') ||
+         lastMessage.content.toLowerCase().includes('dive deeper'))) {
+      
+      // Check if we have a current project context
+      if (window.currentProjectId) {
+        const fullCaseStudy = generateFullCaseStudy(window.currentProjectId)
+        setTimeout(() => {
+          append({
+            role: 'assistant',
+            content: fullCaseStudy
+          })
+        }, 100)
+        
+        // Clear the project context after showing full study
+        delete window.currentProjectId
+        delete window.currentProjectName
+      }
+    }
+  }, [messages, append])
 
   // Update session context based on conversation
   const updateSessionContext = (newMessages) => {
@@ -215,6 +271,21 @@ export default function Home() {
 
   // Auto-focus input on mount and ensure welcome message is visible
   useEffect(() => {
+    // Register service worker for caching
+    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+      navigator.serviceWorker.register('/sw.js')
+        .catch(() => {}) // Silently fail if SW registration fails
+    }
+    
+    // Add global function for suggestion button clicks
+    window.selectSuggestion = (suggestion) => {
+      trackEngagement('suggestion_click', suggestion)
+      append({
+        role: 'user',
+        content: suggestion
+      })
+    }
+    
     // Aggressively ensure page starts at the top
     window.scrollTo(0, 0)
     document.documentElement.scrollTop = 0
@@ -440,6 +511,12 @@ export default function Home() {
         {/* Canonical URL */}
         <link rel="canonical" href="https://bttr-ai.com/" />
         
+        {/* Performance Optimizations */}
+        <link rel="dns-prefetch" href="https://www.makebttr.com" />
+        <link rel="preconnect" href="https://www.makebttr.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
         {/* Structured Data */}
         <script
           type="application/ld+json"
@@ -475,6 +552,31 @@ export default function Home() {
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="color-scheme" content="dark only" />
         <meta name="supported-color-schemes" content="dark" />
+        
+        {/* Critical CSS for above-the-fold content */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            html, body { 
+              margin: 0; 
+              padding: 0; 
+              background: #000; 
+              color: #fff; 
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              overflow: hidden;
+            }
+            #__next { 
+              height: 100vh; 
+              overflow: hidden; 
+            }
+            .welcome-message {
+              font-size: 36px;
+              line-height: 40px;
+              font-weight: 500;
+              text-align: center;
+            }
+          `
+        }} />
+        
         <style>{`
           /* Prevent document scroll but allow content scroll */
           html, body {
@@ -556,6 +658,7 @@ export default function Home() {
             }
           }
           
+          
           .pulse-dot {
             width: 12px;
             height: 12px;
@@ -563,6 +666,26 @@ export default function Home() {
             border-radius: 50%;
             filter: blur(3px);
             animation: pulse 1.5s ease-in-out infinite;
+          }
+          
+          .conversation-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0;
+            max-width: 100%;
+          }
+          
+          @media (max-width: 768px) {
+            .conversation-buttons {
+              gap: 6px;
+              margin: 12px 0;
+            }
+            
+            .conversation-buttons button {
+              font-size: 11px !important;
+              padding: 6px 12px !important;
+            }
           }
           
           .cursor::after {
@@ -1582,14 +1705,7 @@ export default function Home() {
                   transform: isWelcomeComplete ? 'translateY(0)' : 'translateY(20px)',
                   transition: 'all 1s ease-out 0.5s'
                 }}>
-                  {[
-                    "Tell me about your design process",
-                    "How can AI improve our brand?",
-                    "Show me your latest work",
-                    "What's your pricing like?",
-                    "Can you help with our rebrand?",
-                    "Tell me about the Catalyst Program"
-                  ].map((suggestion, index) => (
+                  {conversationSuggestions.map((suggestion, index) => (
                     <button
                       key={index}
                       onClick={() => {
@@ -1678,24 +1794,78 @@ export default function Home() {
                         ul: ({children}) => <ul style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ul>,
                         ol: ({children}) => <ol style={{ marginLeft: '20px', marginBottom: '8px' }}>{children}</ol>,
                         li: ({children}) => <li style={{ marginBottom: '4px' }}>{children}</li>,
-                        img: ({src, alt}) => (
-                          <img 
-                            src={src} 
-                            alt={alt} 
-                            className="chat-image"
-                            style={{ 
-                              width: '100%', 
-                              maxWidth: '100%', 
-                              height: 'auto',
-                              borderRadius: '8px',
+                        div: ({children, className}) => {
+                          if (className === 'conversation-buttons') {
+                            return (
+                              <div className="conversation-buttons">
+                                {children}
+                              </div>
+                            )
+                          }
+                          return <div className={className}>{children}</div>
+                        },
+                        img: ({src, alt}) => {
+                          const [imageLoaded, setImageLoaded] = React.useState(false)
+                          const [imageError, setImageError] = React.useState(false)
+                          
+                          return (
+                            <div style={{
+                              position: 'relative',
+                              width: '100%',
                               marginBottom: '12px',
                               marginTop: '8px',
+                              borderRadius: '8px',
+                              overflow: 'hidden',
                               border: '1px solid rgba(255, 255, 255, 0.1)',
-                              background: '#0a0a0a'
-                            }} 
-                            loading="lazy"
-                          />
-                        ),
+                              background: '#0a0a0a',
+                              minHeight: '200px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}>
+                              {!imageLoaded && !imageError && (
+                                <div style={{
+                                  position: 'absolute',
+                                  top: '50%',
+                                  left: '50%',
+                                  transform: 'translate(-50%, -50%)',
+                                  color: 'rgba(255, 255, 255, 0.3)',
+                                  fontSize: '12px'
+                                }}>
+                                  Loading image...
+                                </div>
+                              )}
+                              {imageError ? (
+                                <div style={{
+                                  color: 'rgba(255, 255, 255, 0.5)',
+                                  textAlign: 'center',
+                                  padding: '40px 20px',
+                                  fontSize: '12px'
+                                }}>
+                                  📷 Image temporarily unavailable
+                                </div>
+                              ) : (
+                                <img 
+                                  src={src} 
+                                  alt={alt} 
+                                  className="chat-image"
+                                  style={{ 
+                                    width: '100%', 
+                                    maxWidth: '100%', 
+                                    height: 'auto',
+                                    display: imageLoaded ? 'block' : 'none',
+                                    opacity: imageLoaded ? 1 : 0,
+                                    transition: 'opacity 0.3s ease'
+                                  }} 
+                                  loading="lazy"
+                                  decoding="async"
+                                  onLoad={() => setImageLoaded(true)}
+                                  onError={() => setImageError(true)}
+                                />
+                              )}
+                            </div>
+                          )
+                        },
                       }}
                     >
                     {msg.content}
@@ -1705,6 +1875,59 @@ export default function Home() {
             </div>
           ))}
           </div>
+          
+          {/* Reset Conversation Suggestion Buttons */}
+          {showResetButtons && (
+            <div className="conversation-suggestions" style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '12px',
+              justifyContent: 'flex-start',
+              maxWidth: '100%',
+              marginTop: '16px',
+              marginBottom: '20px'
+            }}>
+              {conversationSuggestions.map((suggestion, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    trackEngagement('reset_suggestion_click', suggestion)
+                    setShowResetButtons(false)
+                    append({
+                      role: 'user',
+                      content: suggestion
+                    })
+                  }}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '24px',
+                    padding: '8px 16px',
+                    color: '#FFFFFF',
+                    fontSize: '12px',
+                    fontFamily: 'inherit',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
+                    whiteSpace: 'nowrap'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.15)'
+                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)'
+                    e.target.style.transform = 'translateY(-1px)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.1)'
+                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)'
+                    e.target.style.transform = 'translateY(0)'
+                  }}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          )}
           
           {isLoading && (
             <div role="status" aria-live="polite" aria-label="AI is thinking" style={{ 

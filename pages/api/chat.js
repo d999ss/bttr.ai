@@ -21,20 +21,21 @@ export default async function handler(req) {
   const userMessages = messages.filter(msg => msg.role === 'user')
   const isFirstUserMessage = userMessages.length === 1
   
-  if (isFirstUserMessage) {
-    // Send SMS notification for first user interaction
+  if (isFirstUserMessage && process.env.ENABLE_SMS_NOTIFICATIONS === 'true') {
+    // Send SMS notification for first user interaction (optional)
     try {
-      const baseUrl = req.url.includes('localhost') ? 'http://localhost:3000' : 'https://bttr-ai.com'
-      await fetch(`${baseUrl}/api/send-sms`, {
+      const baseUrl = req.url.includes('localhost') ? 'http://localhost:3001' : 'https://bttr-ai.com'
+      fetch(`${baseUrl}/api/send-sms`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userMessage: userMessages[0].content
         })
+      }).catch(() => {
+        // Silently fail SMS sending - non-critical feature
       })
     } catch (error) {
-      console.error('Failed to send SMS:', error)
-      // Don't fail the chat if SMS fails
+      // Don't fail the chat if SMS setup fails
     }
   }
   

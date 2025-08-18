@@ -8,6 +8,7 @@ const nextConfig = {
   
   // Optimize images
   images: {
+    domains: ['www.makebttr.com'],
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
   },

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { generateCaseStudyPrompt } from '../data/case-studies'
 
 const projects = [
   {
