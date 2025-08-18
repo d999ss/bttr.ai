@@ -183,8 +183,8 @@ export default function Home() {
   })
   
   const scrollToBottom = useCallback(() => {
-    // Only auto-scroll if there are multiple messages and portfolio/news is not showing
-    if (messagesEndRef.current && messages.length > 1 && !showPortfolio && !showNews) {
+    // Auto-scroll if there are messages and portfolio/news is not showing
+    if (messagesEndRef.current && messages.length > 0 && !showPortfolio && !showNews) {
       // Use requestAnimationFrame to ensure input field positioning is stable
       requestAnimationFrame(() => {
         messagesEndRef.current?.scrollIntoView({ 
@@ -1848,8 +1848,8 @@ Just type any of these questions or click one of the suggestion buttons below to
           } : {
             /* Chat mode: Normal flow with minimal overlay clearance */
             justifyContent: 'flex-start',
-            paddingTop: showMobileMenu ? 'calc(140px + env(safe-area-inset-top))' : 'calc(40px + env(safe-area-inset-top))',
-            paddingBottom: 'calc(80px + env(safe-area-inset-bottom))'
+            paddingTop: showMobileMenu ? 'calc(140px + env(safe-area-inset-top))' : 'calc(60px + env(safe-area-inset-top))',
+            paddingBottom: 'calc(120px + env(safe-area-inset-bottom))'
           })
         }}>
           <div style={{
@@ -2195,6 +2195,8 @@ Just type any of these questions or click one of the suggestion buttons below to
               </div>
             </div>
           )}
+          {/* Extra padding to ensure last message is visible above input */}
+          <div style={{ height: '20px' }} />
           <div ref={messagesEndRef} />
           </div>
         </main>
