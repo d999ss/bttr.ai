@@ -214,12 +214,33 @@ export default function Home() {
 
   // Auto-focus input on mount and ensure welcome message is visible
   useEffect(() => {
+    // Aggressively ensure page starts at the top
+    window.scrollTo(0, 0)
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+    
+    // Prevent any default scroll behavior
+    const preventScroll = (e) => {
+      if (e.target.tagName !== 'MAIN') {
+        e.preventDefault()
+      }
+    }
+    
+    document.addEventListener('touchmove', preventScroll, { passive: false })
+    document.addEventListener('scroll', () => window.scrollTo(0, 0), { passive: false })
+    
     // Track page load
     trackEvent('page_load', {
       user_agent: navigator.userAgent,
       viewport_width: window.innerWidth,
       viewport_height: window.innerHeight
     })
+    
+    // Cleanup
+    return () => {
+      document.removeEventListener('touchmove', preventScroll)
+      document.removeEventListener('scroll', () => window.scrollTo(0, 0))
+    }
     
     // For mobile, don't auto-focus to prevent keyboard popup on load
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
@@ -439,6 +460,21 @@ export default function Home() {
         <meta name="color-scheme" content="dark only" />
         <meta name="supported-color-schemes" content="dark" />
         <style>{`
+          /* Prevent document scroll on mobile */
+          html, body {
+            height: 100vh !important;
+            overflow: hidden !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: fixed !important;
+            width: 100% !important;
+          }
+          
+          #__next {
+            height: 100vh !important;
+            overflow: hidden !important;
+          }
+          
           /* Clean system font stack like HillaryCoe.com */
           div.message-container div.chat-message,
           div.message-container div.chat-message *,
@@ -721,7 +757,7 @@ export default function Home() {
               top: 0 !important;
               left: 0 !important;
               right: 0 !important;
-              z-index: 9999 !important;
+              z-index: 999999 !important;
               width: 100% !important;
               box-sizing: border-box !important;
             }
@@ -1082,7 +1118,9 @@ export default function Home() {
           fontSize: '12px',
           lineHeight: '1.2',
           letterSpacing: '-0.19px',
-          padding: 'env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0',
+          padding: 0,
+          overflow: 'hidden',
+          position: 'relative',
           margin: 0,
           cursor: 'text',
           display: 'flex',
@@ -1412,9 +1450,14 @@ export default function Home() {
         <main className="mobile-content mobile-fullscreen" role="region" aria-label="Chat messages" style={{
           height: '100vh',
           overflowY: 'auto',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
           /* Fixed padding that accounts for floating overlays - never changes */
-          paddingTop: showMobileMenu ? 'calc(260px + env(safe-area-inset-top))' : 'calc(80px + env(safe-area-inset-top))',
-          paddingBottom: '120px',
+          paddingTop: showMobileMenu ? 'calc(200px + env(safe-area-inset-top))' : 'calc(60px + env(safe-area-inset-top))',
+          paddingBottom: 'calc(120px + env(safe-area-inset-bottom))',
           paddingLeft: '24px',
           paddingRight: '24px',
           background: 'transparent',
