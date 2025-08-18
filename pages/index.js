@@ -372,32 +372,33 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
         .catch(() => {}) // Silently fail if SW registration fails
     }
     
-    // Load Unicorn Studio Liquid background exactly as in Framer component
+    // Load Unicorn Studio Liquid background with correct project ID
     const loadUnicornStudio = () => {
       const container = document.getElementById('unicorn-liquid-bg')
       if (!container) return
       
       // Check if script already exists
-      if (document.querySelector('script[src*="unicornstudio"]')) {
+      if (document.querySelector('script[src*="unicorn.studio"]')) {
         return
       }
       
       const script = document.createElement('script')
       script.type = 'text/javascript'
       script.async = true
-      script.src = 'https://cdn.unicornstudio.com/embed.js'
+      script.src = 'https://cdn.unicorn.studio/v1.2.3/unicornStudio.umd.js'
       
       script.onload = () => {
-        if (typeof window.unicornStudio !== 'undefined') {
+        if (window.UnicornStudio) {
           try {
-            // Initialize with Liquid project (ID from the Framer component)
-            window.unicornStudio.init({
-              container: container,
-              project: 'liquid',
-              width: window.innerWidth,
-              height: window.innerHeight,
-              responsive: true,
-              autoplay: true
+            // Set the project ID for Liquid
+            container.setAttribute('data-us-project', 'lHlDvoJDIXCxxXVqTNOC')
+            
+            // Initialize exactly as in Framer component
+            window.UnicornStudio.destroy()
+            window.UnicornStudio.init().then(scenes => {
+              console.log('Unicorn Studio Liquid loaded:', scenes)
+            }).catch(error => {
+              console.log('Unicorn Studio init error:', error)
             })
           } catch (error) {
             console.log('Unicorn Studio initialization error:', error)
@@ -407,17 +408,10 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
       
       document.head.appendChild(script)
       
-      // Handle window resize
-      const handleResize = () => {
-        if (typeof window.unicornStudio !== 'undefined' && window.unicornStudio.resize) {
-          window.unicornStudio.resize(window.innerWidth, window.innerHeight)
-        }
-      }
-      
-      window.addEventListener('resize', handleResize)
-      
       return () => {
-        window.removeEventListener('resize', handleResize)
+        if (window.UnicornStudio) {
+          window.UnicornStudio.destroy()
+        }
       }
     }
     
