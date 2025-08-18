@@ -377,8 +377,25 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
       const container = document.getElementById('unicorn-liquid-bg')
       if (!container) return
       
+      // Set the project ID immediately
+      container.setAttribute('data-us-project', 'lHlDvoJDIXCxxXVqTNOC')
+      
       // Check if script already exists
-      if (document.querySelector('script[src*="unicorn.studio"]')) {
+      const existingScript = document.querySelector('script[src*="unicorn.studio"]')
+      if (existingScript) {
+        // If script exists, just try to reinitialize
+        if (window.UnicornStudio) {
+          try {
+            window.UnicornStudio.destroy()
+            window.UnicornStudio.init().then(scenes => {
+              console.log('Unicorn Studio Liquid reloaded:', scenes)
+            }).catch(error => {
+              console.log('Unicorn Studio reinit error:', error)
+            })
+          } catch (error) {
+            console.log('Unicorn Studio reinitialization error:', error)
+          }
+        }
         return
       }
       
@@ -390,20 +407,25 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
       script.onload = () => {
         if (window.UnicornStudio) {
           try {
-            // Set the project ID for Liquid
-            container.setAttribute('data-us-project', 'lHlDvoJDIXCxxXVqTNOC')
-            
-            // Initialize exactly as in Framer component
-            window.UnicornStudio.destroy()
-            window.UnicornStudio.init().then(scenes => {
-              console.log('Unicorn Studio Liquid loaded:', scenes)
-            }).catch(error => {
-              console.log('Unicorn Studio init error:', error)
-            })
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+              window.UnicornStudio.destroy()
+              window.UnicornStudio.init().then(scenes => {
+                console.log('Unicorn Studio Liquid loaded:', scenes)
+                // Ensure container shows the animation
+                container.style.opacity = '1'
+              }).catch(error => {
+                console.log('Unicorn Studio init error:', error)
+              })
+            }, 100)
           } catch (error) {
             console.log('Unicorn Studio initialization error:', error)
           }
         }
+      }
+      
+      script.onerror = () => {
+        console.log('Failed to load Unicorn Studio script')
       }
       
       document.head.appendChild(script)
@@ -1466,7 +1488,8 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
             left: 0,
             width: '100%',
             height: '100%',
-            zIndex: 0
+            zIndex: 0,
+            backgroundColor: '#000000'
           }}
         />
         
