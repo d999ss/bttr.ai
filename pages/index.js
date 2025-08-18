@@ -918,42 +918,39 @@ export default function Home() {
             opacity: 1 !important;
           }
           
-          /* Override Geist UI Input internal borders and outlines */
-          .field-wrap input,
-          .field-wrap .geist-input,
-          .field-wrap .geist-input-wrapper,
-          .field-wrap .geist-input input {
+          /* Geist UI Input custom styling */
+          .input-bar .geist-input {
+            --input-height: auto !important;
+          }
+          
+          .input-bar .geist-input input {
+            color: #FFFFFF !important;
+            font-size: 16px !important;
+            font-weight: 400 !important;
+            caret-color: #FFFFFF !important;
+            line-height: 1.5 !important;
+            padding: 12px 16px !important;
+          }
+          
+          .input-bar .geist-input input::placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+            font-weight: 400 !important;
+          }
+          
+          /* Remove double borders */
+          .input-bar .geist-input,
+          .input-bar .geist-input input {
             border: none !important;
             outline: none !important;
             box-shadow: none !important;
-            position: relative !important;
-            z-index: 1 !important;
-            caret-color: white !important;
           }
           
-          /* Override any pseudo-elements or focus states */
-          .field-wrap input:focus,
-          .field-wrap .geist-input:focus,
-          .field-wrap .geist-input input:focus {
+          /* Focus state styling */
+          .input-bar .geist-input:focus,
+          .input-bar .geist-input input:focus {
             border: none !important;
             outline: none !important;
             box-shadow: none !important;
-            caret-color: white !important;
-          }
-          
-          /* Standard input placeholder styling */
-          .field-wrap input::placeholder {
-            color: rgba(255, 255, 255, 0.4) !important;
-          }
-          .field-wrap input::-webkit-input-placeholder {
-            color: rgba(255, 255, 255, 0.4) !important;
-          }
-          .field-wrap input::-moz-placeholder {
-            color: rgba(255, 255, 255, 0.4) !important;
-            opacity: 1;
-          }
-          .field-wrap input:-ms-input-placeholder {
-            color: rgba(255, 255, 255, 0.4) !important;
           }
 
           
@@ -1609,12 +1606,20 @@ export default function Home() {
               onKeyDown={handleKeyPress}
               disabled={isLoading}
               width="100%"
-              font="16px"
+              scale={4/3}
+              clearable={false}
               style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                '--input-color': '#FFFFFF',
+                '--input-bg': 'rgba(0, 0, 0, 0.2)',
+                '--input-border': 'rgba(255, 255, 255, 0.15)',
+                '--input-placeholder': 'rgba(255, 255, 255, 0.5)',
+                backgroundColor: 'rgba(0, 0, 0, 0.2)',
                 backdropFilter: 'blur(20px) saturate(150%)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '12px'
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '12px',
+                fontSize: '16px',
+                fontWeight: '400',
+                padding: '12px 16px'
               }}
             />
           </div>
