@@ -561,7 +561,7 @@ export default function Home() {
             height: 12px;
             background: #FFFFFF;
             border-radius: 50%;
-            filter: blur(2px);
+            filter: blur(3px);
             animation: pulse 1.5s ease-in-out infinite;
           }
           
@@ -706,12 +706,15 @@ export default function Home() {
           
           @media (min-width: 768px) {
             .input-bar {
-              left: 50% !important;
-              transform: translateX(-50%) !important;
-              max-width: 864px;
-              width: 864px;
-              padding: 16px 32px;
+              left: 0 !important;
+              right: 0 !important;
+              transform: none !important;
+              max-width: none !important;
+              width: 100% !important;
+              padding: 16px 0;
               box-sizing: border-box;
+              display: flex;
+              justify-content: center;
             }
           }
           
@@ -723,10 +726,19 @@ export default function Home() {
           
           /* Removed conflicting input field styles - defined in main .input-field */
           
+          /* Global content container for perfect alignment */
+          .content-container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 32px;
+            margin: 0 auto;
+            box-sizing: border-box;
+          }
+          
           /* Nav content container width matching */
           .nav-content-container {
             width: 100%;
-            max-width: 864px;
+            max-width: 1200px;
             padding: 8px 32px;
             display: flex;
             justify-content: space-between;
@@ -735,8 +747,26 @@ export default function Home() {
           }
           
           @media (min-width: 1400px) {
+            .content-container,
+            .nav-content-container {
+              padding-left: 64px;
+              padding-right: 64px;
+            }
+            
             .nav-content-container {
               padding: 8px 64px;
+            }
+            
+            .input-bar {
+              padding: 16px 0;
+            }
+            
+            .input-bar > div {
+              padding: 16px 64px !important;
+            }
+            
+            .mobile-fullscreen > div {
+              padding: 0 64px !important;
             }
           }
           
@@ -786,8 +816,8 @@ export default function Home() {
                 visibility: visible !important;
                 opacity: 1 !important;
                 background: rgba(0, 0, 0, 0.3) !important;
-                backdrop-filter: blur(20px) !important;
-                -webkit-backdrop-filter: blur(20px) !important;
+                backdrop-filter: blur(80px) !important;
+                -webkit-backdrop-filter: blur(80px) !important;
               }
             }
             
@@ -827,7 +857,7 @@ export default function Home() {
               font-weight: 500 !important;
               white-space: normal !important;
               text-align: left !important;
-              margin: 0 0 32px 0 !important;
+              margin: 0 !important;
               max-width: 100% !important;
               word-wrap: break-word !important;
               hyphens: auto !important;
@@ -918,39 +948,15 @@ export default function Home() {
             opacity: 1 !important;
           }
           
-          /* Geist UI Input custom styling */
+          /* Simple Geist Input theming */
           .input-bar .geist-input {
-            --input-height: auto !important;
-          }
-          
-          .input-bar .geist-input input {
-            color: #FFFFFF !important;
-            font-size: 16px !important;
-            font-weight: 400 !important;
-            caret-color: #FFFFFF !important;
-            line-height: 1.5 !important;
-            padding: 12px 16px !important;
-          }
-          
-          .input-bar .geist-input input::placeholder {
-            color: rgba(255, 255, 255, 0.5) !important;
-            font-weight: 400 !important;
-          }
-          
-          /* Remove double borders */
-          .input-bar .geist-input,
-          .input-bar .geist-input input {
-            border: none !important;
-            outline: none !important;
-            box-shadow: none !important;
-          }
-          
-          /* Focus state styling */
-          .input-bar .geist-input:focus,
-          .input-bar .geist-input input:focus {
-            border: none !important;
-            outline: none !important;
-            box-shadow: none !important;
+            --geist-form-color: #FFFFFF;
+            --geist-background: rgba(0, 0, 0, 0.6);
+            --geist-border: rgba(255, 255, 255, 0.25);
+            --geist-border-hover: rgba(255, 255, 255, 0.4);
+            --geist-border-focus: rgba(255, 255, 255, 0.6);
+            --geist-placeholder: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(80px) saturate(150%);
           }
 
           
@@ -970,7 +976,7 @@ export default function Home() {
               display: none !important;
             }
             .desktop-constrained {
-              max-width: 864px !important;
+              max-width: 1200px !important;
               margin: 0 auto !important;
               padding-left: 32px !important;
               padding-right: 32px !important;
@@ -1052,11 +1058,11 @@ export default function Home() {
               font-weight: 500 !important;
               font-size: 53px !important;
               line-height: 47.7px !important;
-              margin-bottom: 0 !important;
+              margin: 0 !important;
               letter-spacing: -0.8px !important;
               white-space: normal !important;
-              max-width: 900px !important;
-              margin: 0 auto !important;
+              width: 100% !important;
+              box-sizing: border-box !important;
             }
             
             /* Center content vertically when only welcome message is shown */
@@ -1125,7 +1131,7 @@ export default function Home() {
           right: 0,
           bottom: 0,
           background: 'url(/BK1.png) center center / cover no-repeat',
-          filter: 'blur(2px)',
+          filter: 'blur(15px)',
           zIndex: 1
         }} />
         
@@ -1148,8 +1154,8 @@ export default function Home() {
           width: '100%',
           zIndex: 9998,
           background: 'rgba(0, 0, 0, 0.1)',
-          backdropFilter: 'blur(20px) saturate(150%)',
-          WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+          backdropFilter: 'blur(80px) saturate(150%)',
+          WebkitBackdropFilter: 'blur(80px) saturate(150%)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
           padding: 0,
           display: 'flex',
@@ -1333,8 +1339,8 @@ export default function Home() {
             right: 0,
             zIndex: 9997,
             background: 'rgba(0, 0, 0, 0.95)',
-            backdropFilter: 'blur(20px) saturate(150%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(150%)',
+            backdropFilter: 'blur(80px) saturate(150%)',
+            WebkitBackdropFilter: 'blur(80px) saturate(150%)',
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
             padding: '20px 16px',
             animation: 'fadeInDown 0.3s ease-out'
@@ -1444,19 +1450,28 @@ export default function Home() {
           left: 0,
           right: 0,
           bottom: 0,
-          /* Fixed padding that accounts for floating overlays - never changes */
-          paddingTop: showMobileMenu ? 'calc(200px + env(safe-area-inset-top))' : 'calc(60px + env(safe-area-inset-top))',
-          paddingBottom: 'calc(120px + env(safe-area-inset-bottom))',
-          paddingLeft: '24px',
-          paddingRight: '24px',
+          /* Fixed padding that accounts for floating overlays - minimal for perfect centering */
+          paddingTop: showMobileMenu ? 'calc(200px + env(safe-area-inset-top))' : (messages.length === 0 && !showPortfolio && !showNews) ? 'calc(20px + env(safe-area-inset-top))' : 'calc(60px + env(safe-area-inset-top))',
+          paddingBottom: (messages.length === 0 && !showPortfolio && !showNews) ? 'calc(20px + env(safe-area-inset-bottom))' : 'calc(120px + env(safe-area-inset-bottom))',
           background: 'transparent',
           WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'smooth',
           touchAction: 'pan-y',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: (messages.length === 0 && !showPortfolio && !showNews) ? 'center' : 'flex-start'
+          justifyContent: (messages.length === 0 && !showPortfolio && !showNews) ? 'center' : 'flex-start',
+          alignItems: 'center'
         }}>
+          <div style={{
+            width: '100%',
+            maxWidth: '1200px',
+            padding: '0 32px',
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: (messages.length === 0 && !showPortfolio && !showNews) ? 'center' : 'flex-start',
+            minHeight: (messages.length === 0 && !showPortfolio && !showNews) ? '100%' : 'auto'
+          }}>
           
           {/* Welcome Message */}
           {messages.length === 0 && !showPortfolio && !showNews && (
@@ -1589,6 +1604,7 @@ export default function Home() {
             </div>
           )}
           <div ref={messagesEndRef} />
+          </div>
         </main>
 
         {/* iOS-style Input Bar */}
@@ -1597,7 +1613,7 @@ export default function Home() {
           role="form" 
           aria-label="Chat input"
         >
-          <div style={{ maxWidth: '864px', width: '100%', padding: '16px 32px', margin: '0 auto', boxSizing: 'border-box' }}>
+          <div style={{ maxWidth: '1200px', width: '100%', padding: '16px 32px', margin: '0 auto', boxSizing: 'border-box' }}>
             <Input
               ref={inputRef}
               placeholder={placeholderText || "Ask us anything"}
@@ -1606,21 +1622,8 @@ export default function Home() {
               onKeyDown={handleKeyPress}
               disabled={isLoading}
               width="100%"
-              scale={4/3}
+              size="large"
               clearable={false}
-              style={{
-                '--input-color': '#FFFFFF',
-                '--input-bg': 'rgba(0, 0, 0, 0.2)',
-                '--input-border': 'rgba(255, 255, 255, 0.15)',
-                '--input-placeholder': 'rgba(255, 255, 255, 0.5)',
-                backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                backdropFilter: 'blur(20px) saturate(150%)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                borderRadius: '12px',
-                fontSize: '16px',
-                fontWeight: '400',
-                padding: '12px 16px'
-              }}
             />
           </div>
         </div>
