@@ -372,6 +372,49 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
         .catch(() => {}) // Silently fail if SW registration fails
     }
     
+    // Load Unicorn Studio background
+    const loadUnicornBackground = () => {
+      // Check if script already exists
+      if (document.querySelector('script[src*="unicornstudio.com"]')) {
+        return
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.unicornstudio.com/3.0.0/unicornStudio.umd.js'
+      script.async = true
+      script.onload = () => {
+        if (window.UnicornStudio) {
+          try {
+            window.UnicornStudio.init({
+              projectId: 'liquid',
+              target: '#unicorn-liquid-bg',
+              viewport: {
+                width: window.innerWidth,
+                height: window.innerHeight
+              }
+            })
+          } catch (error) {
+            console.log('Unicorn Studio init error:', error)
+          }
+        }
+      }
+      document.head.appendChild(script)
+    }
+    
+    loadUnicornBackground()
+    
+    // Handle window resize for background
+    const handleResize = () => {
+      if (window.UnicornStudio && window.UnicornStudio.resize) {
+        window.UnicornStudio.resize({
+          width: window.innerWidth,
+          height: window.innerHeight
+        })
+      }
+    }
+    
+    window.addEventListener('resize', handleResize)
+    
     // Add global function for suggestion button clicks
     window.selectSuggestion = (suggestion) => {
       trackEngagement('suggestion_click', suggestion)
@@ -420,6 +463,7 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
     return () => {
       document.removeEventListener('touchmove', preventDocumentScroll)
       document.removeEventListener('scroll', preventDocumentScrollEvent)
+      window.removeEventListener('resize', handleResize)
     }
     
     // For mobile, don't auto-focus to prevent keyboard popup on load
@@ -1409,23 +1453,20 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
           position: 'relative'
         }}>
         
-        {/* Static Image Background */}
+        {/* Animated Liquid Background */}
         <div
+          id="unicorn-liquid-bg"
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             width: '100%',
             height: '100%',
-            backgroundImage: 'url(/BK1.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
             zIndex: 0
           }}
         />
         
-        {/* Dark overlay on image */}
+        {/* Dark overlay for contrast */}
         <div style={{
           position: 'absolute',
           top: 0,
@@ -1435,23 +1476,6 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
           background: 'rgba(0, 0, 0, 0.4)',
           zIndex: 1
         }} />
-        
-        {/* Blurred background overlay */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundImage: 'url(/BK1.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            filter: 'blur(15px)',
-            zIndex: 2
-          }}
-        />
         
         <div style={{
           width: '100%',
