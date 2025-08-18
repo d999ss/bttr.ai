@@ -921,7 +921,7 @@ export default function Home() {
             max-height: var(--h);
             width: 100%;
             box-sizing: border-box;
-            padding: 0 45px 0 14px; /* Remove vertical padding for perfect centering */
+            padding: 12px 45px 12px 14px; /* Add vertical padding for better text positioning */
             font-family: 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-size: 16px;
             letter-spacing: -0.19px;
@@ -937,7 +937,7 @@ export default function Home() {
             outline: none;
             resize: none;
             overflow: hidden;
-            line-height: var(--h); /* Line height equals container height for vertical centering */
+            line-height: 1.4; /* Better line height for text readability */
             text-align: left;
             vertical-align: middle;
             display: flex;
