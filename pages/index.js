@@ -1493,14 +1493,14 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
           }}
         />
         
-        {/* Dark overlay for contrast */}
+        {/* Light overlay for text contrast only */}
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(0, 0, 0, 0.4)',
+          background: 'rgba(0, 0, 0, 0.1)',
           zIndex: 1
         }} />
         
