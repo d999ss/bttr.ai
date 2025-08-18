@@ -62,7 +62,7 @@ We believe that **clarity, precision, and emotional resonance** create lasting i
 * **Story-first design**: Our products and brands communicate narratives people care about
 * **Rapid iteration with precision**: We prove that speed and quality are not mutually exclusive
 
-**Bored Optimism™ in Practice**
+**Our Mindset**
 We maintain a calm confidence in future success, paired with an obsession for excellence.
 We build as if the win is already inevitable, without being distracted by hype or panic.
 
