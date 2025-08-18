@@ -918,39 +918,6 @@ export default function Home() {
             opacity: 1 !important;
           }
 
-          .send-btn {
-            position: absolute;
-            right: 3px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: var(--btn-size);
-            height: var(--btn-size);
-            border-radius: 50%;
-            border: 0;
-            background: transparent;
-            color: transparent;
-            font-size: 15px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-          }
-
-          .send-btn:not([disabled]) {
-            background: #FFFFFF;
-            color: #1a1a1a;
-          }
-
-          .send-btn:not([disabled]):active {
-            background: #CCCCCC;
-          }
-
-          .send-btn[disabled] {
-            opacity: 1;
-            cursor: default;
-          }
           
           /* Desktop chat container - full width */
           @media (min-width: 1025px) {
@@ -1620,26 +1587,6 @@ export default function Home() {
                 fontSize: '16px'
               }}
             />
-
-            <button 
-              className="send-btn" 
-              type="button" 
-              aria-label="Send"
-              disabled={isLoading || !input.trim()}
-              onClick={(e) => {
-                e.preventDefault()
-                // Close portfolio and news when user starts chatting
-                if (showPortfolio) {
-                  setShowPortfolio(false)
-                }
-                if (showNews) {
-                  setShowNews(false)
-                }
-                handleSubmit(e)
-              }}
-            >
-              ↑
-            </button>
           </div>
         </div>
         
