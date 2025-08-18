@@ -985,7 +985,6 @@ Just type any of these questions or click one of the suggestion buttons below to
             }
           }
           
-          /* Removed conflicting input field styles - defined in main .input-field */
           
           /* Global content container for perfect alignment */
           .content-container {
