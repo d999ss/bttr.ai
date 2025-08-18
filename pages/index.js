@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
 import { useChat } from '@ai-sdk/react'
 import ReactMarkdown from 'react-markdown'
+import { Input, GeistProvider, CssBaseline } from '@geist-ui/core'
 import ErrorBoundary from '../components/ErrorBoundary'
 import NetworkStatus from '../components/NetworkStatus'
 import Portfolio from '../components/Portfolio'
@@ -413,8 +414,10 @@ export default function Home() {
   }
 
   return (
-    <ErrorBoundary>
-      <Head>
+    <GeistProvider themeType="dark">
+      <CssBaseline />
+      <ErrorBoundary>
+        <Head>
         <title>Bttr. AI - Make Things Better with AI</title>
         <meta name="description" content="Bttr. AI - Your intelligent partner for creative innovation. Chat with our AI assistant about design, technology, and making things better." />
         <meta name="keywords" content="Bttr, AI assistant, product design, UI/UX, creative technology, digital innovation, design systems" />
@@ -913,63 +916,6 @@ export default function Home() {
             display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
-          }
-
-          .input-field {
-            height: var(--h);
-            min-height: var(--h);
-            max-height: var(--h);
-            width: 100%;
-            box-sizing: border-box;
-            padding: 0 45px 0 14px; /* Reset to no vertical padding for proper centering */
-            font-family: 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-size: 16px;
-            letter-spacing: -0.19px;
-            color: #FFFFFF !important;
-            background: rgba(0, 0, 0, 0.1) !important;
-            backdrop-filter: blur(20px) saturate(150%) !important;
-            -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            border-radius: var(--radius);
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            outline: none;
-            resize: none;
-            overflow: hidden;
-            line-height: var(--h); /* Line height equals container height for perfect vertical centering */
-            text-align: left;
-            vertical-align: middle;
-            caret-color: white;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-          }
-
-          .input-field::placeholder {
-            color: rgba(255, 255, 255, 0.4) !important;
-          }
-          .input-field::-webkit-input-placeholder {
-            color: rgba(255, 255, 255, 0.4) !important;
-          }
-          .input-field::-moz-placeholder {
-            color: rgba(255, 255, 255, 0.4) !important;
-            opacity: 1;
-          }
-          .input-field:-ms-input-placeholder {
-            color: rgba(255, 255, 255, 0.4) !important;
-          }
-          
-          /* Ensure consistent placeholder color on mobile */
-          @media (max-width: 767px) {
-            .input-field::placeholder {
-              color: rgba(255, 255, 255, 0.4) !important;
-            }
-            .input-field::-webkit-input-placeholder {
-              color: rgba(255, 255, 255, 0.4) !important;
-            }
-          }
-
-          .input-field:focus {
-            box-shadow: none;
           }
 
           .send-btn {
@@ -1651,22 +1597,28 @@ export default function Home() {
         >
           <label className="sr-only" htmlFor="chat-input">Message</label>
           <div className="field-wrap">
-            <textarea 
-              id="chat-input"
+            <Input 
               ref={inputRef}
-              className="input-field"
-              rows="1"
               placeholder={placeholderText || "Ask us anything"}
               value={input}
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e)}
               onKeyDown={handleKeyPress}
               disabled={isLoading}
               autoComplete="off"
               autoCorrect="on"
               spellCheck="true"
-              enterKeyHint="send"
-              inputMode="text"
-              autoFocus
+              htmlType="text"
+              width="100%"
+              scale={1.2}
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                backdropFilter: 'blur(20px) saturate(150%)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                color: '#FFFFFF',
+                fontFamily: "'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+                fontSize: '16px'
+              }}
             />
 
             <button 
@@ -1722,6 +1674,7 @@ export default function Home() {
         />
         </div>
       </div>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </GeistProvider>
   )
 }
