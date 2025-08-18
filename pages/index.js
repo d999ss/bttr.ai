@@ -219,18 +219,28 @@ export default function Home() {
     document.documentElement.scrollTop = 0
     document.body.scrollTop = 0
     
-    // Prevent any default scroll behavior but allow input interactions
-    const preventScroll = (e) => {
-      if (e.target.tagName !== 'MAIN' && 
-          e.target.tagName !== 'TEXTAREA' && 
-          e.target.tagName !== 'INPUT' &&
-          !e.target.closest('.input-bar')) {
-        e.preventDefault()
+    // Only prevent document-level scrolling, allow content scrolling
+    const preventDocumentScroll = (e) => {
+      // Allow scrolling if target is within main content or input area
+      if (e.target.closest('main') || 
+          e.target.closest('.input-bar') ||
+          e.target.tagName === 'TEXTAREA' || 
+          e.target.tagName === 'INPUT') {
+        return // Allow scrolling
       }
+      e.preventDefault()
     }
     
-    document.addEventListener('touchmove', preventScroll, { passive: false })
-    document.addEventListener('scroll', () => window.scrollTo(0, 0), { passive: false })
+    // Only prevent scroll on document/body, not on content
+    document.addEventListener('touchmove', preventDocumentScroll, { passive: false })
+    
+    // Only reset scroll if it's on the document itself, not content
+    const preventDocumentScrollEvent = (e) => {
+      if (e.target === document || e.target === document.documentElement || e.target === document.body) {
+        window.scrollTo(0, 0)
+      }
+    }
+    document.addEventListener('scroll', preventDocumentScrollEvent, { passive: false })
     
     // Track page load
     trackEvent('page_load', {
@@ -241,8 +251,8 @@ export default function Home() {
     
     // Cleanup
     return () => {
-      document.removeEventListener('touchmove', preventScroll)
-      document.removeEventListener('scroll', () => window.scrollTo(0, 0))
+      document.removeEventListener('touchmove', preventDocumentScroll)
+      document.removeEventListener('scroll', preventDocumentScrollEvent)
     }
     
     // For mobile, don't auto-focus to prevent keyboard popup on load
@@ -463,13 +473,12 @@ export default function Home() {
         <meta name="color-scheme" content="dark only" />
         <meta name="supported-color-schemes" content="dark" />
         <style>{`
-          /* Prevent document scroll on mobile */
+          /* Prevent document scroll but allow content scroll */
           html, body {
             height: 100vh !important;
             overflow: hidden !important;
             margin: 0 !important;
             padding: 0 !important;
-            position: fixed !important;
             width: 100% !important;
           }
           
