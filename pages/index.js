@@ -1870,7 +1870,9 @@ Let me know what catches your interest!`
                 padding: 0,
                 fontFamily: 'inherit'
               }}
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
                 // Hide portfolio and news if showing and start contact chat
                 setShowPortfolio(false)
                 setShowNews(false)
@@ -2042,7 +2044,9 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
                   textAlign: 'left',
                   fontFamily: 'inherit'
                 }}
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
                   setShowMobileMenu(false)
                   setShowPortfolio(false)
                   setShowNews(false)
