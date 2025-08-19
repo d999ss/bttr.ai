@@ -1,14 +1,35 @@
-const CACHE_NAME = 'bttr-ai-v1'
+const CACHE_NAME = 'bttr-ai-v2' // Updated version to bust cache
 const urlsToCache = [
   '/',
-  '/BK1.png',
   '/TriakisFont-Regular.otf'
 ]
 
 self.addEventListener('install', (event) => {
+  // Skip waiting and activate immediately
+  self.skipWaiting()
+  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => cache.addAll(urlsToCache))
+  )
+})
+
+self.addEventListener('activate', (event) => {
+  // Clean up old caches
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Deleting old cache:', cacheName)
+            return caches.delete(cacheName)
+          }
+        })
+      )
+    }).then(() => {
+      // Take control of all clients immediately
+      return self.clients.claim()
+    })
   )
 })
 
