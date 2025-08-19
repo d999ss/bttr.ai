@@ -703,10 +703,15 @@ Let me know what catches your interest!`
 
   // Log conversation to backend
   const logConversation = async (messages, isComplete = false) => {
-    if (!sessionId) return
+    if (!sessionId) {
+      console.log('No sessionId, skipping conversation logging')
+      return
+    }
+
+    console.log('Logging conversation:', { sessionId, messageCount: messages.length, isComplete })
 
     try {
-      await fetch('/api/log-conversation', {
+      const response = await fetch('/api/log-conversation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -722,6 +727,9 @@ Let me know what catches your interest!`
           }
         })
       })
+      
+      const result = await response.json()
+      console.log('Conversation logged successfully:', result)
     } catch (error) {
       console.error('Error logging conversation:', error)
     }
