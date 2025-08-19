@@ -2290,12 +2290,12 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
                   onClick={(e) => handleSubmit(e)}
                   style={{
                     position: 'absolute',
-                    right: '8px',
+                    right: '6px',
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '8px',
                     background: 'linear-gradient(135deg, #007AFF 0%, #0051D5 100%)',
                     border: 'none',
                     cursor: 'pointer',
@@ -2307,10 +2307,12 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
                     pointerEvents: input.trim() ? 'auto' : 'none'
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-50%) scale(1.1)'
+                    e.target.style.transform = 'translateY(-50%) scale(1.05)'
+                    e.target.style.boxShadow = '0 2px 8px rgba(0, 122, 255, 0.3)'
                   }}
                   onMouseLeave={(e) => {
                     e.target.style.transform = 'translateY(-50%) scale(1)'
+                    e.target.style.boxShadow = 'none'
                   }}
                   aria-label="Send message"
                 >
