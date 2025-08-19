@@ -37,20 +37,26 @@ function AssistantMessageWithImageWait({ content }) {
           }
           return <div className={className}>{children}</div>
         },
-        button: ({children, onclick, style, ...props}) => {
+        button: ({children, onclick, onClick, style, ...props}) => {
           const handleClick = () => {
-            if (onclick) {
-              // Parse onclick handler - handle window.open and window.selectSuggestion calls
-              if (onclick.includes('window.open(')) {
-                const urlMatch = onclick.match(/window\.open\(['"]([^'"]+)['"]/);
-                if (urlMatch) {
-                  window.open(urlMatch[1], '_blank');
+            // Handle both onclick attribute and onClick prop
+            const clickHandler = onclick || onClick;
+            if (clickHandler) {
+              if (typeof clickHandler === 'string') {
+                // Parse onclick string - handle window.open and window.selectSuggestion calls
+                if (clickHandler.includes('window.open(')) {
+                  const urlMatch = clickHandler.match(/window\.open\(['"]([^'"]+)['"]/);
+                  if (urlMatch) {
+                    window.open(urlMatch[1], '_blank');
+                  }
+                } else if (clickHandler.includes('window.selectSuggestion(')) {
+                  const suggestionMatch = clickHandler.match(/window\.selectSuggestion\(['"]([^'"]+)['"]/);
+                  if (suggestionMatch && window.selectSuggestion) {
+                    window.selectSuggestion(suggestionMatch[1]);
+                  }
                 }
-              } else if (onclick.includes('window.selectSuggestion(')) {
-                const suggestionMatch = onclick.match(/window\.selectSuggestion\(['"]([^'"]+)['"]/);
-                if (suggestionMatch && window.selectSuggestion) {
-                  window.selectSuggestion(suggestionMatch[1]);
-                }
+              } else if (typeof clickHandler === 'function') {
+                clickHandler();
               }
             }
           };
@@ -2218,20 +2224,26 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
                               }
                               return <div className={className}>{children}</div>
                             },
-                            button: ({children, onclick, style, ...props}) => {
+                            button: ({children, onclick, onClick, style, ...props}) => {
                               const handleClick = () => {
-                                if (onclick) {
-                                  // Parse onclick handler - handle window.open and window.selectSuggestion calls
-                                  if (onclick.includes('window.open(')) {
-                                    const urlMatch = onclick.match(/window\.open\(['"]([^'"]+)['"]/);
-                                    if (urlMatch) {
-                                      window.open(urlMatch[1], '_blank');
+                                // Handle both onclick attribute and onClick prop
+                                const clickHandler = onclick || onClick;
+                                if (clickHandler) {
+                                  if (typeof clickHandler === 'string') {
+                                    // Parse onclick string - handle window.open and window.selectSuggestion calls
+                                    if (clickHandler.includes('window.open(')) {
+                                      const urlMatch = clickHandler.match(/window\.open\(['"]([^'"]+)['"]/);
+                                      if (urlMatch) {
+                                        window.open(urlMatch[1], '_blank');
+                                      }
+                                    } else if (clickHandler.includes('window.selectSuggestion(')) {
+                                      const suggestionMatch = clickHandler.match(/window\.selectSuggestion\(['"]([^'"]+)['"]/);
+                                      if (suggestionMatch && window.selectSuggestion) {
+                                        window.selectSuggestion(suggestionMatch[1]);
+                                      }
                                     }
-                                  } else if (onclick.includes('window.selectSuggestion(')) {
-                                    const suggestionMatch = onclick.match(/window\.selectSuggestion\(['"]([^'"]+)['"]/);
-                                    if (suggestionMatch && window.selectSuggestion) {
-                                      window.selectSuggestion(suggestionMatch[1]);
-                                    }
+                                  } else if (typeof clickHandler === 'function') {
+                                    clickHandler();
                                   }
                                 }
                               };
