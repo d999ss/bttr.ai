@@ -200,9 +200,11 @@ export default function Home() {
     }
   })
   
+  const [userScrolledUp, setUserScrolledUp] = useState(false)
+
   const scrollToBottom = useCallback(() => {
-    // Auto-scroll if there are messages and portfolio/news is not showing
-    if (messagesEndRef.current && messages.length > 0 && !showPortfolio && !showNews) {
+    // Only auto-scroll if user hasn't manually scrolled up and we have messages
+    if (messagesEndRef.current && messages.length > 0 && !showPortfolio && !showNews && !userScrolledUp) {
       // Use requestAnimationFrame to ensure input field positioning is stable
       requestAnimationFrame(() => {
         messagesEndRef.current?.scrollIntoView({ 
@@ -212,7 +214,22 @@ export default function Home() {
         })
       })
     }
-  }, [messages.length, showPortfolio, showNews])
+  }, [messages.length, showPortfolio, showNews, userScrolledUp])
+
+  // Detect if user has scrolled up manually
+  useEffect(() => {
+    const chatContainer = document.querySelector('.mobile-content')
+    if (!chatContainer) return
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = chatContainer
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50 // 50px threshold
+      setUserScrolledUp(!isAtBottom)
+    }
+
+    chatContainer.addEventListener('scroll', handleScroll, { passive: true })
+    return () => chatContainer.removeEventListener('scroll', handleScroll)
+  }, [])
 
   // Function to pause background videos on user interaction
   
@@ -385,8 +402,17 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
     // Removed inactivity prompt - keeping timer structure for potential future use
   }
 
+  const [previousMessageLength, setPreviousMessageLength] = useState(0)
+
   useEffect(() => {
-    scrollToBottom()
+    // Only scroll and reset scroll state when new messages are actually added
+    if (messages.length > previousMessageLength) {
+      // Reset scroll state when new messages arrive so auto-scroll works
+      setUserScrolledUp(false)
+      scrollToBottom()
+      setPreviousMessageLength(messages.length)
+    }
+    
     updateSessionContext(messages)
     // Mark chat as started when first message appears
     if (messages.length > 0) {
@@ -396,7 +422,7 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
     if (!isLoading && messages.length > 0) {
       inputRef.current?.focus()
     }
-  }, [messages, isLoading])
+  }, [messages, isLoading, previousMessageLength, scrollToBottom])
 
   // Simple fade-in for welcome message
   useEffect(() => {
