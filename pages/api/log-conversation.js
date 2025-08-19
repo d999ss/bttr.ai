@@ -33,10 +33,45 @@ export default async function handler(req, res) {
     const result = await ConversationStorage.saveConversation(sessionId, conversationLog)
 
     if (result.success) {
+      // Send email notification for qualified conversations
+      const userMessages = messages.filter(msg => msg.role === 'user')
+      const shouldSendEmail = (
+        userMessages.length >= 3 || // 3+ user messages
+        metadata?.conversationComplete || // Marked as complete
+        conversationLog.lastUserMessage?.toLowerCase().includes('contact') || // Contact intent
+        conversationLog.lastUserMessage?.toLowerCase().includes('email')
+      )
+
+      if (shouldSendEmail) {
+        try {
+          // Send email notification asynchronously
+          fetch(`${req.headers.origin || 'https://bttr-ai.com'}/api/send-conversation-email`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              sessionId,
+              conversation: conversationLog,
+              analytics: {
+                userMessageCount: userMessages.length,
+                totalMessages: messages.length,
+                hasContactIntent: conversationLog.lastUserMessage?.toLowerCase().includes('contact') || conversationLog.lastUserMessage?.toLowerCase().includes('email')
+              }
+            })
+          }).catch(emailError => {
+            console.error('Email notification failed:', emailError)
+          })
+        } catch (emailError) {
+          console.error('Error triggering email notification:', emailError)
+        }
+      }
+
       res.status(200).json({ 
         success: true, 
         message: 'Conversation logged successfully',
-        sessionId 
+        sessionId,
+        emailSent: shouldSendEmail
       })
     } else {
       res.status(500).json({ 
