@@ -299,7 +299,23 @@ export default function Home() {
         role: 'assistant',
         content: `What's up! 👋
 
-Ready to explore what we can build together? Pick a topic below or ask me anything!`
+Ready to explore what we can build together? Pick a topic below or ask me anything!
+
+What are you interested in? Here are some topics we can dive into:
+
+**Design Projects** - Learn about our visual work like the Ikon Pass app redesign or Air Company branding.
+**Business Strategy** - Discover how we help brands with market positioning and growth outcomes.
+**Innovation & Transformation** - Explore our Catalyst Program designed to help leaders outthink uncertainty.
+**Recent News** - Get updates on our latest partnerships and projects.
+
+<div class="conversation-buttons" style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
+<button onclick="window.selectSuggestion('Tell me about your design projects and visual work')" style="background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%); border: none; color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer;">🎨 Design Projects</button>
+<button onclick="window.selectSuggestion('How do you help brands with business strategy and positioning?')" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; backdrop-filter: blur(10px);">📈 Business Strategy</button>
+<button onclick="window.selectSuggestion('What is the Catalyst Program and how does it work?')" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; backdrop-filter: blur(10px);">⚡ Innovation</button>
+<button onclick="window.selectSuggestion('What are your latest news and partnerships?')" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; backdrop-filter: blur(10px);">📰 Recent News</button>
+</div>
+
+Let me know what catches your interest!`
       })
       
       // Show reset buttons after message
