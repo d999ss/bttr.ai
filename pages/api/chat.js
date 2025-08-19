@@ -15,7 +15,7 @@ export default async function handler(req) {
     return new Response('Method not allowed', { status: 405 })
   }
 
-  const { messages, sessionContext, stream } = await req.json()
+  const { messages, sessionContext, stream, viewportHeight, viewportWidth } = await req.json()
   
   // Check if this is the user's first real message (not the welcome message)
   const userMessages = messages.filter(msg => msg.role === 'user')
@@ -607,6 +607,8 @@ What's your current conversion rate? Where in the funnel are people dropping off
 
 TODAY'S DATE: ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
 CURRENT TIME: ${new Date().toLocaleTimeString('en-US')}
+VIEWPORT: ${viewportWidth || 1024}px width x ${viewportHeight || 800}px height
+IS_MOBILE: ${(viewportWidth || 1024) < 768}
 
 IMPORTANT INSTRUCTIONS:
 - You are Bttr.'s AI team representative
@@ -629,7 +631,17 @@ IMPORTANT INSTRUCTIONS:
   • ![Program Strategy](https://www.makebttr.com/content/uploads/2025/08/03.png)
   • ![Tom Goodwin](https://www.makebttr.com/content/uploads/2025/08/05-1.png)
 - Emphasize that the Catalyst Program helps leaders "outthink uncertainty" and make 2026 a breakthrough year
-- When users ask what's new or about recent work, reference our latest news and partnerships (Opendoor, AI car brand, etc.)`
+- When users ask what's new or about recent work, reference our latest news and partnerships (Opendoor, AI car brand, etc.)
+
+BUTTON DISPLAY RULES:
+- For mobile devices (viewport width < 768px): Show maximum 5 conversation buttons
+- For desktop: Show all available conversation buttons
+- IMPORTANT: On mobile, always prioritize the most important CTAs in this order:
+  1. Contact/Book Call button
+  2. See Brand Work button  
+  3. News/Latest Updates
+  4. Start Conversation
+  5. One relevant prompt based on context`
 
   // Add session context insights
   if (sessionContext && Object.keys(sessionContext).length > 0) {

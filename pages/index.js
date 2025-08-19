@@ -131,7 +131,7 @@ export default function Home() {
   const [conversationStartTime, setConversationStartTime] = useState(null)
   const [welcomeText, setWelcomeText] = useState('')
   const [isWelcomeComplete, setIsWelcomeComplete] = useState(false)
-  const [isMobileInputVisible, setIsMobileInputVisible] = useState(true) // Default to true, will be set properly in useEffect
+  const [isMobileInputVisible, setIsMobileInputVisible] = useState(true) // Always show input on mobile
   const [showPortfolio, setShowPortfolio] = useState(false)
   const [showNews, setShowNews] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
@@ -140,6 +140,7 @@ export default function Home() {
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
   const [showResetButtons, setShowResetButtons] = useState(false)
   const [showContactSuggestions, setShowContactSuggestions] = useState(false)
+  const [isMobileDevice, setIsMobileDevice] = useState(false)
   
   // Memoized conversation suggestions
   const conversationSuggestions = useMemo(() => [
@@ -193,7 +194,9 @@ export default function Home() {
     initialMessages: [],
     body: {
       sessionContext: sessionContext,
-      stream: false
+      stream: false,
+      viewportHeight: typeof window !== 'undefined' ? window.innerHeight : 800,
+      viewportWidth: typeof window !== 'undefined' ? window.innerWidth : 1024
     },
     onError: (error) => {
       console.error('Chat error:', error)
@@ -323,6 +326,16 @@ Let me know what catches your interest!`
     }, 300)
   }, [append, setMessages, setShowPortfolio, setShowNews, setChatStarted, setIsWelcomeComplete, setWelcomeText])
 
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobileDevice(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+  
   // Load session context from localStorage
   useEffect(() => {
     const saved = localStorage.getItem('donny-session-context')
@@ -878,15 +891,7 @@ Let me know what catches your interest!`
     // Check if mobile
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
     
-    if (isMobile && !isMobileInputVisible && messages.length === 0) {
-      // On mobile, tapping the welcome screen should show input
-      setIsMobileInputVisible(true)
-      setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.focus()
-        }
-      }, 300) // Wait for animation
-    } else if (!isMobile) {
+    if (!isMobile) {
       // Focus the input field immediately on desktop
       setTimeout(() => inputRef.current?.focus(), 50)
     }
@@ -1445,16 +1450,25 @@ Let me know what catches your interest!`
               padding: 10px 16px !important;
             }
             
-            /* Mobile-only input animations */
+            /* Mobile-only input animations - always visible */
             @media (max-width: 767px) {
+              .input-bar {
+                transform: translateY(0) !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                display: block !important;
+              }
+              
               .input-bar.mobile-hidden {
-                transform: translateY(100%) !important;
-                transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1) !important;
+                transform: translateY(0) !important;
+                visibility: visible !important;
+                opacity: 1 !important;
               }
               
               .input-bar.mobile-visible {
                 transform: translateY(0) !important;
-                transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1) !important;
+                visibility: visible !important;
+                opacity: 1 !important;
               }
             }
             
@@ -2211,7 +2225,9 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
                   transform: isWelcomeComplete ? 'translateY(0)' : 'translateY(20px)',
                   transition: 'all 1s ease-out 0.5s'
                 }}>
-                  {conversationSuggestions.map((suggestion, index) => (
+                  {conversationSuggestions
+                    .slice(0, isMobileDevice ? 5 : conversationSuggestions.length)
+                    .map((suggestion, index) => (
                     <button
                       key={index}
                       onClick={() => {
@@ -2410,7 +2426,9 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
               marginTop: '16px',
               marginBottom: '20px'
             }}>
-              {conversationSuggestions.map((suggestion, index) => (
+              {conversationSuggestions
+                .slice(0, isMobileDevice ? 5 : conversationSuggestions.length)
+                .map((suggestion, index) => (
                 <button
                   key={index}
                   onClick={() => {
