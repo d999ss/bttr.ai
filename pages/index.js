@@ -576,16 +576,16 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
     }, 100)
     
     // Re-focus on visibility change (for mobile app switching)
-    const handleVisibilityChange = () => {
+    const handleFocusOnVisibility = () => {
       if (!document.hidden) {
         setTimeout(() => inputRef.current?.focus(), 100)
       }
     }
     
-    document.addEventListener('visibilitychange', handleVisibilityChange)
+    document.addEventListener('visibilitychange', handleFocusOnVisibility)
     
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      document.removeEventListener('visibilitychange', handleFocusOnVisibility)
     }
   }, [isWelcomeComplete])
 
