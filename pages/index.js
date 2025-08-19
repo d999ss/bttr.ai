@@ -897,24 +897,48 @@ Let me know what catches your interest!`
       <CssBaseline />
       <ErrorBoundary>
         <Head>
-        <title>Bttr. AI - Make Things Better with AI</title>
-        <meta name="description" content="Bttr. AI - Your intelligent partner for creative innovation. Chat with our AI assistant about design, technology, and making things better." />
-        <meta name="keywords" content="Bttr, AI assistant, product design, UI/UX, creative technology, digital innovation, design systems" />
+        <title>Bttr. - Brand Strategy & Design Agency | Transform Your Brand with AI-Powered Innovation</title>
+        <meta name="description" content="Bttr. is a premier brand strategy and design agency helping companies like Ikon Pass, Air Company & GE transform their brands. Get instant consultation with our AI-powered brand strategist. Book a strategy call today." />
+        <meta name="keywords" content="brand strategy agency, brand design, brand transformation, AI brand consulting, brand positioning, brand identity, visual identity, brand refresh, startup branding, enterprise branding, Ikon Pass, Air Company, GE branding" />
         <meta name="author" content="Bttr." />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1" />
+        
+        {/* Business Location & Contact */}
+        <meta name="geo.region" content="US" />
+        <meta name="geo.placename" content="United States" />
+        <meta name="business.type" content="Brand Strategy Agency" />
+        <meta name="business.hours" content="Mo-Fr 09:00-18:00" />
+        
+        {/* Rich Snippets for Services */}
+        <meta name="service" content="Brand Strategy, Brand Design, Brand Transformation, AI Brand Consulting" />
+        <meta name="target_audience" content="Startups, Enterprises, Business Leaders, CMOs, Founders" />
+        
+        {/* Performance & Loading */}
+        <meta name="format-detection" content="telephone=yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://bttr-ai.com/" />
-        <meta property="og:title" content="Bttr. AI - Make Things Better with AI" />
-        <meta property="og:description" content="Bttr. A design agency for the AI era." />
+        <meta property="og:title" content="Bttr. - Brand Strategy & Design Agency | Transform Your Brand" />
+        <meta property="og:description" content="Premier brand strategy agency trusted by Ikon Pass, Air Company & GE. Get instant AI-powered brand consultation and book a strategy call. Transform your brand today." />
         <meta property="og:image" content="https://bttr-ai.com/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:site_name" content="Bttr. Brand Strategy Agency" />
         
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://bttr-ai.com/" />
-        <meta property="twitter:title" content="Bttr. AI - Make Things Better with AI" />
-        <meta property="twitter:description" content="Bttr. A design agency for the AI era." />
+        <meta property="twitter:title" content="Bttr. - Transform Your Brand with AI-Powered Strategy" />
+        <meta property="twitter:description" content="Premier brand agency trusted by Ikon Pass, Air Company & GE. Get instant consultation with our AI brand strategist. Book your strategy call today." />
         <meta property="twitter:image" content="https://bttr-ai.com/og-image.jpg" />
+        <meta property="twitter:creator" content="@donnysmith" />
+        <meta property="twitter:site" content="@makebttr" />
         
         {/* Canonical URL */}
         <link rel="canonical" href="https://bttr-ai.com/" />
@@ -925,28 +949,37 @@ Let me know what catches your interest!`
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
-        {/* Structured Data */}
+        {/* Structured Data - Organization Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Person",
-              "name": "Bttr. AI",
-              "jobTitle": "AI Assistant for Creative Innovation",
-              "description": "Building innovative digital experiences at the intersection of design and technology",
+              "@type": "Organization",
+              "name": "Bttr. Brand Strategy Agency",
+              "alternateName": "Bttr.",
+              "description": "Premier brand strategy and design agency specializing in brand transformation, visual identity, and AI-powered brand consulting for startups and enterprises.",
               "url": "https://bttr-ai.com",
+              "logo": "https://bttr-ai.com/logo.png",
+              "image": "https://bttr-ai.com/og-image.jpg",
               "sameAs": [
-                "https://twitter.com/donnysmith",
-                "https://linkedin.com/in/donnysmith",
-                "https://github.com/donnysmith"
+                "https://www.makebttr.com",
+                "https://twitter.com/makebttr",
+                "https://linkedin.com/company/makebttr"
               ],
+              "foundingDate": "2020",
+              "founders": [{
+                "@type": "Person",
+                "name": "Donny Smith"
+              }],
               "knowsAbout": [
-                "Product Design",
-                "User Experience (UX)",
-                "User Interface (UI)",
-                "Creative Technology",
-                "Artificial Intelligence",
+                "Brand Strategy",
+                "Brand Transformation",
+                "Visual Identity Design",
+                "Brand Positioning",
+                "AI Brand Consulting",
+                "Enterprise Branding",
+                "Startup Branding",
                 "Design Systems",
                 "Web Development"
               ]

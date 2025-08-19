@@ -1,2 +1,39 @@
+# Bttr. Brand Strategy Agency - Robots.txt
+# https://bttr-ai.com/robots.txt
+
 User-agent: *
+Allow: /
+Allow: /*.js
+Allow: /*.css
+
+# Block admin areas from search engines
+Disallow: /admin/
+Disallow: /api/
+
+# Block common bot targets
+Disallow: /*.json
+Disallow: /node_modules/
+Disallow: /.next/
+
+# Allow important pages for SEO
+Allow: /
+Allow: /sitemap.xml
+
+# Sitemap location
+Sitemap: https://bttr-ai.com/sitemap.xml
+
+# Crawl delay (be nice to servers)
+Crawl-delay: 1
+
+# Specific bot instructions
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot  
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
 Allow: /
