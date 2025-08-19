@@ -2269,17 +2269,66 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
           aria-label="Chat input"
         >
           <div style={{ maxWidth: '864px', width: '100%', padding: '16px 32px', margin: '0 auto', boxSizing: 'border-box' }}>
-            <Input
-              ref={inputRef}
-              placeholder={placeholderText || "Ask us anything"}
-              value={input}
-              onChange={(e) => handleInputChange(e)}
-              onKeyDown={handleKeyPress}
-              disabled={isLoading}
-              width="100%"
-              size="large"
-              clearable={false}
-            />
+            <div style={{ position: 'relative', width: '100%' }}>
+              <Input
+                ref={inputRef}
+                placeholder={placeholderText || "Ask us anything"}
+                value={input}
+                onChange={(e) => handleInputChange(e)}
+                onKeyDown={handleKeyPress}
+                disabled={isLoading}
+                width="100%"
+                size="large"
+                clearable={false}
+                style={{
+                  paddingRight: input.trim() ? '48px' : '16px',
+                  transition: 'padding-right 0.2s ease'
+                }}
+              />
+              {input.trim() && !isLoading && (
+                <button
+                  onClick={(e) => handleSubmit(e)}
+                  style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #007AFF 0%, #0051D5 100%)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.2s ease',
+                    opacity: input.trim() ? 1 : 0,
+                    pointerEvents: input.trim() ? 'auto' : 'none'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = 'translateY(-50%) scale(1.1)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = 'translateY(-50%) scale(1)'
+                  }}
+                  aria-label="Send message"
+                >
+                  <svg 
+                    width="16" 
+                    height="16" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="white" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </button>
+              )}
+            </div>
           </div>
         </div>
         
