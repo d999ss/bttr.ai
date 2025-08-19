@@ -366,10 +366,27 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
 
   // Auto-focus input on mount and ensure welcome message is visible
   useEffect(() => {
-    // Register service worker for caching
-    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-      navigator.serviceWorker.register('/sw.js')
-        .catch(() => {}) // Silently fail if SW registration fails
+    // Unregister old service workers and force update
+    if ('serviceWorker' in navigator) {
+      // First, unregister all service workers to clear old cache
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+          registration.unregister()
+          console.log('Unregistered old service worker')
+        }
+      }).then(() => {
+        // Re-register with new version if in production
+        if (process.env.NODE_ENV === 'production') {
+          // Add timestamp to force update
+          navigator.serviceWorker.register('/sw.js?v=' + Date.now())
+            .then(reg => {
+              console.log('Service worker registered with new version')
+              // Force update check
+              reg.update()
+            })
+            .catch(() => {}) 
+        }
+      })
     }
     
     // Load Unicorn Studio Liquid background with retry logic
@@ -1536,7 +1553,8 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
             width: '100%',
             height: '100%',
             zIndex: 0,
-            backgroundColor: '#000000'
+            backgroundColor: '#000000',
+            backgroundImage: 'none'
           }}
         />
         
