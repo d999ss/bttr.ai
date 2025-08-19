@@ -546,16 +546,6 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
       viewport_height: window.innerHeight
     })
     
-    // Cleanup
-    return () => {
-      document.removeEventListener('touchmove', preventDocumentScroll)
-      document.removeEventListener('scroll', preventDocumentScrollEvent)
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      if (cleanupUnicorn) {
-        cleanupUnicorn()
-      }
-    }
-    
     // For mobile, don't auto-focus to prevent keyboard popup on load
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
     
@@ -584,8 +574,15 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
     
     document.addEventListener('visibilitychange', handleFocusOnVisibility)
     
+    // Cleanup
     return () => {
+      document.removeEventListener('touchmove', preventDocumentScroll)
+      document.removeEventListener('scroll', preventDocumentScrollEvent)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
       document.removeEventListener('visibilitychange', handleFocusOnVisibility)
+      if (cleanupUnicorn) {
+        cleanupUnicorn()
+      }
     }
   }, [isWelcomeComplete])
 
@@ -2290,12 +2287,12 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
                   onClick={(e) => handleSubmit(e)}
                   style={{
                     position: 'absolute',
-                    right: '6px',
+                    right: '4px',
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '8px',
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '5px',
                     background: 'linear-gradient(135deg, #007AFF 0%, #0051D5 100%)',
                     border: 'none',
                     cursor: 'pointer',
@@ -2317,8 +2314,8 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
                   aria-label="Send message"
                 >
                   <svg 
-                    width="16" 
-                    height="16" 
+                    width="14" 
+                    height="14" 
                     viewBox="0 0 24 24" 
                     fill="none" 
                     stroke="white" 
@@ -2326,7 +2323,7 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
                     strokeLinecap="round" 
                     strokeLinejoin="round"
                   >
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                    <path d="M12 19V5M5 12l7-7 7 7"/>
                   </svg>
                 </button>
               )}
