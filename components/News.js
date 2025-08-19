@@ -1,6 +1,37 @@
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const newsItems = [
+  {
+    id: 'brand-transformation-2025',
+    title: 'How to Transform Your Brand in 2025',
+    date: 'Aug 2024',
+    category: 'Brand Strategy Guide',
+    description: 'Complete guide to brand transformation using our proven 7-step framework. Includes case studies from Ikon Pass, Air Company & GE.',
+    link: '/blog/how-to-transform-your-brand-in-2025',
+    isInternal: true,
+    seo: true
+  },
+  {
+    id: 'ai-brand-strategy-future',
+    title: 'AI-Powered Brand Strategy Revolution',
+    date: 'Aug 2024',
+    category: 'Innovation',
+    description: 'How AI is transforming brand strategy and helping companies achieve 300% growth. Get insights from our AI brand strategist.',
+    link: '/blog/ai-powered-brand-strategy-future',
+    isInternal: true,
+    seo: true
+  },
+  {
+    id: 'startup-branding-mistakes',
+    title: '7 Fatal Startup Branding Mistakes',
+    date: 'Aug 2024',
+    category: 'Startup Guide',
+    description: 'Avoid the branding pitfalls that kill 90% of startups. Includes free brand audit checklist and real case studies.',
+    link: '/blog/startup-branding-mistakes-avoid',
+    isInternal: true,
+    seo: true
+  },
   {
     id: 'opendoor',
     title: 'Opendoor appoint Bttr.',
@@ -70,6 +101,17 @@ const newsItems = [
 export default function News({ onNewsClick }) {
   const [hoveredItem, setHoveredItem] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
+  const router = useRouter()
+
+  const handleItemClick = (item) => {
+    if (item.isInternal) {
+      // For internal blog posts, navigate to the page
+      router.push(item.link)
+    } else {
+      // For external links, use the existing onNewsClick handler
+      onNewsClick(item)
+    }
+  }
   
   useEffect(() => {
     const checkMobile = () => {
@@ -91,7 +133,7 @@ export default function News({ onNewsClick }) {
       {newsItems.map((item) => (
         <div 
           key={item.id}
-          onClick={() => onNewsClick(item)}
+          onClick={() => handleItemClick(item)}
           onMouseEnter={() => setHoveredItem(item.id)}
           onMouseLeave={() => setHoveredItem(null)}
           style={{ 
@@ -112,12 +154,13 @@ export default function News({ onNewsClick }) {
             marginBottom: '12px'
           }}>
             <span style={{ 
-              color: '#666',
+              color: item.seo ? '#007AFF' : '#666',
               fontSize: '11px',
               textTransform: 'uppercase',
-              letterSpacing: '0.5px'
+              letterSpacing: '0.5px',
+              fontWeight: item.seo ? '600' : 'normal'
             }}>
-              {item.category}
+              {item.category} {item.seo ? '•' : ''}
             </span>
             <span style={{ 
               color: '#666',
