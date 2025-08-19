@@ -37,6 +37,45 @@ function AssistantMessageWithImageWait({ content }) {
           }
           return <div className={className}>{children}</div>
         },
+        button: ({children, onclick, style, ...props}) => {
+          const handleClick = () => {
+            if (onclick) {
+              // Parse onclick handler - handle window.open and window.selectSuggestion calls
+              if (onclick.includes('window.open(')) {
+                const urlMatch = onclick.match(/window\.open\(['"]([^'"]+)['"]/);
+                if (urlMatch) {
+                  window.open(urlMatch[1], '_blank');
+                }
+              } else if (onclick.includes('window.selectSuggestion(')) {
+                const suggestionMatch = onclick.match(/window\.selectSuggestion\(['"]([^'"]+)['"]/);
+                if (suggestionMatch && window.selectSuggestion) {
+                  window.selectSuggestion(suggestionMatch[1]);
+                }
+              }
+            }
+          };
+          
+          return (
+            <button
+              onClick={handleClick}
+              style={{
+                background: style?.background || 'rgba(255, 255, 255, 0.1)',
+                border: style?.border || '1px solid rgba(255, 255, 255, 0.2)',
+                color: style?.color || 'white',
+                padding: style?.padding || '12px 24px',
+                borderRadius: style?.borderRadius || '24px',
+                fontSize: style?.fontSize || '14px',
+                fontWeight: style?.fontWeight || '500',
+                cursor: 'pointer',
+                backdropFilter: style?.backdropFilter || 'blur(10px)',
+                ...style
+              }}
+              {...props}
+            >
+              {children}
+            </button>
+          );
+        },
         img: ({src, alt}) => {          
           return (
             <div style={{
@@ -82,6 +121,8 @@ export default function Home() {
   const inputRef = useRef(null)
   const inactivityTimerRef = useRef(null)
   const [sessionContext, setSessionContext] = useState({})
+  const [sessionId, setSessionId] = useState(null)
+  const [conversationStartTime, setConversationStartTime] = useState(null)
   const [welcomeText, setWelcomeText] = useState('')
   const [isWelcomeComplete, setIsWelcomeComplete] = useState(false)
   const [isMobileInputVisible, setIsMobileInputVisible] = useState(true) // Default to true, will be set properly in useEffect
@@ -96,14 +137,14 @@ export default function Home() {
   
   // Memoized conversation suggestions
   const conversationSuggestions = useMemo(() => [
-    "Tell me about your design process",
-    "How can AI improve our brand?",
-    "Show me your latest work",
-    "What's your pricing like?",
-    "Can you help with our rebrand?",
-    "Tell me about the Catalyst Program",
-    "What makes Bttr different?",
-    "How do you approach strategy?"
+    "I'm trying to launch a new brand",
+    "I need to build growth mechanics into the product",
+    "Align teams for smooth product launches",
+    "Turn customer feedback into product updates",
+    "Help me redesign our mobile experience",
+    "We need a complete brand refresh",
+    "Build a design system that scales",
+    "Improve our conversion rates"
   ], [])
 
   // Memoized contact suggestions
@@ -120,13 +161,16 @@ export default function Home() {
   
   // Rotating placeholder messages
   const placeholderMessages = useMemo(() => [
-    "Ask if we're available for new projects",
-    "Ask if we're taking on new clients",
-    "Ask if we're available for consulting work",
-    "Ask if we can help with your next project",
-    "Ask about Bttr and our services",
-    "Ask about our design process",
-    "Ask about our product strategy approach"
+    "Why are you here?",
+    "Why are you stuck?",
+    "What's broken in your business right now?",
+    "What keeps you up at night?",
+    "What's not working with your current approach?",
+    "What's the real problem you're facing?",
+    "What would happen if you don't fix this?",
+    "What's stopping you from growing?",
+    "What's your biggest business challenge?",
+    "What's the real issue?"
   ], [])
   
   const { 
@@ -599,10 +643,88 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
   }, [])
 
 
-  // Remove typewriter animation - just show static placeholder
+  // Static placeholder - no rotation
   useEffect(() => {
     setPlaceholderText('Ask us anything')
   }, [])
+
+  // Generate unique session ID
+  const generateSessionId = () => {
+    return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+  }
+
+  // Log conversation to backend
+  const logConversation = async (messages, isComplete = false) => {
+    if (!sessionId) return
+
+    try {
+      await fetch('/api/log-conversation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          sessionId,
+          messages,
+          metadata: {
+            conversationStarted: conversationStartTime,
+            conversationComplete: isComplete,
+            url: window.location.href,
+            userAgent: navigator.userAgent
+          }
+        })
+      })
+    } catch (error) {
+      console.error('Error logging conversation:', error)
+    }
+  }
+
+  // Initialize session on first load
+  useEffect(() => {
+    if (!sessionId) {
+      const newSessionId = generateSessionId()
+      setSessionId(newSessionId)
+      setConversationStartTime(new Date().toISOString())
+    }
+  }, [sessionId])
+
+  // Log conversation whenever messages change
+  useEffect(() => {
+    if (messages.length > 0 && sessionId) {
+      // Log after a small delay to batch rapid changes
+      const timeoutId = setTimeout(() => {
+        logConversation(messages, false)
+      }, 1000)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [messages, sessionId])
+
+  // Log final conversation when user leaves page
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (messages.length > 0 && sessionId) {
+        // Use navigator.sendBeacon for reliable logging on page unload
+        const data = JSON.stringify({
+          sessionId,
+          messages,
+          metadata: {
+            conversationStarted: conversationStartTime,
+            conversationComplete: true,
+            url: window.location.href,
+            userAgent: navigator.userAgent
+          }
+        })
+
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon('/api/log-conversation', data)
+        }
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [messages, sessionId, conversationStartTime])
 
   const handleKeyPress = (e) => {
     // Clear inactivity timer on any key press
@@ -2095,6 +2217,45 @@ Ready to explore what we can build together? Pick a topic below or ask me anythi
                                 return <div className="conversation-buttons">{children}</div>
                               }
                               return <div className={className}>{children}</div>
+                            },
+                            button: ({children, onclick, style, ...props}) => {
+                              const handleClick = () => {
+                                if (onclick) {
+                                  // Parse onclick handler - handle window.open and window.selectSuggestion calls
+                                  if (onclick.includes('window.open(')) {
+                                    const urlMatch = onclick.match(/window\.open\(['"]([^'"]+)['"]/);
+                                    if (urlMatch) {
+                                      window.open(urlMatch[1], '_blank');
+                                    }
+                                  } else if (onclick.includes('window.selectSuggestion(')) {
+                                    const suggestionMatch = onclick.match(/window\.selectSuggestion\(['"]([^'"]+)['"]/);
+                                    if (suggestionMatch && window.selectSuggestion) {
+                                      window.selectSuggestion(suggestionMatch[1]);
+                                    }
+                                  }
+                                }
+                              };
+                              
+                              return (
+                                <button
+                                  onClick={handleClick}
+                                  style={{
+                                    background: style?.background || 'rgba(255, 255, 255, 0.1)',
+                                    border: style?.border || '1px solid rgba(255, 255, 255, 0.2)',
+                                    color: style?.color || 'white',
+                                    padding: style?.padding || '12px 24px',
+                                    borderRadius: style?.borderRadius || '24px',
+                                    fontSize: style?.fontSize || '14px',
+                                    fontWeight: style?.fontWeight || '500',
+                                    cursor: 'pointer',
+                                    backdropFilter: style?.backdropFilter || 'blur(10px)',
+                                    ...style
+                                  }}
+                                  {...props}
+                                >
+                                  {children}
+                                </button>
+                              );
                             },
                           }}
                         >

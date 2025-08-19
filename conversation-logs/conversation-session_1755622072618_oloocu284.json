@@ -1,0 +1,28 @@
+{
+  "sessionId": "session_1755622072618_oloocu284",
+  "timestamp": "2025-08-19T16:48:00.871Z",
+  "messages": [
+    {
+      "role": "user",
+      "content": "This is a test!",
+      "timestamp": "2025-08-19T16:48:00.871Z"
+    },
+    {
+      "role": "assistant",
+      "content": "We appreciate your engagement! If you have any questions or need information about our services, projects, or anything else, feel free to ask. We're here to help!",
+      "timestamp": "2025-08-19T16:48:00.871Z"
+    }
+  ],
+  "metadata": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+    "ip": "::1",
+    "referer": "http://localhost:3001/",
+    "conversationStarted": "2025-08-19T16:47:52.618Z",
+    "conversationComplete": false,
+    "url": "http://localhost:3001/"
+  },
+  "conversationLength": 1,
+  "lastUserMessage": "This is a test!",
+  "conversationStarted": "2025-08-19T16:47:52.618Z",
+  "conversationEnded": "2025-08-19T16:48:00.871Z"
+}
