@@ -1876,8 +1876,24 @@ Let me know what catches your interest!`
                 setShowNews(false)
                 trackEngagement('contact_click', 'header')
                 append({
-                  role: 'user',
-                  content: 'How can we work together?'
+                  role: 'assistant',
+                  content: `🚀 **Ready to transform your brand?** Let's make it happen.
+
+We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough results. Your brand could be next.
+
+**Here's how we can connect:**
+
+📧 **Email Discussion** - Send us details about your project and we'll respond within 24 hours
+📅 **Strategy Call** - Book a 30-minute consultation to explore how we can elevate your brand
+📱 **Quick Chat** - Text or call for immediate questions
+
+<div class="conversation-buttons" style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
+<button onclick="window.open('mailto:hello@makebttr.com?subject=Brand%20Transformation%20Project&body=Hi%20Bttr%20team%2C%0A%0AI%27m%20interested%20in%20discussing%20how%20you%20can%20help%20transform%20my%20brand.%0A%0AProject%20details%3A%0A-%20Company%2FBrand%20name%3A%0A-%20Industry%3A%0A-%20Current%20challenge%3A%0A-%20Goals%3A%0A-%20Timeline%3A%0A-%20Budget%20range%3A%0A%0ALooking%20forward%20to%20hearing%20from%20you%21', '_blank')" style="background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%); border: none; color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer;">📧 Email Project Details</button>
+<button onclick="window.open('https://calendly.com/bttr-strategy', '_blank')" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); border: none; color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer;">📅 Book Strategy Call</button>
+<button onclick="window.open('tel:+1234567890', '_blank')" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; backdrop-filter: blur(10px);">📱 Call Now</button>
+</div>
+
+**Don't wait.** The brands that move fast are the ones that win. Which option works best for you?`
                 })
               }}
               aria-label="Contact for inquiries"
@@ -2032,8 +2048,24 @@ Let me know what catches your interest!`
                   setShowNews(false)
                   trackEngagement('contact_click', 'header')
                   append({
-                    role: 'user',
-                    content: 'How can we work together?'
+                    role: 'assistant',
+                    content: `🚀 **Ready to transform your brand?** Let's make it happen.
+
+We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough results. Your brand could be next.
+
+**Here's how we can connect:**
+
+📧 **Email Discussion** - Send us details about your project and we'll respond within 24 hours
+📅 **Strategy Call** - Book a 30-minute consultation to explore how we can elevate your brand
+📱 **Quick Chat** - Text or call for immediate questions
+
+<div class="conversation-buttons" style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
+<button onclick="window.open('mailto:hello@makebttr.com?subject=Brand%20Transformation%20Project&body=Hi%20Bttr%20team%2C%0A%0AI%27m%20interested%20in%20discussing%20how%20you%20can%20help%20transform%20my%20brand.%0A%0AProject%20details%3A%0A-%20Company%2FBrand%20name%3A%0A-%20Industry%3A%0A-%20Current%20challenge%3A%0A-%20Goals%3A%0A-%20Timeline%3A%0A-%20Budget%20range%3A%0A%0ALooking%20forward%20to%20hearing%20from%20you%21', '_blank')" style="background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%); border: none; color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer;">📧 Email Project Details</button>
+<button onclick="window.open('https://calendly.com/bttr-strategy', '_blank')" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); border: none; color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer;">📅 Book Strategy Call</button>
+<button onclick="window.open('tel:+1234567890', '_blank')" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; backdrop-filter: blur(10px);">📱 Call Now</button>
+</div>
+
+**Don't wait.** The brands that move fast are the ones that win. Which option works best for you?`
                   })
                 }}
               >
