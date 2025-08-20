@@ -2355,11 +2355,13 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           ...(messages.length === 0 && !showPortfolio && !showNews ? {
             /* Welcome message: True viewport centering */
             justifyContent: 'center',
+            alignItems: 'center',
             minHeight: '100vh',
-            padding: 0
+            padding: '20px 0'
           } : typeof window !== 'undefined' && window.innerWidth >= 768 ? {
             /* Desktop: Vertically centered with space for inline input */
             justifyContent: 'center',
+            alignItems: 'center',
             minHeight: 'calc(100vh - 140px)', // Account for header
             paddingTop: '60px',
             paddingBottom: '60px' // Less bottom padding since input is inline
@@ -2400,7 +2402,9 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              gap: '32px'
+              gap: '32px',
+              textAlign: 'center',
+              flex: '1 1 auto'
             }}>
               <div 
                 className="welcome-message"
