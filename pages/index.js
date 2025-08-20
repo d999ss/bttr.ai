@@ -1799,26 +1799,25 @@ Let me know what catches your interest!`
               padding-bottom: 40px !important;
             }
             
-            /* Fixed input field styling */
+            /* Ultra visible input field for iPhone debugging */
             div.input-bar {
               position: fixed !important;
-              bottom: env(safe-area-inset-bottom, 0px) !important;
+              bottom: 0px !important;
               left: 0px !important;
               right: 0px !important;
               width: 100vw !important;
-              height: 80px !important;
-              z-index: 99999999 !important;
+              height: 100px !important;
+              z-index: 999999999 !important;
               visibility: visible !important;
               opacity: 1 !important;
               transform: translateY(0) translateZ(0) !important;
               display: block !important;
-              min-height: 80px !important;
-              background: rgba(0, 0, 0, 0.8) !important; /* Back to dark styling */
-              border: none !important;
+              min-height: 100px !important;
+              background: red !important; /* Debug red again */
+              border: 5px solid yellow !important;
               padding: 16px !important;
               pointer-events: all !important;
               isolation: isolate !important;
-              backdrop-filter: blur(20px) !important;
             }
             
             /* Force all child elements visible */
@@ -2118,11 +2117,27 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           </div>
         </header>
 
+        {/* DEBUG: Safe area info */}
+        <div style={{
+          position: 'fixed',
+          top: '10px',
+          right: '10px',
+          background: 'lime',
+          padding: '5px',
+          fontSize: '10px',
+          zIndex: 999999999,
+          color: 'black'
+        }}>
+          Safe Top: {typeof window !== 'undefined' && CSS.supports('padding-top: env(safe-area-inset-top)') ? 'YES' : 'NO'}
+        </div>
+
         {/* Mobile Navigation Header */}
         <header className="mobile-header mobile-show" role="banner" style={{
           justifyContent: 'space-between',
           alignItems: 'center',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          paddingTop: 'max(env(safe-area-inset-top), 44px)', // Force safe area
+          background: 'rgba(0, 0, 0, 0.9)' // More opaque for debugging
         }}>
           {/* Mobile Logo */}
           <h1 
