@@ -1802,7 +1802,7 @@ Let me know what catches your interest!`
             /* Ultra aggressive input field styling */
             div.input-bar {
               position: fixed !important;
-              bottom: 0px !important;
+              top: 200px !important; /* Move to middle of screen for testing */
               left: 0px !important;
               right: 0px !important;
               width: 100vw !important;
