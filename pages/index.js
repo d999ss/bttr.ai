@@ -1799,25 +1799,20 @@ Let me know what catches your interest!`
               padding-bottom: 40px !important;
             }
             
-            /* Ultra visible input field for iPhone debugging */
-            div.input-bar {
-              position: fixed !important;
-              bottom: 0px !important;
-              left: 0px !important;
-              right: 0px !important;
-              width: 100vw !important;
-              height: 100px !important;
-              z-index: 999999999 !important;
-              visibility: visible !important;
-              opacity: 1 !important;
-              transform: translateY(0) translateZ(0) !important;
-              display: block !important;
-              min-height: 100px !important;
-              background: red !important; /* Debug red again */
-              border: 5px solid yellow !important;
-              padding: 16px !important;
-              pointer-events: all !important;
-              isolation: isolate !important;
+            /* Simplified iPhone input field */
+            .input-bar {
+              position: fixed;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              width: 100%;
+              height: 100px;
+              z-index: 2147483647;
+              background: red;
+              border: 5px solid yellow;
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
             
             /* Force all child elements visible */
@@ -2136,8 +2131,14 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           justifyContent: 'space-between',
           alignItems: 'center',
           boxSizing: 'border-box',
-          paddingTop: 'max(env(safe-area-inset-top), 44px)', // Force safe area
-          background: 'rgba(0, 0, 0, 0.9)' // More opaque for debugging
+          paddingTop: '44px', // Standard iPhone status bar height
+          height: '88px', // 44px content + 44px status bar
+          background: 'rgba(0, 0, 0, 0.9)', // More opaque for debugging
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          right: '0',
+          zIndex: '1000'
         }}>
           {/* Mobile Logo */}
           <h1 
