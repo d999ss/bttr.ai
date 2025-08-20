@@ -1,6 +1,7 @@
 import React from 'react'
 import Portfolio from './Portfolio'
 import News from './News'
+import Subscription from './Subscription'
 
 export default function Navigation({ 
   showMobileMenu, 
@@ -9,11 +10,14 @@ export default function Navigation({
   setShowPortfolio, 
   showNews, 
   setShowNews,
+  showSubscription,
+  setShowSubscription,
   handleNameClick,
   trackEngagement,
   append,
   onProjectClick,
-  onNewsClick
+  onNewsClick,
+  onSubscriptionAction
 }) {
   return (
     <>
@@ -71,6 +75,7 @@ export default function Navigation({
               }}
               onClick={() => {
                 setShowNews(false)
+                setShowSubscription && setShowSubscription(false)
                 setShowPortfolio(!showPortfolio)
                 trackEngagement('portfolio_toggle', showPortfolio ? 'close' : 'open')
               }}
@@ -93,6 +98,7 @@ export default function Navigation({
               onClick={() => {
                 setShowPortfolio(false)
                 setShowNews(false)
+                setShowSubscription && setShowSubscription(false)
                 trackEngagement('catalyst_click', 'header')
                 append({
                   role: 'user',
@@ -118,6 +124,7 @@ export default function Navigation({
               onClick={() => {
                 setShowPortfolio(false)
                 setShowNews(!showNews)
+                setShowSubscription && setShowSubscription(false)
                 trackEngagement('news_toggle', showNews ? 'close' : 'open')
               }}
               aria-label="View latest news"
@@ -136,11 +143,34 @@ export default function Navigation({
                 padding: 0,
                 fontFamily: 'inherit'
               }}
+              onClick={() => {
+                setShowPortfolio(false)
+                setShowNews(false)
+                setShowSubscription && setShowSubscription(!showSubscription)
+                trackEngagement('subscription_toggle', showSubscription ? 'close' : 'open')
+              }}
+              aria-label="View subscription plans"
+            >
+              Subscribe
+            </button>
+            <button 
+              style={{ 
+                color: '#FFFFFF', 
+                fontSize: '12px', 
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                fontFamily: 'inherit'
+              }}
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
                 setShowPortfolio(false)
                 setShowNews(false)
+                setShowSubscription && setShowSubscription(false)
                 trackEngagement('contact_click', 'header')
                 append({
                   role: 'assistant',
@@ -294,10 +324,33 @@ export default function Navigation({
                 setShowMobileMenu(false)
                 setShowPortfolio(false)
                 setShowNews(!showNews)
+                setShowSubscription && setShowSubscription(false)
                 trackEngagement('news_toggle', showNews ? 'close' : 'open')
               }}
             >
               News
+            </button>
+            <button 
+              style={{ 
+                color: '#FFFFFF', 
+                fontSize: '16px',
+                background: 'none',
+                border: 'none',
+                padding: '12px 0',
+                cursor: 'pointer',
+                textAlign: 'left',
+                fontFamily: 'inherit',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+              }}
+              onClick={() => {
+                setShowMobileMenu(false)
+                setShowPortfolio(false)
+                setShowNews(false)
+                setShowSubscription && setShowSubscription(!showSubscription)
+                trackEngagement('subscription_toggle', showSubscription ? 'close' : 'open')
+              }}
+            >
+              Subscribe
             </button>
             <button 
               style={{ 
@@ -316,6 +369,7 @@ export default function Navigation({
                 setShowMobileMenu(false)
                 setShowPortfolio(false)
                 setShowNews(false)
+                setShowSubscription && setShowSubscription(false)
                 trackEngagement('contact_click', 'header')
                 append({
                   role: 'assistant',
@@ -350,6 +404,13 @@ export default function Navigation({
       {showNews && (
         <div className="message-container portfolio-enter" style={{ marginTop: '24px' }}>
           <News onNewsClick={onNewsClick} />
+        </div>
+      )}
+      
+      {/* Subscription Section */}
+      {showSubscription && (
+        <div className="message-container portfolio-enter" style={{ marginTop: '24px' }}>
+          <Subscription onSubscriptionAction={onSubscriptionAction} />
         </div>
       )}
     </>

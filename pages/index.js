@@ -8,6 +8,7 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import NetworkStatus from '../components/NetworkStatus'
 import Portfolio from '../components/Portfolio'
 import News from '../components/News'
+import Subscription from '../components/Subscription'
 import { trackEvent, trackEngagement } from '../lib/analytics'
 import { generateCaseStudySummary, generateFullCaseStudy } from '../data/case-studies'
 
@@ -134,6 +135,7 @@ export default function Home() {
   const [isMobileInputVisible, setIsMobileInputVisible] = useState(true) // Always show input on mobile
   const [showPortfolio, setShowPortfolio] = useState(false)
   const [showNews, setShowNews] = useState(false)
+  const [showSubscription, setShowSubscription] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [chatStarted, setChatStarted] = useState(false)
   const [placeholderText, setPlaceholderText] = useState('')
@@ -151,7 +153,8 @@ export default function Home() {
     "Redesign our mobile app experience",
     "We need a complete brand refresh",
     "Build a design system that scales well",
-    "Improve our website conversion rates"
+    "Improve our website conversion rates",
+    "What's a subscription model look like?"
   ], [])
 
   // Memoized contact suggestions
@@ -207,7 +210,7 @@ export default function Home() {
 
   const scrollToBottom = useCallback(() => {
     // Only auto-scroll if user hasn't manually scrolled up and we have messages
-    if (messagesEndRef.current && messages.length > 0 && !showPortfolio && !showNews && !userScrolledUp) {
+    if (messagesEndRef.current && messages.length > 0 && !showPortfolio && !showNews && !showSubscription && !userScrolledUp) {
       // Use requestAnimationFrame to ensure input field positioning is stable
       requestAnimationFrame(() => {
         messagesEndRef.current?.scrollIntoView({ 
@@ -228,7 +231,7 @@ export default function Home() {
         }, 100)
       })
     }
-  }, [messages.length, showPortfolio, showNews, userScrolledUp])
+  }, [messages.length, showPortfolio, showNews, showSubscription, userScrolledUp])
 
   // Detect if user has scrolled up manually + Enhanced elastic scroll
   useEffect(() => {
@@ -321,11 +324,29 @@ export default function Home() {
     })
   }
   
+  const handleSubscriptionAction = (plan) => {
+    // Track subscription interaction
+    trackEngagement('subscription_click', plan.name)
+    
+    // Mark chat as started for analytics
+    setChatStarted(true)
+    
+    // Close subscription immediately to prevent flash
+    setShowSubscription(false)
+    
+    // Send a message to chat about the selected plan
+    append({
+      role: 'user',
+      content: `I'm interested in the ${plan.name} subscription plan`
+    })
+  }
+  
   const handleNameClick = useCallback(() => {
     // Reset to homepage welcome state
     setMessages([])
     setShowPortfolio(false)
     setShowNews(false)
+    setShowSubscription(false)
     setShowContactSuggestions(false)
     setShowResetButtons(false)
     
@@ -853,12 +874,15 @@ export default function Home() {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       // User interaction
-      // Close portfolio and news when user starts chatting
+      // Close portfolio, news, and subscription when user starts chatting
       if (showPortfolio) {
         setShowPortfolio(false)
       }
       if (showNews) {
         setShowNews(false)
+      }
+      if (showSubscription) {
+        setShowSubscription(false)
       }
       if (showContactSuggestions) {
         setShowContactSuggestions(false)
@@ -2000,8 +2024,9 @@ export default function Home() {
                 fontFamily: 'inherit'
               }}
               onClick={() => {
-                // Toggle portfolio and hide news
+                // Toggle portfolio and hide news/subscription
                 setShowNews(false)
+                setShowSubscription(false)
                 setShowPortfolio(!showPortfolio)
                 trackEngagement('portfolio_toggle', showPortfolio ? 'close' : 'open')
               }}
@@ -2022,9 +2047,10 @@ export default function Home() {
                 fontFamily: 'inherit'
               }}
               onClick={() => {
-                // Hide portfolio and news if showing and start catalyst chat
+                // Hide portfolio, news, and subscription if showing and start catalyst chat
                 setShowPortfolio(false)
                 setShowNews(false)
+                setShowSubscription(false)
                 trackEngagement('catalyst_click', 'header')
                 append({
                   role: 'user',
@@ -2050,6 +2076,7 @@ export default function Home() {
               onClick={() => {
                 // Toggle news and hide portfolio
                 setShowPortfolio(false)
+                setShowSubscription(false)
                 setShowNews(!showNews)
                 trackEngagement('news_toggle', showNews ? 'close' : 'open')
               }}
@@ -2069,12 +2096,36 @@ export default function Home() {
                 padding: 0,
                 fontFamily: 'inherit'
               }}
+              onClick={() => {
+                // Toggle subscription and hide portfolio/news
+                setShowPortfolio(false)
+                setShowNews(false)
+                setShowSubscription(!showSubscription)
+                trackEngagement('subscription_toggle', showSubscription ? 'close' : 'open')
+              }}
+              aria-label="View subscription plans"
+            >
+              Subscribe
+            </button>
+            <button 
+              style={{ 
+                color: '#FFFFFF', 
+                fontSize: '12px', 
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+                textDecoration: 'none',
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                fontFamily: 'inherit'
+              }}
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                // Hide portfolio and news if showing and start contact chat
+                // Hide portfolio, news, and subscription if showing and start contact chat
                 setShowPortfolio(false)
                 setShowNews(false)
+                setShowSubscription(false)
                 trackEngagement('contact_click', 'header')
                 append({
                   role: 'assistant',
@@ -2236,11 +2287,34 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
                 onClick={() => {
                   setShowMobileMenu(false)
                   setShowPortfolio(false)
+                  setShowSubscription(false)
                   setShowNews(!showNews)
                   trackEngagement('news_toggle', showNews ? 'close' : 'open')
                 }}
               >
                 News
+              </button>
+              <button 
+                style={{ 
+                  color: '#FFFFFF', 
+                  fontSize: '16px',
+                  background: 'none',
+                  border: 'none',
+                  padding: '12px 0',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  fontFamily: 'inherit',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+                }}
+                onClick={() => {
+                  setShowMobileMenu(false)
+                  setShowPortfolio(false)
+                  setShowNews(false)
+                  setShowSubscription(!showSubscription)
+                  trackEngagement('subscription_toggle', showSubscription ? 'close' : 'open')
+                }}
+              >
+                Subscribe
               </button>
               <button 
                 style={{ 
@@ -2302,7 +2376,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           alignItems: 'center',
           
           /* Dynamic spacing based on content type and device */
-          ...(messages.length === 0 && !showPortfolio && !showNews ? {
+          ...(messages.length === 0 && !showPortfolio && !showNews && !showSubscription ? {
             /* Welcome message: True viewport centering */
             justifyContent: 'center',
             alignItems: 'center',
@@ -2330,7 +2404,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
             display: 'flex',
             flexDirection: 'column',
             /* Dynamic styling based on content type */
-            ...(messages.length === 0 && !showPortfolio && !showNews ? {
+            ...(messages.length === 0 && !showPortfolio && !showNews && !showSubscription ? {
               /* Welcome message: Center positioning like donnysmith.com */
               minHeight: '100vh',
               padding: '80px 32px 140px 32px',
@@ -2345,7 +2419,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           }}>
           
           {/* Welcome Screen - Clean Structure */}
-          {messages.length === 0 && !showPortfolio && !showNews && (
+          {messages.length === 0 && !showPortfolio && !showNews && !showSubscription && (
             <div style={{
               width: '100%',
               display: 'flex',
@@ -2394,7 +2468,18 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
                     <button
                       key={index}
                       onClick={() => {
-                            trackEngagement('suggestion_click', suggestion)
+                        trackEngagement('suggestion_click', suggestion)
+                        
+                        // Special handling for subscription model question
+                        if (suggestion === "What's a subscription model look like?") {
+                          // Close other sections and show subscription
+                          setShowPortfolio(false)
+                          setShowNews(false)
+                          setShowSubscription(true)
+                          // Don't start a chat, just show the beautiful subscription section
+                          return
+                        }
+                        
                         append({
                           role: 'user',
                           content: suggestion
@@ -2447,6 +2532,13 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           {showNews && (
             <div className="message-container portfolio-enter" style={{ marginTop: '24px' }}>
               <News onNewsClick={handleNewsClick} />
+            </div>
+          )}
+          
+          {/* Subscription Section */}
+          {showSubscription && (
+            <div className="message-container portfolio-enter" style={{ marginTop: '24px' }}>
+              <Subscription onSubscriptionAction={handleSubscriptionAction} />
             </div>
           )}
           
