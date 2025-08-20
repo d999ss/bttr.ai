@@ -1035,7 +1035,7 @@ Let me know what catches your interest!`
         />
         
         {/* Viewport and Mobile */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#000000" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="color-scheme" content="dark only" />
@@ -1044,17 +1044,23 @@ Let me know what catches your interest!`
         {/* Critical CSS for above-the-fold content */}
         <style dangerouslySetInnerHTML={{
           __html: `
+            :root {
+              --safe-bottom: env(safe-area-inset-bottom, 0px);
+              --safe-top: env(safe-area-inset-top, 0px);
+            }
             html, body { 
               margin: 0; 
               padding: 0; 
               background: #000; 
               color: #fff; 
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-              overflow: hidden;
+              height: 100%;
             }
             #__next { 
-              height: 100vh; 
-              overflow: hidden; 
+              min-height: 100dvh;
+              min-height: 100svh; /* fallback */
+              display: flex;
+              flex-direction: column;
             }
             .welcome-message {
               font-size: 36px;
@@ -2311,25 +2317,20 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           </div>
         )}
 
-        {/* Terminal Content - Flows underneath floating overlays */}
+        {/* SCROLLABLE CHAT CONTENT */}
         <main className="mobile-content mobile-fullscreen" role="region" aria-label="Chat messages" style={{
-          height: typeof window !== 'undefined' && window.innerWidth <= 768 ? 'calc(100vh - 100px)' : '100vh', // Leave space for input on mobile
+          flex: '1 1 auto',
           overflowY: 'auto',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: typeof window !== 'undefined' && window.innerWidth <= 768 ? '100px' : 0, // Space for input field on mobile
-          background: 'transparent',
           WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'smooth',
           touchAction: 'pan-y',
-          /* Enhanced iOS-style elastic scroll */
           overscrollBehavior: 'contain',
           WebkitOverscrollBehavior: 'contain',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          paddingTop: 'max(var(--safe-top), 90px)', // Safe from header
+          paddingBottom: '20px',
           /* Dynamic spacing based on content type */
           ...(messages.length === 0 && !showPortfolio && !showNews ? {
             /* Welcome message: True viewport centering */
@@ -2750,118 +2751,68 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
         </main>
 
 
-        {/* INPUT FIELD - Positioned in safe area */}
-        <div style={{
-          position: 'fixed',
-          bottom: '150px', // Much higher to avoid Safari's problematic bottom area
-          left: '15px',
-          right: '15px',
-          height: '56px',
+        {/* STICKY FOOTER INPUT - iOS Safari safe */}
+        <footer style={{
+          position: 'sticky',
+          bottom: 0,
+          paddingBottom: 'max(var(--safe-bottom), 12px)',
+          paddingTop: '12px',
+          paddingLeft: '16px',
+          paddingRight: '16px',
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
-          border: '1px solid rgba(255, 255, 255, 0.3)',
-          borderRadius: '28px',
-          zIndex: 999999999,
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 20px',
-          backdropFilter: 'blur(20px)'
+          backdropFilter: 'blur(20px)',
+          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+          zIndex: 1000
         }}>
-          <input
-            ref={inputRef}
-            placeholder="Type here"
-            value={input}
-            onChange={(e) => handleInputChange(e)}
-            onKeyDown={handleKeyPress}
-            style={{
-              width: '100%',
-              height: '40px',
-              fontSize: '16px',
-              padding: '0 10px',
-              border: 'none',
-              borderRadius: '20px',
-              backgroundColor: 'white',
-              color: 'black'
-            }}
-          />
-        </div>
-
-        {/* iOS-style Input Bar */}
-        <div 
-          className="input-bar mobile-visible" 
-          role="form" 
-          aria-label="Chat input"
-          style={{ display: 'none !important' }}
-        >
-          <div style={{ maxWidth: '864px', width: '100%', padding: '16px 32px', margin: '0 auto', boxSizing: 'border-box' }}>
-            <div style={{ position: 'relative', width: '100%' }}>
-              <input
-                ref={inputRef}
-                placeholder={placeholderText || "Ask us anything"}
-                value={input}
-                onChange={(e) => handleInputChange(e)}
-                onKeyDown={handleKeyPress}
-                disabled={isLoading}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '28px',
+            padding: '0 20px',
+            height: '56px',
+            border: '1px solid rgba(255, 255, 255, 0.2)'
+          }}>
+            <input
+              ref={inputRef}
+              placeholder={placeholderText || "Ask us anything"}
+              value={input}
+              onChange={(e) => handleInputChange(e)}
+              onKeyDown={handleKeyPress}
+              disabled={isLoading}
+              style={{
+                width: '100%',
+                height: '40px',
+                fontSize: '16px',
+                backgroundColor: 'transparent',
+                border: 'none',
+                outline: 'none',
+                color: '#fff',
+                fontFamily: 'inherit'
+              }}
+            />
+            {input.trim() && !isLoading && (
+              <button
+                onClick={(e) => handleSubmit(e)}
                 style={{
-                  width: '100%',
-                  padding: '16px',
-                  paddingRight: input.trim() ? '48px' : '16px',
-                  fontSize: '16px',
-                  border: '2px solid #333',
-                  borderRadius: '12px',
-                  background: '#1a1a1a',
-                  color: '#fff',
-                  outline: 'none',
-                  transition: 'padding-right 0.2s ease'
+                  marginLeft: '12px',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '18px',
+                  backgroundColor: '#007AFF',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
                 }}
-              />
-              {input.trim() && !isLoading && (
-                <button
-                  onClick={(e) => handleSubmit(e)}
-                  style={{
-                    position: 'absolute',
-                    right: '4px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '5px',
-                    background: 'linear-gradient(135deg, #007AFF 0%, #0051D5 100%)',
-                    border: 'none',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.2s ease',
-                    opacity: input.trim() ? 1 : 0,
-                    pointerEvents: input.trim() ? 'auto' : 'none'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-50%) scale(1.05)'
-                    e.target.style.boxShadow = '0 2px 8px rgba(0, 122, 255, 0.3)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = 'translateY(-50%) scale(1)'
-                    e.target.style.boxShadow = 'none'
-                  }}
-                  aria-label="Send message"
-                >
-                  <svg 
-                    width="14" 
-                    height="14" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="white" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  >
-                    <path d="M12 19V5M5 12l7-7 7 7"/>
-                  </svg>
-                </button>
-              )}
-            </div>
+              >
+                <span style={{ color: 'white', fontSize: '16px' }}>→</span>
+              </button>
+            )}
           </div>
-        </div>
+        </footer>
         
         {/* Keyboard-safe spacing script */}
         <script
