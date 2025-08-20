@@ -2870,7 +2870,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
               </button>
             )}
           </div>
-        </footer>
+        </div>
         
         {/* Keyboard-safe spacing script */}
         <script
