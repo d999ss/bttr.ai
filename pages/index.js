@@ -1991,7 +1991,9 @@ Let me know what catches your interest!`
           minHeight: '100vh',
           position: 'relative',
           overflow: 'visible',
-          zIndex: 2
+          zIndex: 2,
+          display: 'flex',
+          flexDirection: 'column'
         }}
         className="desktop-constrained">
         
