@@ -1,7 +1,41 @@
+import React, { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
+import Navigation from '../../components/Navigation'
+import Portfolio from '../../components/Portfolio'
+import News from '../../components/News'
 
 export default function BrandTransformationGuide() {
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [showPortfolio, setShowPortfolio] = useState(false)
+  const [showNews, setShowNews] = useState(false)
+  
+  const handleNameClick = () => {
+    window.location.href = '/'
+  }
+  
+  // Mock functions for blog pages since they don't have chat functionality
+  const trackEngagement = (event, action) => {
+    console.log('Track engagement:', event, action)
+  }
+  
+  const append = (message) => {
+    console.log('Would append message:', message)
+    // Redirect to homepage to start chat
+    window.location.href = '/'
+  }
+  
+  const handleProjectClick = (project) => {
+    console.log('Project clicked:', project)
+    // Redirect to homepage to start chat about project
+    window.location.href = '/'
+  }
+  
+  const handleNewsClick = (newsItem) => {
+    console.log('News clicked:', newsItem)
+    // Redirect to homepage to start chat about news
+    window.location.href = '/'
+  }
   return (
     <>
       <Head>
@@ -50,6 +84,58 @@ export default function BrandTransformationGuide() {
             })
           }}
         />
+        <style jsx global>{`
+          /* Nav content container width matching */
+          .nav-content-container {
+            width: 100%;
+            max-width: 864px;
+            padding: 8px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+          }
+          
+          @media (min-width: 1400px) {
+            .nav-content-container {
+              padding-left: 64px;
+              padding-right: 64px;
+              padding: 8px 64px;
+            }
+          }
+          
+          @media (max-width: 1024px) {
+            .mobile-hide {
+              display: none !important;
+            }
+            .mobile-show {
+              display: flex !important;
+            }
+          }
+          
+          /* Desktop */
+          @media (min-width: 1025px) {
+            .mobile-show {
+              display: none !important;
+            }
+            
+            /* Hide mobile menu dropdown on desktop */
+            .mobile-menu-dropdown {
+              display: none !important;
+            }
+          }
+          
+          @keyframes fadeInDown {
+            from {
+              opacity: 0;
+              transform: translateY(-10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        `}</style>
       </Head>
 
       <div style={{
@@ -58,33 +144,22 @@ export default function BrandTransformationGuide() {
         color: '#ffffff',
         fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       }}>
-        {/* Navigation */}
-        <nav style={{ 
-          padding: '20px', 
-          borderBottom: '1px solid rgba(255,255,255,0.1)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <Link href="/blog" style={{ 
-            color: '#fff', 
-            textDecoration: 'none', 
-            fontSize: '16px' 
-          }}>
-            ← Back to Blog
-          </Link>
-          <Link href="/" style={{ 
-            color: '#007AFF', 
-            textDecoration: 'none', 
-            fontSize: '16px',
-            fontWeight: '600'
-          }}>
-            Bttr.
-          </Link>
-        </nav>
+        <Navigation 
+          showMobileMenu={showMobileMenu}
+          setShowMobileMenu={setShowMobileMenu}
+          showPortfolio={showPortfolio}
+          setShowPortfolio={setShowPortfolio}
+          showNews={showNews}
+          setShowNews={setShowNews}
+          handleNameClick={handleNameClick}
+          trackEngagement={trackEngagement}
+          append={append}
+          onProjectClick={handleProjectClick}
+          onNewsClick={handleNewsClick}
+        />
 
         {/* Article */}
-        <article style={{ maxWidth: '800px', margin: '0 auto', padding: '40px 20px 80px' }}>
+        <article style={{ maxWidth: '800px', margin: '0 auto', padding: '100px 20px 80px' }}>
           {/* Header */}
           <header style={{ marginBottom: '48px' }}>
             <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>

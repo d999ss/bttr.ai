@@ -1,5 +1,9 @@
+import React, { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
+import Navigation from '../../components/Navigation'
+import Portfolio from '../../components/Portfolio'
+import News from '../../components/News'
 
 const blogPosts = [
   {
@@ -50,6 +54,36 @@ const blogPosts = [
 ]
 
 export default function BlogIndex() {
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [showPortfolio, setShowPortfolio] = useState(false)
+  const [showNews, setShowNews] = useState(false)
+  
+  const handleNameClick = () => {
+    window.location.href = '/'
+  }
+  
+  // Mock functions for blog pages since they don't have chat functionality
+  const trackEngagement = (event, action) => {
+    console.log('Track engagement:', event, action)
+  }
+  
+  const append = (message) => {
+    console.log('Would append message:', message)
+    // Redirect to homepage to start chat
+    window.location.href = '/'
+  }
+  
+  const handleProjectClick = (project) => {
+    console.log('Project clicked:', project)
+    // Redirect to homepage to start chat about project
+    window.location.href = '/'
+  }
+  
+  const handleNewsClick = (newsItem) => {
+    console.log('News clicked:', newsItem)
+    // Redirect to homepage to start chat about news
+    window.location.href = '/'
+  }
   return (
     <>
       <Head>
@@ -63,6 +97,58 @@ export default function BlogIndex() {
         <meta property="og:description" content="Expert brand strategy insights and case studies. Learn how to transform your brand with proven frameworks." />
         <meta property="og:url" content="https://bttr-ai.com/blog" />
         <meta property="og:type" content="website" />
+        <style jsx global>{`
+          /* Nav content container width matching */
+          .nav-content-container {
+            width: 100%;
+            max-width: 864px;
+            padding: 8px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+          }
+          
+          @media (min-width: 1400px) {
+            .nav-content-container {
+              padding-left: 64px;
+              padding-right: 64px;
+              padding: 8px 64px;
+            }
+          }
+          
+          @media (max-width: 1024px) {
+            .mobile-hide {
+              display: none !important;
+            }
+            .mobile-show {
+              display: flex !important;
+            }
+          }
+          
+          /* Desktop */
+          @media (min-width: 1025px) {
+            .mobile-show {
+              display: none !important;
+            }
+            
+            /* Hide mobile menu dropdown on desktop */
+            .mobile-menu-dropdown {
+              display: none !important;
+            }
+          }
+          
+          @keyframes fadeInDown {
+            from {
+              opacity: 0;
+              transform: translateY(-10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        `}</style>
       </Head>
 
       <div style={{
@@ -71,33 +157,22 @@ export default function BlogIndex() {
         color: '#ffffff',
         fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       }}>
-        {/* Navigation */}
-        <nav style={{ 
-          padding: '20px', 
-          borderBottom: '1px solid rgba(255,255,255,0.1)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <Link href="/" style={{ 
-            color: '#fff', 
-            textDecoration: 'none', 
-            fontSize: '18px', 
-            fontWeight: '600' 
-          }}>
-            ← Back to Bttr.
-          </Link>
-          <Link href="/blog" style={{ 
-            color: '#007AFF', 
-            textDecoration: 'none', 
-            fontSize: '16px' 
-          }}>
-            Blog
-          </Link>
-        </nav>
+        <Navigation 
+          showMobileMenu={showMobileMenu}
+          setShowMobileMenu={setShowMobileMenu}
+          showPortfolio={showPortfolio}
+          setShowPortfolio={setShowPortfolio}
+          showNews={showNews}
+          setShowNews={setShowNews}
+          handleNameClick={handleNameClick}
+          trackEngagement={trackEngagement}
+          append={append}
+          onProjectClick={handleProjectClick}
+          onNewsClick={handleNewsClick}
+        />
 
         {/* Header */}
-        <header style={{ padding: '60px 20px', textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
+        <header style={{ padding: '120px 20px 60px', textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
           <h1 style={{ 
             fontSize: '48px', 
             fontWeight: '700', 
