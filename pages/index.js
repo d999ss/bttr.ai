@@ -1047,6 +1047,14 @@ Let me know what catches your interest!`
             :root {
               --safe-bottom: env(safe-area-inset-bottom, 0px);
               --safe-top: env(safe-area-inset-top, 0px);
+              --header-h: 56px;
+              --col-max: 72ch;
+              --radius: 12px;
+              --leading: 1.5;
+              --z-header: 30;
+              --z-composer: 40;
+              --z-popover: 50;
+              --z-modal: 60;
             }
             html, body { 
               margin: 0; 
@@ -1055,12 +1063,25 @@ Let me know what catches your interest!`
               color: #fff; 
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
               height: 100%;
+              line-height: var(--leading);
+              text-rendering: optimizeLegibility;
+              -webkit-font-smoothing: antialiased;
+              overscroll-behavior: none; /* Prevent iOS bounce */
             }
             #__next { 
               min-height: 100dvh;
-              min-height: 100svh; /* fallback */
+              min-height: -webkit-fill-available; /* iOS Safari fallback */
+              min-height: 100svh; /* small viewport fallback */
               display: flex;
               flex-direction: column;
+            }
+            .container { 
+              max-width: 1200px; 
+              margin-inline: auto; 
+              padding-inline: 16px; 
+            }
+            .safe-bottom { 
+              padding-bottom: env(safe-area-inset-bottom, 0px); 
             }
             .welcome-message {
               font-size: 36px;
@@ -2757,21 +2778,37 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           </div>
         </main>
 
+        {/* Mobile spacer - prevents content from hiding behind fixed footer */}
+        <div style={{
+          display: typeof window !== 'undefined' && window.innerWidth < 768 ? 'block' : 'none',
+          height: '120px' // Space for mobile input bar
+        }} />
 
-        {/* FIXED FOOTER INPUT - iOS Safari safe */}
-        <footer style={{
-          position: 'fixed',
-          left: 0,
-          right: 0,
-          bottom: 'calc(var(--safe-bottom) + var(--kb, 0px))',
-          zIndex: 9999,
-          paddingTop: '12px',
-          paddingLeft: '16px',
-          paddingRight: '16px',
-          paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)',
-          backgroundColor: 'rgba(0, 0, 0, 0.9)',
-          backdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+        {/* COMPOSER DOCK - Desktop: inline, Mobile: fixed bottom */}
+        <div style={{
+          // Desktop: inline within content column (like ChatGPT)
+          ...(typeof window !== 'undefined' && window.innerWidth >= 768 ? {
+            position: 'static',
+            maxWidth: '864px',
+            width: '100%',
+            margin: '0 auto',
+            padding: '20px 32px',
+            backgroundColor: 'transparent'
+          } : {
+            // Mobile: dock to bottom with safe-area
+            position: 'fixed',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 'var(--z-composer)',
+            paddingTop: '12px',
+            paddingLeft: '16px',
+            paddingRight: '16px',
+            paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            backdropFilter: 'blur(20px)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+          })
         }}>
           <div style={{
             display: 'flex',
@@ -2784,20 +2821,32 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           }}>
             <input
               ref={inputRef}
-              placeholder={placeholderText || "Ask us anything"}
+              placeholder={placeholderText || "Message Bttr. AI…"}
               value={input}
               onChange={(e) => handleInputChange(e)}
               onKeyDown={handleKeyPress}
+              onFocus={(e) => {
+                // Genius's keyboard avoidance fix
+                if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                  setTimeout(() => {
+                    e.target.scrollIntoView({ block: "nearest", behavior: "smooth" });
+                  }, 300);
+                }
+              }}
               disabled={isLoading}
+              inputMode="text"
+              autoComplete="off"
               style={{
                 width: '100%',
-                height: '40px',
+                minHeight: '44px', // Minimum hit target
                 fontSize: '16px',
+                lineHeight: '1.25', // Better vertical centering
                 backgroundColor: 'transparent',
                 border: 'none',
                 outline: 'none',
                 color: '#fff',
-                fontFamily: 'inherit'
+                fontFamily: 'inherit',
+                caretColor: '#fff'
               }}
             />
             {input.trim() && !isLoading && (
