@@ -409,7 +409,7 @@ export default function Navigation({
       
       {/* Subscription Section */}
       {showSubscription && (
-        <div className="message-container portfolio-enter" style={{ marginTop: '24px' }}>
+        <div className="message-container portfolio-enter" style={{ paddingTop: '120px', marginTop: '0px' }}>
           <Subscription onSubscriptionAction={onSubscriptionAction} />
         </div>
       )}

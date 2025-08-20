@@ -159,7 +159,7 @@ export default function Subscription({ onSubscriptionAction }) {
 
   return (
     <div style={{
-      marginTop: isMobile ? '24px' : '48px',
+      marginTop: isMobile ? '0px' : '0px',
       marginBottom: isMobile ? '40px' : '120px',
       paddingBottom: isMobile ? '20px' : '80px',
       marginLeft: isMobile ? '0px' : '0px',
