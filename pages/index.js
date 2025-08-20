@@ -220,7 +220,10 @@ export default function Home() {
         setTimeout(() => {
           const container = document.querySelector('.mobile-content')
           if (container) {
-            container.scrollTop = container.scrollHeight
+            // More aggressive scrolling on desktop to ensure message visibility
+            const isDesktop = window.innerWidth >= 768
+            const extraScroll = isDesktop ? 100 : 0
+            container.scrollTop = container.scrollHeight + extraScroll
           }
         }, 100)
       })
@@ -237,7 +240,9 @@ export default function Home() {
 
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = chatContainer
-      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50 // 50px threshold
+      // More generous threshold on desktop to prevent auto-scroll interference
+      const threshold = window.innerWidth >= 768 ? 100 : 50
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - threshold
       const isAtTop = scrollTop <= 10
       
       setUserScrolledUp(!isAtBottom)
@@ -1785,6 +1790,13 @@ Let me know what catches your interest!`
               box-sizing: border-box !important;
             }
           }
+          
+          /* Desktop: Ensure proper bottom spacing for chat messages */
+          @media (min-width: 768px) {
+            .mobile-content {
+              padding-bottom: 200px !important; /* Extra bottom space on desktop */
+            }
+          }
             
             /* Center content vertically when only welcome message is shown */
             .mobile-fullscreen {
@@ -2241,7 +2253,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
             /* Chat mode: Normal flow with minimal overlay clearance */
             justifyContent: 'flex-start',
             paddingTop: showMobileMenu ? 'calc(140px + env(safe-area-inset-top))' : 'calc(60px + env(safe-area-inset-top))',
-            paddingBottom: 'calc(160px + env(safe-area-inset-bottom))'
+            paddingBottom: window.innerWidth >= 768 ? '240px' : 'calc(160px + env(safe-area-inset-bottom))'
           })
         }}>
           <div style={{
@@ -2646,7 +2658,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
             </div>
           )}
           {/* Extra padding to ensure last message is visible above input */}
-          <div style={{ height: '60px' }} />
+          <div style={{ height: window.innerWidth >= 768 ? '120px' : '60px' }} />
           <div ref={messagesEndRef} />
           </div>
         </main>
