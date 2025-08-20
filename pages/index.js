@@ -2126,24 +2126,24 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           Safe Top: {typeof window !== 'undefined' && CSS.supports('padding-top: env(safe-area-inset-top)') ? 'YES' : 'NO'}
         </div>
 
-        {/* BYPASS TEST: Simple element that should definitely show */}
+        {/* BYPASS TEST: Move element up from bottom */}
         <div style={{
           position: 'fixed',
-          bottom: '0px',
+          bottom: '100px',
           left: '0px',
           width: '100%',
-          height: '120px',
+          height: '80px',
           backgroundColor: 'purple',
-          border: '10px solid orange',
+          border: '5px solid orange',
           zIndex: 9999999,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           color: 'white',
-          fontSize: '20px',
+          fontSize: '16px',
           fontWeight: 'bold'
         }}>
-          TEST ELEMENT
+          TEST - 100px from bottom
         </div>
 
         {/* Mobile Navigation Header */}
