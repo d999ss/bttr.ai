@@ -964,7 +964,7 @@ Let me know what catches your interest!`
         {/* Performance & Loading */}
         <meta name="format-detection" content="telephone=yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
@@ -1329,7 +1329,7 @@ Let me know what catches your interest!`
 
           .input-bar {
             position: fixed !important;
-            bottom: max(env(safe-area-inset-bottom), 0px) !important;
+            bottom: max(env(safe-area-inset-bottom), 20px) !important;
             left: 0 !important;
             right: 0 !important;
             z-index: 999999 !important;
@@ -1794,17 +1794,51 @@ Let me know what catches your interest!`
           /* Mobile: Ensure input field is always visible */
           @media (max-width: 768px) {
             .mobile-content {
-              height: calc(100vh - 100px) !important;
-              bottom: 100px !important;
+              height: calc(100vh - 120px) !important;
+              bottom: 120px !important;
+              padding-bottom: 40px !important;
             }
             
             .input-bar {
               position: fixed !important;
-              bottom: max(env(safe-area-inset-bottom), 0px) !important;
+              bottom: max(env(safe-area-inset-bottom), 20px) !important;
               z-index: 999999 !important;
               visibility: visible !important;
               opacity: 1 !important;
               transform: translateY(0) !important;
+              display: block !important;
+              min-height: 80px !important;
+              background: rgba(255, 0, 0, 0.8) !important; /* Temporary red debug background */
+            }
+            
+            /* Force input visibility on iPhone */
+            .input-bar, .input-bar * {
+              visibility: visible !important;
+              opacity: 1 !important;
+              display: block !important;
+            }
+            
+            /* Ensure content doesn't overlap input */
+            body {
+              padding-bottom: 120px !important;
+            }
+            
+            /* iPhone specific safe area handling */
+            .mobile-fullscreen {
+              padding-top: max(env(safe-area-inset-top), 44px) !important;
+              min-height: calc(100vh - max(env(safe-area-inset-top), 44px) - 120px) !important;
+            }
+            
+            /* Force safe areas on iPhone */
+            @supports (padding: max(0px)) {
+              .mobile-content {
+                padding-top: max(env(safe-area-inset-top), 44px) !important;
+              }
+              
+              .input-bar {
+                bottom: max(env(safe-area-inset-bottom), 20px) !important;
+                padding-bottom: max(env(safe-area-inset-bottom), 20px) !important;
+              }
             }
           }
           
@@ -2269,7 +2303,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           } : {
             /* Chat mode: Normal flow with minimal overlay clearance */
             justifyContent: 'flex-start',
-            paddingTop: showMobileMenu ? 'calc(140px + env(safe-area-inset-top))' : 'calc(60px + env(safe-area-inset-top))',
+            paddingTop: showMobileMenu ? 'calc(140px + max(env(safe-area-inset-top), 44px))' : 'calc(60px + max(env(safe-area-inset-top), 44px))',
             paddingBottom: typeof window !== 'undefined' && window.innerWidth >= 768 ? '240px' : 'calc(160px + env(safe-area-inset-bottom))'
           })
         }}>
