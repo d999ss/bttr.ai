@@ -2341,7 +2341,6 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
         {/* SCROLLABLE CHAT CONTENT */}
         <main className="mobile-content mobile-fullscreen" role="region" aria-label="Chat messages" style={{
           flex: '1 1 auto',
-          minHeight: 'calc(100dvh - 200px)', // Ensure enough height to push footer down
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'smooth',
@@ -2351,24 +2350,25 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          paddingTop: 'max(var(--safe-top), 90px)', // Safe from header
-          paddingBottom: 'calc(96px + var(--kb, 0px) + env(safe-area-inset-bottom))',
+          
           /* Dynamic spacing based on content type and device */
           ...(messages.length === 0 && !showPortfolio && !showNews ? {
             /* Welcome message: True viewport centering */
             justifyContent: 'center',
+            minHeight: '100vh',
             padding: 0
           } : typeof window !== 'undefined' && window.innerWidth >= 768 ? {
-            /* Desktop chat mode: Vertically centered content */
+            /* Desktop: Vertically centered with space for inline input */
             justifyContent: 'center',
-            minHeight: 'calc(100vh - 120px)', // Account for header and input
+            minHeight: 'calc(100vh - 140px)', // Account for header
             paddingTop: '60px',
-            paddingBottom: '120px'
+            paddingBottom: '60px' // Less bottom padding since input is inline
           } : {
-            /* Mobile chat mode: Normal flow with mobile overlay clearance */
+            /* Mobile: Top-aligned with fixed bottom input */
             justifyContent: 'flex-start',
             paddingTop: showMobileMenu ? 'calc(140px + max(env(safe-area-inset-top), 44px))' : 'calc(60px + max(env(safe-area-inset-top), 44px))',
-            paddingBottom: 'calc(160px + env(safe-area-inset-bottom))'
+            paddingBottom: '160px', // Space for fixed bottom input
+            minHeight: 'calc(100dvh - 200px)'
           })
         }}>
           <div style={{
@@ -2813,11 +2813,21 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '28px',
-            padding: '0 20px',
+            borderRadius: '12px',
+            padding: '0 16px',
             height: '56px',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
+            // Desktop: Floating ChatGPT-style input with shadow
+            ...(typeof window !== 'undefined' && window.innerWidth >= 768 ? {
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.15)', 
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2)',
+              maxWidth: '768px',
+              margin: '0 auto'
+            } : {
+              // Mobile: Subtle styling
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.2)'
+            })
           }}>
             <input
               ref={inputRef}
