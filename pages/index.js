@@ -144,23 +144,23 @@ export default function Home() {
   
   // Memoized conversation suggestions
   const conversationSuggestions = useMemo(() => [
-    "I'm trying to launch a new brand",
-    "I need to build growth mechanics into the product",
+    "Help me launch a new brand strategy",
+    "Build growth mechanics into our product",
     "Align teams for smooth product launches",
-    "Turn customer feedback into product updates",
-    "Help me redesign our mobile experience",
+    "Turn customer feedback into updates",
+    "Redesign our mobile app experience",
     "We need a complete brand refresh",
-    "Build a design system that scales",
-    "Improve our conversion rates"
+    "Build a design system that scales well",
+    "Improve our website conversion rates"
   ], [])
 
   // Memoized contact suggestions
   const contactSuggestions = useMemo(() => [
     "What's your availability for new projects?",
-    "Can we schedule a discovery call?",
+    "Can we schedule a discovery call together?",
     "What information do you need from us?",
     "How do you handle project timelines?",
-    "What's your onboarding process?",
+    "What's your client onboarding process?",
     "Can you share some client references?",
     "What's included in your strategy phase?",
     "How do you price different project types?"
@@ -322,51 +322,26 @@ export default function Home() {
   }
   
   const handleNameClick = useCallback(() => {
-    // Mark chat as started for analytics (layout is now independent)
-    setChatStarted(true)
-    
-    // Then clear the chat and hide portfolio and news
+    // Reset to homepage welcome state
     setMessages([])
     setShowPortfolio(false)
     setShowNews(false)
     setShowContactSuggestions(false)
+    setShowResetButtons(false)
     
-    // Skip welcome animation since this is a manual reset
+    // Reset to welcome screen with starter questions
+    setChatStarted(false)
     setIsWelcomeComplete(true)
-    setWelcomeText("")
+    setWelcomeText(welcomeText)
     
     // Track interaction
     trackEngagement('name_click', 'header')
     
-    // Send "what's up" message with conversation starters
+    // Focus input after reset
     setTimeout(() => {
-      append({
-        role: 'assistant',
-        content: `What's up! 👋
-
-Ready to explore what we can build together? Pick a topic below or ask me anything!
-
-What are you interested in? Here are some topics we can dive into:
-
-**Design Projects** - Learn about our visual work like the Ikon Pass app redesign or Air Company branding.
-**Business Strategy** - Discover how we help brands with market positioning and growth outcomes.
-**Innovation & Transformation** - Explore our Catalyst Program designed to help leaders outthink uncertainty.
-**Recent News** - Get updates on our latest partnerships and projects.
-
-<div class="conversation-buttons" style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
-<button onclick="window.selectSuggestion('Tell me about your design projects and visual work')" style="background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%); border: none; color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer;">🎨 Design Projects</button>
-<button onclick="window.selectSuggestion('How do you help brands with business strategy and positioning?')" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; backdrop-filter: blur(10px);">📈 Business Strategy</button>
-<button onclick="window.selectSuggestion('What is the Catalyst Program and how does it work?')" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; backdrop-filter: blur(10px);">⚡ Innovation</button>
-<button onclick="window.selectSuggestion('What are your latest news and partnerships?')" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; backdrop-filter: blur(10px);">📰 Recent News</button>
-</div>
-
-Let me know what catches your interest!`
-      })
-      
-      // Show reset buttons after message
-      setShowResetButtons(true)
-    }, 300)
-  }, [append, setMessages, setShowPortfolio, setShowNews, setChatStarted, setIsWelcomeComplete, setWelcomeText])
+      inputRef.current?.focus()
+    }, 100)
+  }, [setMessages, setShowPortfolio, setShowNews, setChatStarted, setIsWelcomeComplete, setWelcomeText, welcomeText])
 
   // Detect mobile device
   useEffect(() => {
@@ -1115,34 +1090,7 @@ Let me know what catches your interest!`
             - All overlays are completely independent of content state/changes
           */
           
-          @font-face {
-            font-family: 'Neue Montreal';
-            src: url('/NeueMontreal-Regular.woff2') format('woff2'),
-                 url('/NeueMontreal-Regular.woff') format('woff'),
-                 url('/NeueMontreal-Regular.otf') format('opentype');
-            font-weight: 400;
-            font-style: normal;
-            font-display: swap;
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-          }
-          @font-face {
-            font-family: 'Triakis';
-            src: url('/TriakisFont-Regular.otf') format('opentype');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-          }
-          @font-face {
-            font-family: 'SuisseBPIntl';
-            src: url('/SuisseBPIntl-Medium.woff2') format('woff2'),
-                 url('/SuisseBPIntl-Medium.woff') format('woff'),
-                 url('/SuisseBPIntl-Medium.otf') format('opentype');
-            font-weight: 500;
-            font-style: normal;
-            font-display: swap;
-            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-          }
+          /* Clean system font stack - looks great without custom fonts */
           @keyframes blink {
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0; }
@@ -1523,7 +1471,7 @@ Let me know what catches your interest!`
             }
             
             .mobile-welcome .welcome-message {
-              font-family: 'SuisseBPIntl', 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+              font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
               font-size: 42px !important;
               line-height: 40px !important;
               letter-spacing: -0.7px !important;
@@ -1538,7 +1486,7 @@ Let me know what catches your interest!`
             
             /* Mobile welcome message styling */
             .mobile-welcome .welcome-message {
-              font-family: 'SuisseBPIntl', 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+              font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
               font-size: 28px !important;
               line-height: 32px !important;
               letter-spacing: -0.5px !important;
@@ -1791,7 +1739,7 @@ Let me know what catches your interest!`
           /* Medium breakpoint - match donnysmith.com sizing */
           @media (min-width: 768px) and (max-width: 1023px) {
             .welcome-message {
-              font-family: 'SuisseBPIntl', 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+              font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
               font-weight: 500 !important;
               font-size: 32px !important;
               line-height: 36px !important;
@@ -1806,7 +1754,7 @@ Let me know what catches your interest!`
           /* Desktop welcome message - match donnysmith.com */
           @media (min-width: 1024px) {
             .welcome-message {
-              font-family: 'SuisseBPIntl', 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+              font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
               font-weight: 500 !important;
               font-size: 36px !important;
               line-height: 40px !important;
@@ -1919,7 +1867,7 @@ Let me know what catches your interest!`
           alignItems: 'center',
           justifyContent: 'center',
           padding: '20px',
-          fontFamily: "'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
           textAlign: 'center'
         }}>
           <h1 style={{ fontSize: '24px', marginBottom: '16px' }}>JavaScript Required</h1>
@@ -1944,7 +1892,7 @@ Let me know what catches your interest!`
           height: '100vh',
           background: 'transparent',
           color: '#FFFFFF',
-          fontFamily: "'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
           fontSize: '12px',
           lineHeight: '1.2',
           letterSpacing: '-0.19px',
@@ -2000,7 +1948,7 @@ Let me know what catches your interest!`
         {/* Floating Navigation Header - Independent overlay */}
         <header className="mobile-hide" role="banner" style={{
           position: 'fixed',
-          top: '32px',
+          top: 0,
           left: 0,
           right: 0,
           width: '100%',
@@ -2365,7 +2313,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: 'calc(100vh - 140px)', // Account for header
-            paddingTop: '92px',
+            paddingTop: '60px',
             paddingBottom: '60px' // Less bottom padding since input is inline
           } : {
             /* Mobile: Top-aligned with fixed bottom input */

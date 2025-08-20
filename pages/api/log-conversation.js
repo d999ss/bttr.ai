@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     const conversationLog = {
       sessionId,
       timestamp: new Date().toISOString(),
-      messages: messages.map(msg => ({
+      messages: (messages || []).map(msg => ({
         role: msg.role,
         content: msg.content,
         timestamp: new Date().toISOString()
@@ -24,8 +24,8 @@ export default async function handler(req, res) {
         referer: req.headers['referer'],
         ...metadata
       },
-      conversationLength: messages.filter(msg => msg.role === 'user').length,
-      lastUserMessage: messages.filter(msg => msg.role === 'user').slice(-1)[0]?.content,
+      conversationLength: (messages || []).filter(msg => msg.role === 'user').length,
+      lastUserMessage: (messages || []).filter(msg => msg.role === 'user').slice(-1)[0]?.content,
       conversationStarted: metadata?.conversationStarted || new Date().toISOString(),
       conversationEnded: new Date().toISOString()
     }
