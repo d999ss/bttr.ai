@@ -1,4 +1,5 @@
 import { ConversationStorage } from '../../lib/conversation-storage'
+import { saveConversation as saveToDatabase } from '../../lib/database'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -19,7 +20,7 @@ export default async function handler(req, res) {
       })),
       metadata: {
         userAgent: req.headers['user-agent'],
-        ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+        ip: req.headers['x-forwarded-for'] || req.connection?.remoteAddress,
         referer: req.headers['referer'],
         ...metadata
       },
@@ -29,10 +30,16 @@ export default async function handler(req, res) {
       conversationEnded: new Date().toISOString()
     }
 
-    // Save using the new storage system
-    const result = await ConversationStorage.saveConversation(sessionId, conversationLog)
+    // Try to save to database first (if configured)
+    let dbResult = { success: false }
+    if (process.env.POSTGRES_URL) {
+      dbResult = await saveToDatabase(sessionId, conversationLog)
+    }
 
-    if (result.success) {
+    // Also save to in-memory storage as fallback
+    const memoryResult = await ConversationStorage.saveConversation(sessionId, conversationLog)
+
+    if (dbResult.success || memoryResult.success) {
       // Send email notification for qualified conversations
       const userMessages = messages.filter(msg => msg.role === 'user')
       const shouldSendEmail = (
@@ -71,12 +78,13 @@ export default async function handler(req, res) {
         success: true, 
         message: 'Conversation logged successfully',
         sessionId,
-        emailSent: shouldSendEmail
+        emailSent: shouldSendEmail,
+        storage: dbResult.success ? 'database' : 'memory'
       })
     } else {
       res.status(500).json({ 
         error: 'Failed to log conversation',
-        details: result.error 
+        details: dbResult.error || memoryResult.error 
       })
     }
 
