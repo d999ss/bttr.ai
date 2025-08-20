@@ -215,23 +215,60 @@ export default function Home() {
           block: 'end',
           inline: 'nearest'
         })
+        
+        // Additional scroll adjustment to ensure clearance from input
+        setTimeout(() => {
+          const container = document.querySelector('.mobile-content')
+          if (container) {
+            container.scrollTop = container.scrollHeight
+          }
+        }, 100)
       })
     }
   }, [messages.length, showPortfolio, showNews, userScrolledUp])
 
-  // Detect if user has scrolled up manually
+  // Detect if user has scrolled up manually + Enhanced elastic scroll
   useEffect(() => {
     const chatContainer = document.querySelector('.mobile-content')
     if (!chatContainer) return
 
+    let isScrolling = false
+    let scrollTimeout = null
+
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = chatContainer
       const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50 // 50px threshold
+      const isAtTop = scrollTop <= 10
+      
       setUserScrolledUp(!isAtBottom)
+      
+      // Enhanced spring effect for iOS-like behavior
+      if (!isScrolling) {
+        isScrolling = true
+        
+        // Add subtle spring animation when hitting boundaries
+        if (isAtTop || isAtBottom) {
+          chatContainer.style.animation = 'springBounce 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+          setTimeout(() => {
+            if (chatContainer) {
+              chatContainer.style.animation = ''
+            }
+          }, 400)
+        }
+      }
+      
+      // Reset scrolling flag after scroll ends
+      clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(() => {
+        isScrolling = false
+      }, 150)
     }
 
     chatContainer.addEventListener('scroll', handleScroll, { passive: true })
-    return () => chatContainer.removeEventListener('scroll', handleScroll)
+    return () => {
+      chatContainer.removeEventListener('scroll', handleScroll)
+      clearTimeout(scrollTimeout)
+    }
   }, [])
 
   // Function to pause background videos on user interaction
@@ -1097,6 +1134,45 @@ Let me know what catches your interest!`
             }
           }
           
+          @keyframes springBounce {
+            0% {
+              transform: translateY(0px);
+            }
+            25% {
+              transform: translateY(-2px);
+            }
+            50% {
+              transform: translateY(1px);
+            }
+            75% {
+              transform: translateY(-0.5px);
+            }
+            100% {
+              transform: translateY(0px);
+            }
+          }
+          
+          @keyframes elasticScroll {
+            0% {
+              transform: translateY(0);
+            }
+            20% {
+              transform: translateY(-10px);
+            }
+            40% {
+              transform: translateY(3px);
+            }
+            60% {
+              transform: translateY(-1px);
+            }
+            80% {
+              transform: translateY(0.3px);
+            }
+            100% {
+              transform: translateY(0);
+            }
+          }
+          
           
           .pulse-dot {
             width: 6px;
@@ -1399,6 +1475,9 @@ Let me know what catches your interest!`
               overflow-y: auto !important;
               overflow-x: hidden !important;
               -webkit-overflow-scrolling: touch !important;
+              overscroll-behavior: contain !important;
+              -webkit-overscroll-behavior: contain !important;
+              scroll-behavior: smooth !important;
             }
             
             /* Welcome message mobile styling */
@@ -1477,7 +1556,7 @@ Let me know what catches your interest!`
               flex: 1 !important;
               overflow-y: auto !important;
               padding: 16px !important;
-              padding-bottom: 100px !important; /* Space for input */
+              padding-bottom: 140px !important; /* Space for input */
             }
             
             /* Mobile message styling */
@@ -2147,6 +2226,9 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'smooth',
           touchAction: 'pan-y',
+          /* Enhanced iOS-style elastic scroll */
+          overscrollBehavior: 'contain',
+          WebkitOverscrollBehavior: 'contain',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -2159,7 +2241,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
             /* Chat mode: Normal flow with minimal overlay clearance */
             justifyContent: 'flex-start',
             paddingTop: showMobileMenu ? 'calc(140px + env(safe-area-inset-top))' : 'calc(60px + env(safe-area-inset-top))',
-            paddingBottom: 'calc(120px + env(safe-area-inset-bottom))'
+            paddingBottom: 'calc(160px + env(safe-area-inset-bottom))'
           })
         }}>
           <div style={{
@@ -2564,7 +2646,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
             </div>
           )}
           {/* Extra padding to ensure last message is visible above input */}
-          <div style={{ height: '20px' }} />
+          <div style={{ height: '60px' }} />
           <div ref={messagesEndRef} />
           </div>
         </main>
