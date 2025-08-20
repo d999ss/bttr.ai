@@ -1074,7 +1074,7 @@ Let me know what catches your interest!`
         <style>{`
           /* Prevent document scroll but allow content scroll */
           html, body {
-            height: 100vh !important;
+            height: 100dvh !important;
             overflow: hidden !important;
             margin: 0 !important;
             padding: 0 !important;
@@ -1082,7 +1082,7 @@ Let me know what catches your interest!`
           }
           
           #__next {
-            height: 100vh !important;
+            height: 100dvh !important;
             overflow: hidden !important;
           }
           
@@ -1255,7 +1255,7 @@ Let me know what catches your interest!`
               display: flex !important;
             }
             .mobile-fullscreen {
-              height: 100vh !important;
+              height: 100dvh !important;
               padding-top: 60px !important;
               padding-bottom: 80px !important;
               padding-left: 20px !important;
@@ -1479,7 +1479,7 @@ Let me know what catches your interest!`
             
             /* Mobile content takes full viewport */
             .mobile-content {
-              height: 100vh !important;
+              height: 100dvh !important;
               padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
               display: flex !important;
               flex-direction: column !important;
@@ -2320,6 +2320,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
         {/* SCROLLABLE CHAT CONTENT */}
         <main className="mobile-content mobile-fullscreen" role="region" aria-label="Chat messages" style={{
           flex: '1 1 auto',
+          minHeight: 'calc(100dvh - 200px)', // Ensure enough height to push footer down
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'smooth',
@@ -2330,7 +2331,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           flexDirection: 'column',
           alignItems: 'center',
           paddingTop: 'max(var(--safe-top), 90px)', // Safe from header
-          paddingBottom: '20px',
+          paddingBottom: 'calc(96px + var(--kb, 0px) + env(safe-area-inset-bottom))',
           /* Dynamic spacing based on content type */
           ...(messages.length === 0 && !showPortfolio && !showNews ? {
             /* Welcome message: True viewport centering */
@@ -2752,8 +2753,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
 
 
         {/* STICKY FOOTER INPUT - iOS Safari safe */}
-        <footer style={{
-          position: 'sticky',
+        <footer style={{ position: 'sticky',
           bottom: 0,
           paddingBottom: 'max(var(--safe-bottom), 12px)',
           paddingTop: '12px',
@@ -2762,8 +2762,10 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
           backdropFilter: 'blur(20px)',
           borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-          zIndex: 1000
-        }}>
+          zIndex: 1000,
+          transform: 'translateY(calc(-1 * var(--kb, 0px)))',
+          willChange: 'transform'
+         }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -2825,18 +2827,18 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
                     const overlap = Math.max(0, (window.innerHeight - vv.height - vv.offsetTop));
                     document.documentElement.style.setProperty('--kb', overlap + 'px');
                     // Prevent conversation from moving up by maintaining scroll position
-                    document.body.style.transform = 'translateY(0)';
+                    // removed body translateY; footer translates via --kb
                   };
                   ['resize','scroll'].forEach(e => vv.addEventListener(e, set));
                   set();
                 } else {
                   window.addEventListener('focusin', () => {
                     document.documentElement.style.setProperty('--kb','12px');
-                    document.body.style.transform = 'translateY(0)';
+                    // removed body translateY; footer translates via --kb
                   });
                   window.addEventListener('focusout', () => {
                     document.documentElement.style.setProperty('--kb','0px');
-                    document.body.style.transform = 'translateY(0)';
+                    // removed body translateY; footer translates via --kb
                   });
                 }
               })();
