@@ -2750,18 +2750,23 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
         >
           <div style={{ maxWidth: '864px', width: '100%', padding: '16px 32px', margin: '0 auto', boxSizing: 'border-box' }}>
             <div style={{ position: 'relative', width: '100%' }}>
-              <Input
+              <input
                 ref={inputRef}
                 placeholder={placeholderText || "Ask us anything"}
                 value={input}
                 onChange={(e) => handleInputChange(e)}
                 onKeyDown={handleKeyPress}
                 disabled={isLoading}
-                width="100%"
-                size="large"
-                clearable={false}
                 style={{
+                  width: '100%',
+                  padding: '16px',
                   paddingRight: input.trim() ? '48px' : '16px',
+                  fontSize: '16px',
+                  border: '2px solid #333',
+                  borderRadius: '12px',
+                  background: '#1a1a1a',
+                  color: '#fff',
+                  outline: 'none',
                   transition: 'padding-right 0.2s ease'
                 }}
               />
