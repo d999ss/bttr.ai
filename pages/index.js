@@ -1799,23 +1799,34 @@ Let me know what catches your interest!`
               padding-bottom: 40px !important;
             }
             
-            .input-bar {
+            /* Ultra aggressive input field styling */
+            div.input-bar {
               position: fixed !important;
-              bottom: max(env(safe-area-inset-bottom), 20px) !important;
+              bottom: 0px !important;
+              left: 0px !important;
+              right: 0px !important;
+              width: 100vw !important;
               z-index: 999999 !important;
               visibility: visible !important;
               opacity: 1 !important;
               transform: translateY(0) !important;
               display: block !important;
-              min-height: 80px !important;
-              background: rgba(255, 0, 0, 0.8) !important; /* Temporary red debug background */
+              min-height: 100px !important;
+              background: red !important; /* Super visible red */
+              border: 5px solid blue !important;
+              padding: 20px !important;
             }
             
-            /* Force input visibility on iPhone */
-            .input-bar, .input-bar * {
+            /* Force all child elements visible */
+            div.input-bar,
+            div.input-bar *,
+            div.input-bar div,
+            div.input-bar input,
+            div.input-bar textarea {
               visibility: visible !important;
               opacity: 1 !important;
               display: block !important;
+              background: rgba(255, 0, 0, 0.5) !important;
             }
             
             /* Ensure content doesn't overlap input */
@@ -2713,6 +2724,22 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           <div ref={messagesEndRef} />
           </div>
         </main>
+
+        {/* DEBUG INFO FOR MOBILE */}
+        <div style={{
+          position: 'fixed',
+          top: '50px',
+          left: '10px',
+          background: 'yellow',
+          padding: '10px',
+          zIndex: 999999,
+          fontSize: '12px',
+          color: 'black'
+        }}>
+          Screen: {typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : 'loading'}<br/>
+          UserAgent: {typeof navigator !== 'undefined' ? (navigator.userAgent.includes('iPhone') ? 'iPhone' : 'Other') : 'loading'}<br/>
+          Mobile Input Visible: {isMobileInputVisible ? 'true' : 'false'}
+        </div>
 
         {/* iOS-style Input Bar */}
         <div 
