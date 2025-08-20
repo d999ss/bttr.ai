@@ -1799,25 +1799,26 @@ Let me know what catches your interest!`
               padding-bottom: 40px !important;
             }
             
-            /* Ultra aggressive input field styling */
+            /* Fixed input field styling */
             div.input-bar {
               position: fixed !important;
-              top: 200px !important; /* Move to middle of screen for testing */
+              bottom: env(safe-area-inset-bottom, 0px) !important;
               left: 0px !important;
               right: 0px !important;
               width: 100vw !important;
-              height: 120px !important;
+              height: 80px !important;
               z-index: 99999999 !important;
               visibility: visible !important;
               opacity: 1 !important;
               transform: translateY(0) translateZ(0) !important;
               display: block !important;
-              min-height: 120px !important;
-              background: red !important; /* Super visible red */
-              border: 10px solid blue !important;
-              padding: 20px !important;
+              min-height: 80px !important;
+              background: rgba(0, 0, 0, 0.8) !important; /* Back to dark styling */
+              border: none !important;
+              padding: 16px !important;
               pointer-events: all !important;
               isolation: isolate !important;
+              backdrop-filter: blur(20px) !important;
             }
             
             /* Force all child elements visible */
@@ -2728,21 +2729,6 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           </div>
         </main>
 
-        {/* DEBUG INFO FOR MOBILE */}
-        <div style={{
-          position: 'fixed',
-          top: '50px',
-          left: '10px',
-          background: 'yellow',
-          padding: '10px',
-          zIndex: 999999,
-          fontSize: '12px',
-          color: 'black'
-        }}>
-          Screen: {typeof window !== 'undefined' ? `${window.innerWidth}x${window.innerHeight}` : 'loading'}<br/>
-          UserAgent: {typeof navigator !== 'undefined' ? (navigator.userAgent.includes('iPhone') ? 'iPhone' : 'Other') : 'loading'}<br/>
-          Mobile Input Visible: {isMobileInputVisible ? 'true' : 'false'}
-        </div>
 
         {/* iOS-style Input Bar */}
         <div 
