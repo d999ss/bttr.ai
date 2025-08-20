@@ -2000,7 +2000,7 @@ Let me know what catches your interest!`
         {/* Floating Navigation Header - Independent overlay */}
         <header className="mobile-hide" role="banner" style={{
           position: 'fixed',
-          top: 0,
+          top: '32px',
           left: 0,
           right: 0,
           width: '100%',
@@ -2365,7 +2365,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: 'calc(100vh - 140px)', // Account for header
-            paddingTop: '60px',
+            paddingTop: '92px',
             paddingBottom: '60px' // Less bottom padding since input is inline
           } : {
             /* Mobile: Top-aligned with fixed bottom input */
