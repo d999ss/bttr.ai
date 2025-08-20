@@ -1035,9 +1035,11 @@ Let me know what catches your interest!`
         />
         
         {/* Viewport and Mobile */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
         <meta name="theme-color" content="#000000" />
         <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="color-scheme" content="dark only" />
         <meta name="supported-color-schemes" content="dark" />
         
@@ -1791,29 +1793,44 @@ Let me know what catches your interest!`
             }
           }
           
-          /* Mobile: Ensure input field is always visible */
+          /* iPhone Layout Fix - Stack header, content, input */
           @media (max-width: 768px) {
-            .mobile-content {
-              height: calc(100vh - 120px) !important;
-              bottom: 120px !important;
-              padding-bottom: 40px !important;
+            /* Header at top - safe from notch */
+            .mobile-header {
+              position: fixed !important;
+              top: 0 !important;
+              left: 0 !important;
+              right: 0 !important;
+              height: 80px !important;
+              padding-top: 40px !important; /* Safe area for notch */
+              z-index: 1000 !important;
+              background: rgba(0, 0, 0, 0.9) !important;
             }
             
-            /* Fixed iPhone input field - positioned above Safari's bottom bar */
+            /* Content in middle - scrollable */
+            .mobile-content {
+              position: fixed !important;
+              top: 80px !important; /* Below header */
+              bottom: 100px !important; /* Above input */
+              left: 0 !important;
+              right: 0 !important;
+              overflow-y: auto !important;
+              padding: 20px !important;
+            }
+            
+            /* Input at bottom - always visible */
             .input-bar {
-              position: fixed;
-              bottom: 90px; /* Move up to avoid Safari's bottom interface */
-              left: 0;
-              right: 0;
-              width: 100%;
-              height: 80px;
-              z-index: 2147483647;
-              background: rgba(0, 0, 0, 0.8);
-              backdrop-filter: blur(20px);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              padding: 16px;
+              position: fixed !important;
+              bottom: 20px !important; /* Safe from Safari bottom */
+              left: 20px !important;
+              right: 20px !important;
+              height: 60px !important;
+              z-index: 2000 !important;
+              background: rgba(0, 0, 0, 0.9) !important;
+              border-radius: 30px !important;
+              display: flex !important;
+              align-items: center !important;
+              padding: 0 20px !important;
             }
             
             /* Force all child elements visible */
@@ -2119,14 +2136,15 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           justifyContent: 'space-between',
           alignItems: 'center',
           boxSizing: 'border-box',
-          paddingTop: '50px', // Increased to clear notch area  
-          height: '94px', // 44px content + 50px top padding
+          paddingTop: '50px', // Safe distance from notch
+          height: '90px',
           background: 'rgba(0, 0, 0, 0.9)',
           position: 'fixed',
           top: '0',
           left: '0',
           right: '0',
-          zIndex: '1000'
+          zIndex: '1000',
+          backdropFilter: 'blur(20px)'
         }}>
           {/* Mobile Logo */}
           <h1 
@@ -2734,12 +2752,47 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
         </main>
 
 
+        {/* INPUT FIELD - Proper position for mobile Safari */}
+        <div style={{
+          position: 'fixed',
+          bottom: '30px', // Should work with proper viewport now
+          left: '15px',
+          right: '15px',
+          height: '56px',
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          borderRadius: '28px',
+          zIndex: 999999999,
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0 20px',
+          backdropFilter: 'blur(20px)'
+        }}>
+          <input
+            ref={inputRef}
+            placeholder="Type here"
+            value={input}
+            onChange={(e) => handleInputChange(e)}
+            onKeyDown={handleKeyPress}
+            style={{
+              width: '100%',
+              height: '40px',
+              fontSize: '16px',
+              padding: '0 10px',
+              border: 'none',
+              borderRadius: '20px',
+              backgroundColor: 'white',
+              color: 'black'
+            }}
+          />
+        </div>
+
         {/* iOS-style Input Bar */}
         <div 
           className="input-bar mobile-visible" 
           role="form" 
           aria-label="Chat input"
-          style={{ display: 'block !important', visibility: 'visible !important' }}
+          style={{ display: 'none !important' }}
         >
           <div style={{ maxWidth: '864px', width: '100%', padding: '16px 32px', margin: '0 auto', boxSizing: 'border-box' }}>
             <div style={{ position: 'relative', width: '100%' }}>
