@@ -1799,20 +1799,21 @@ Let me know what catches your interest!`
               padding-bottom: 40px !important;
             }
             
-            /* Simplified iPhone input field */
+            /* Fixed iPhone input field - positioned above Safari's bottom bar */
             .input-bar {
               position: fixed;
-              bottom: 0;
+              bottom: 90px; /* Move up to avoid Safari's bottom interface */
               left: 0;
               right: 0;
               width: 100%;
-              height: 100px;
+              height: 80px;
               z-index: 2147483647;
-              background: red;
-              border: 5px solid yellow;
+              background: rgba(0, 0, 0, 0.8);
+              backdrop-filter: blur(20px);
               display: flex;
               align-items: center;
               justify-content: center;
+              padding: 16px;
             }
             
             /* Force all child elements visible */
@@ -2112,48 +2113,15 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           </div>
         </header>
 
-        {/* DEBUG: Safe area info */}
-        <div style={{
-          position: 'fixed',
-          top: '10px',
-          right: '10px',
-          background: 'lime',
-          padding: '5px',
-          fontSize: '10px',
-          zIndex: 999999999,
-          color: 'black'
-        }}>
-          Safe Top: {typeof window !== 'undefined' && CSS.supports('padding-top: env(safe-area-inset-top)') ? 'YES' : 'NO'}
-        </div>
-
-        {/* BYPASS TEST: Move element up from bottom */}
-        <div style={{
-          position: 'fixed',
-          bottom: '100px',
-          left: '0px',
-          width: '100%',
-          height: '80px',
-          backgroundColor: 'purple',
-          border: '5px solid orange',
-          zIndex: 9999999,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          fontSize: '16px',
-          fontWeight: 'bold'
-        }}>
-          TEST - 100px from bottom
-        </div>
 
         {/* Mobile Navigation Header */}
         <header className="mobile-header mobile-show" role="banner" style={{
           justifyContent: 'space-between',
           alignItems: 'center',
           boxSizing: 'border-box',
-          paddingTop: '44px', // Standard iPhone status bar height
-          height: '88px', // 44px content + 44px status bar
-          background: 'rgba(0, 0, 0, 0.9)', // More opaque for debugging
+          paddingTop: '50px', // Increased to clear notch area  
+          height: '94px', // 44px content + 50px top padding
+          background: 'rgba(0, 0, 0, 0.9)',
           position: 'fixed',
           top: '0',
           left: '0',
