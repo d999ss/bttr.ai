@@ -1806,15 +1806,18 @@ Let me know what catches your interest!`
               left: 0px !important;
               right: 0px !important;
               width: 100vw !important;
-              z-index: 999999 !important;
+              height: 120px !important;
+              z-index: 99999999 !important;
               visibility: visible !important;
               opacity: 1 !important;
-              transform: translateY(0) !important;
+              transform: translateY(0) translateZ(0) !important;
               display: block !important;
-              min-height: 100px !important;
+              min-height: 120px !important;
               background: red !important; /* Super visible red */
-              border: 5px solid blue !important;
+              border: 10px solid blue !important;
               padding: 20px !important;
+              pointer-events: all !important;
+              isolation: isolate !important;
             }
             
             /* Force all child elements visible */
