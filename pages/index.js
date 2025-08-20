@@ -2332,16 +2332,22 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           alignItems: 'center',
           paddingTop: 'max(var(--safe-top), 90px)', // Safe from header
           paddingBottom: 'calc(96px + var(--kb, 0px) + env(safe-area-inset-bottom))',
-          /* Dynamic spacing based on content type */
+          /* Dynamic spacing based on content type and device */
           ...(messages.length === 0 && !showPortfolio && !showNews ? {
             /* Welcome message: True viewport centering */
             justifyContent: 'center',
             padding: 0
+          } : typeof window !== 'undefined' && window.innerWidth >= 768 ? {
+            /* Desktop chat mode: Vertically centered content */
+            justifyContent: 'center',
+            minHeight: 'calc(100vh - 120px)', // Account for header and input
+            paddingTop: '60px',
+            paddingBottom: '120px'
           } : {
-            /* Chat mode: Normal flow with minimal overlay clearance */
+            /* Mobile chat mode: Normal flow with mobile overlay clearance */
             justifyContent: 'flex-start',
             paddingTop: showMobileMenu ? 'calc(140px + max(env(safe-area-inset-top), 44px))' : 'calc(60px + max(env(safe-area-inset-top), 44px))',
-            paddingBottom: typeof window !== 'undefined' && window.innerWidth >= 768 ? '240px' : 'calc(160px + env(safe-area-inset-bottom))'
+            paddingBottom: 'calc(160px + env(safe-area-inset-bottom))'
           })
         }}>
           <div style={{
