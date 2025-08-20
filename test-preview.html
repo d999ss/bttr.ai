@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Preview Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #0070f3;
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 30px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        .button {
+            background-color: #0070f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0051a2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Browser Preview Test</h1>
+    <p>If you can see this page, the browser preview is working correctly. This is a simple test page to verify that the browser preview functionality is working in your IDE.</p>
+    <p>Current time: <span id="current-time"></span></p>
+    <button class="button" id="test-button">Click Me</button>
+
+    <script>
+        // Update the current time
+        function updateTime() {
+            document.getElementById('current-time').textContent = new Date().toLocaleTimeString();
+        }
+        
+        // Update time immediately and then every second
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // Add click event to button
+        document.getElementById('test-button').addEventListener('click', function() {
+            alert('Button clicked! Browser preview is working correctly.');
+        });
+    </script>
+</body>
+</html>

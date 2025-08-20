@@ -12,6 +12,7 @@
     "@ai-sdk/openai": "^1.0.0",
     "@ai-sdk/react": "^1.0.0",
     "@geist-ui/core": "^2.3.8",
+    "@stripe/stripe-js": "^7.8.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/postgres": "^0.10.0",
     "@vercel/speed-insights": "^1.2.0",
@@ -25,6 +26,7 @@
     "react-markdown": "^9.1.0",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
+    "stripe": "^18.4.0",
     "twilio": "^5.8.0"
   },
   "devDependencies": {

@@ -21,7 +21,9 @@ const plans = [
     ],
     color: '#007AFF',
     gradient: 'linear-gradient(135deg, rgba(0,122,255,0.1) 0%, rgba(0,212,255,0.1) 100%)',
-    border: 'rgba(0,122,255,0.3)'
+    border: 'rgba(0,122,255,0.3)',
+    priceId: 'price_core_plan', // Replace with actual Stripe price ID
+    stripeLink: 'https://buy.stripe.com/test_core_plan' // Replace with actual Stripe link
   },
   {
     id: 'pro',
@@ -38,7 +40,9 @@ const plans = [
     ],
     color: '#FFD700',
     gradient: 'linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,165,0,0.1) 100%)',
-    border: '#FFD700'
+    border: '#FFD700',
+    priceId: 'price_pro_plan', // Replace with actual Stripe price ID
+    stripeLink: 'https://buy.stripe.com/test_pro_plan' // Replace with actual Stripe link
   },
   {
     id: 'enterprise',
@@ -57,7 +61,9 @@ const plans = [
     ],
     color: '#8B45C4',
     gradient: 'linear-gradient(135deg, rgba(139,69,196,0.1) 0%, rgba(88,28,135,0.1) 100%)',
-    border: 'rgba(139,69,196,0.3)'
+    border: 'rgba(139,69,196,0.3)',
+    priceId: 'price_enterprise_plan', // Replace with actual Stripe price ID
+    stripeLink: 'mailto:hello@makebttr.com?subject=Enterprise%20Plan%20Inquiry' // Contact for enterprise
   }
 ]
 
@@ -95,6 +101,7 @@ export default function Subscription({ onSubscriptionAction }) {
   const [hoveredPlan, setHoveredPlan] = useState(null)
   const [hoveredDeliverable, setHoveredDeliverable] = useState(null)
   const [isMobile, setIsMobile] = useState(false)
+  const [loading, setLoading] = useState('')
   
   useEffect(() => {
     const checkMobile = () => {
@@ -104,6 +111,51 @@ export default function Subscription({ onSubscriptionAction }) {
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
+
+  const handleCheckout = async (plan) => {
+    if (plan.id === 'enterprise') {
+      // Enterprise plan redirects to contact
+      window.open(plan.stripeLink, '_blank')
+      return
+    }
+
+    setLoading(plan.id)
+    
+    try {
+      // For demo purposes, we'll use the stripeLink directly
+      // In production, you'd create a checkout session via your API
+      
+      // Option 1: Direct Stripe link (for quick setup)
+      if (plan.stripeLink) {
+        window.open(plan.stripeLink, '_blank')
+        setLoading('')
+        return
+      }
+      
+      // Option 2: Custom checkout session (for full control)
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: plan.priceId,
+          planName: plan.name,
+        }),
+      })
+      
+      const { url } = await response.json()
+      
+      if (url) {
+        window.location.href = url
+      }
+    } catch (error) {
+      console.error('Error creating checkout session:', error)
+      alert('Something went wrong. Please try again.')
+    } finally {
+      setLoading('')
+    }
+  }
 
   return (
     <div style={{
@@ -157,7 +209,7 @@ export default function Subscription({ onSubscriptionAction }) {
         {plans.map((plan) => (
           <button
             key={plan.id}
-            onClick={() => onSubscriptionAction && onSubscriptionAction(plan)}
+            onClick={() => handleCheckout(plan)}
             onMouseEnter={() => setHoveredPlan(plan.id)}
             onMouseLeave={() => setHoveredPlan(null)}
             style={{
@@ -470,30 +522,35 @@ export default function Subscription({ onSubscriptionAction }) {
           justifyContent: 'center',
           flexWrap: 'wrap'
         }}>
-          <button style={{
-            background: 'linear-gradient(135deg, #007AFF 0%, #0051D5 100%)',
-            color: 'white',
-            padding: '8px 16px',
-            borderRadius: '6px',
-            border: 'none',
-            fontWeight: '500',
-            fontSize: '10px',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease'
-          }}>
-            Start Trial
+          <button 
+            onClick={() => handleCheckout(plans[0])} // Default to Core plan for trial
+            disabled={loading === plans[0].id}
+            style={{
+              background: loading === plans[0].id ? 'rgba(0,122,255,0.5)' : 'linear-gradient(135deg, #007AFF 0%, #0051D5 100%)',
+              color: 'white',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              border: 'none',
+              fontWeight: '500',
+              fontSize: '10px',
+              cursor: loading === plans[0].id ? 'not-allowed' : 'pointer',
+              transition: 'all 0.2s ease'
+            }}>
+            {loading === plans[0].id ? 'Loading...' : 'Start Trial'}
           </button>
-          <button style={{
-            background: 'rgba(255,255,255,0.1)',
-            color: 'white',
-            padding: '8px 16px',
-            borderRadius: '6px',
-            border: '1px solid rgba(255,255,255,0.2)',
-            fontWeight: '500',
-            fontSize: '10px',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease'
-          }}>
+          <button 
+            onClick={() => window.open('https://calendly.com/d999ss-rvyb', '_blank')}
+            style={{
+              background: 'rgba(255,255,255,0.1)',
+              color: 'white',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              border: '1px solid rgba(255,255,255,0.2)',
+              fontWeight: '500',
+              fontSize: '10px',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}>
             Book Call
           </button>
         </div>
