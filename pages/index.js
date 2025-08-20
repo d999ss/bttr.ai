@@ -2396,18 +2396,19 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
             })
           }}>
           
-          {/* Welcome Message */}
+          {/* Welcome Screen - Clean Structure */}
           {messages.length === 0 && !showPortfolio && !showNews && (
-            <div className="mobile-welcome message-container" style={{
+            <div style={{
               width: '100%',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'center',
               alignItems: 'center',
-              gap: '32px',
-              textAlign: 'center',
-              flex: '1 1 auto'
+              justifyContent: 'center',
+              gap: '48px',
+              minHeight: '400px',
+              marginTop: typeof window !== 'undefined' && window.innerWidth < 768 ? '40px' : '0'
             }}>
+              {/* Welcome Headline */}
               <div 
                 className="welcome-message"
                 role="status"
@@ -2416,26 +2417,25 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
                 style={{
                   color: '#FFFFFF',
                   textAlign: 'center',
-                  maxWidth: '100%',
-                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.4)'
-                }}>
-                <div style={{ 
-                  position: 'relative',
+                  maxWidth: '800px',
+                  width: '100%',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.4)',
                   opacity: isWelcomeComplete ? 1 : 0,
                   transition: 'opacity 1.2s ease-out'
                 }}>
-                  {welcomeText}
-                </div>
+                {welcomeText}
               </div>
               
-              {/* Conversation Suggestions */}
+              {/* Conversation Buttons Grid */}
               {isWelcomeComplete && (
-                <div className="conversation-suggestions" style={{
+                <div style={{
                   display: 'flex',
                   flexWrap: 'wrap',
                   gap: '12px',
                   justifyContent: 'center',
-                  maxWidth: '600px',
+                  alignItems: 'center',
+                  maxWidth: '700px',
+                  width: '100%',
                   opacity: isWelcomeComplete ? 1 : 0,
                   transform: isWelcomeComplete ? 'translateY(0)' : 'translateY(20px)',
                   transition: 'all 1s ease-out 0.5s'
@@ -2456,16 +2456,18 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
                         background: 'rgba(255, 255, 255, 0.1)',
                         border: '1px solid rgba(255, 255, 255, 0.2)',
                         borderRadius: '24px',
-                        padding: '8px 16px',
+                        padding: '10px 20px',
                         color: '#FFFFFF',
-                        fontSize: '12px',
+                        fontSize: '14px',
+                        fontWeight: '500',
                         fontFamily: 'inherit',
                         textShadow: '0 1px 2px rgba(0, 0, 0, 0.4)',
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
                         backdropFilter: 'blur(10px)',
                         WebkitBackdropFilter: 'blur(10px)',
-                        whiteSpace: 'nowrap'
+                        whiteSpace: 'nowrap',
+                        minWidth: '120px'
                       }}
                       onMouseEnter={(e) => {
                         e.target.style.background = 'rgba(255, 255, 255, 0.15)'
