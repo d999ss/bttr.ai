@@ -698,7 +698,7 @@ Let me know what catches your interest!`
     
     // Set initial visibility based on device type
     if (typeof window !== 'undefined') {
-      setIsMobileInputVisible(!isMobile) // Hide on mobile, show on desktop
+      setIsMobileInputVisible(true) // Always show input field
     }
     
     // Ensure welcome message is visible first
@@ -2716,9 +2716,10 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
 
         {/* iOS-style Input Bar */}
         <div 
-          className={`input-bar ${!isMobileInputVisible ? 'mobile-hidden' : 'mobile-visible'}`} 
+          className="input-bar mobile-visible" 
           role="form" 
           aria-label="Chat input"
+          style={{ display: 'block !important', visibility: 'visible !important' }}
         >
           <div style={{ maxWidth: '864px', width: '100%', padding: '16px 32px', margin: '0 auto', boxSizing: 'border-box' }}>
             <div style={{ position: 'relative', width: '100%' }}>
