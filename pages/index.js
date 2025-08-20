@@ -1035,11 +1035,9 @@ Let me know what catches your interest!`
         />
         
         {/* Viewport and Mobile */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
         <meta name="theme-color" content="#000000" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="color-scheme" content="dark only" />
         <meta name="supported-color-schemes" content="dark" />
         
@@ -2752,15 +2750,15 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
         </main>
 
 
-        {/* INPUT FIELD - Proper position for mobile Safari */}
+        {/* INPUT FIELD - Positioned in safe area */}
         <div style={{
           position: 'fixed',
-          bottom: '30px', // Should work with proper viewport now
+          bottom: '150px', // Much higher to avoid Safari's problematic bottom area
           left: '15px',
           right: '15px',
           height: '56px',
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
           borderRadius: '28px',
           zIndex: 999999999,
           display: 'flex',
