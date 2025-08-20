@@ -2752,20 +2752,21 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
         </main>
 
 
-        {/* STICKY FOOTER INPUT - iOS Safari safe */}
-        <footer style={{ position: 'sticky',
-          bottom: 0,
-          paddingBottom: 'max(var(--safe-bottom), 12px)',
+        {/* FIXED FOOTER INPUT - iOS Safari safe */}
+        <footer style={{
+          position: 'fixed',
+          left: 0,
+          right: 0,
+          bottom: 'calc(var(--safe-bottom) + var(--kb, 0px))',
+          zIndex: 9999,
           paddingTop: '12px',
           paddingLeft: '16px',
           paddingRight: '16px',
+          paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)',
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
           backdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-          zIndex: 1000,
-          transform: 'translateY(calc(-1 * var(--kb, 0px)))',
-          willChange: 'transform'
-         }}>
+          borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+        }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
