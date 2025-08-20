@@ -1329,7 +1329,7 @@ Let me know what catches your interest!`
 
           .input-bar {
             position: fixed !important;
-            bottom: env(safe-area-inset-bottom) !important;
+            bottom: max(env(safe-area-inset-bottom), 0px) !important;
             left: 0 !important;
             right: 0 !important;
             z-index: 999999 !important;
@@ -1338,9 +1338,9 @@ Let me know what catches your interest!`
             backdrop-filter: blur(80px) saturate(150%);
             -webkit-backdrop-filter: blur(80px) saturate(150%);
             width: 100% !important;
+            min-height: 80px !important; /* Ensure minimum height for visibility */
             box-sizing: border-box;
             pointer-events: auto;
-            min-height: 64px;
             /* Complete isolation from content flow */
             margin: 0 !important;
             top: auto !important;
@@ -1791,8 +1791,25 @@ Let me know what catches your interest!`
             }
           }
           
+          /* Mobile: Ensure input field is always visible */
+          @media (max-width: 768px) {
+            .mobile-content {
+              height: calc(100vh - 100px) !important;
+              bottom: 100px !important;
+            }
+            
+            .input-bar {
+              position: fixed !important;
+              bottom: max(env(safe-area-inset-bottom), 0px) !important;
+              z-index: 999999 !important;
+              visibility: visible !important;
+              opacity: 1 !important;
+              transform: translateY(0) !important;
+            }
+          }
+          
           /* Desktop: Ensure proper bottom spacing for chat messages */
-          @media (min-width: 768px) {
+          @media (min-width: 769px) {
             .mobile-content {
               padding-bottom: 200px !important; /* Extra bottom space on desktop */
             }
@@ -2227,13 +2244,13 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
 
         {/* Terminal Content - Flows underneath floating overlays */}
         <main className="mobile-content mobile-fullscreen" role="region" aria-label="Chat messages" style={{
-          height: '100vh',
+          height: window.innerWidth <= 768 ? 'calc(100vh - 100px)' : '100vh', // Leave space for input on mobile
           overflowY: 'auto',
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          bottom: 0,
+          bottom: window.innerWidth <= 768 ? '100px' : 0, // Space for input field on mobile
           background: 'transparent',
           WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'smooth',
