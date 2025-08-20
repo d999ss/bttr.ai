@@ -221,7 +221,7 @@ export default function Home() {
           const container = document.querySelector('.mobile-content')
           if (container) {
             // More aggressive scrolling on desktop to ensure message visibility
-            const isDesktop = window.innerWidth >= 768
+            const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768
             const extraScroll = isDesktop ? 100 : 0
             container.scrollTop = container.scrollHeight + extraScroll
           }
@@ -241,7 +241,7 @@ export default function Home() {
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = chatContainer
       // More generous threshold on desktop to prevent auto-scroll interference
-      const threshold = window.innerWidth >= 768 ? 100 : 50
+      const threshold = typeof window !== 'undefined' && window.innerWidth >= 768 ? 100 : 50
       const isAtBottom = scrollTop + clientHeight >= scrollHeight - threshold
       const isAtTop = scrollTop <= 10
       
@@ -371,7 +371,7 @@ Let me know what catches your interest!`
   // Detect mobile device
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobileDevice(window.innerWidth < 768)
+      setIsMobileDevice(typeof window !== 'undefined' && window.innerWidth < 768)
     }
     checkMobile()
     window.addEventListener('resize', checkMobile)
@@ -689,8 +689,8 @@ Let me know what catches your interest!`
     // Track page load
     trackEvent('page_load', {
       user_agent: navigator.userAgent,
-      viewport_width: window.innerWidth,
-      viewport_height: window.innerHeight
+      viewport_width: typeof window !== 'undefined' ? window.innerWidth : 1024,
+      viewport_height: typeof window !== 'undefined' ? window.innerHeight : 768
     })
     
     // For mobile, don't auto-focus to prevent keyboard popup on load
@@ -2244,13 +2244,13 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
 
         {/* Terminal Content - Flows underneath floating overlays */}
         <main className="mobile-content mobile-fullscreen" role="region" aria-label="Chat messages" style={{
-          height: window.innerWidth <= 768 ? 'calc(100vh - 100px)' : '100vh', // Leave space for input on mobile
+          height: typeof window !== 'undefined' && window.innerWidth <= 768 ? 'calc(100vh - 100px)' : '100vh', // Leave space for input on mobile
           overflowY: 'auto',
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          bottom: window.innerWidth <= 768 ? '100px' : 0, // Space for input field on mobile
+          bottom: typeof window !== 'undefined' && window.innerWidth <= 768 ? '100px' : 0, // Space for input field on mobile
           background: 'transparent',
           WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'smooth',
@@ -2270,7 +2270,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
             /* Chat mode: Normal flow with minimal overlay clearance */
             justifyContent: 'flex-start',
             paddingTop: showMobileMenu ? 'calc(140px + env(safe-area-inset-top))' : 'calc(60px + env(safe-area-inset-top))',
-            paddingBottom: window.innerWidth >= 768 ? '240px' : 'calc(160px + env(safe-area-inset-bottom))'
+            paddingBottom: typeof window !== 'undefined' && window.innerWidth >= 768 ? '240px' : 'calc(160px + env(safe-area-inset-bottom))'
           })
         }}>
           <div style={{
@@ -2675,7 +2675,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
             </div>
           )}
           {/* Extra padding to ensure last message is visible above input */}
-          <div style={{ height: window.innerWidth >= 768 ? '120px' : '60px' }} />
+          <div style={{ height: typeof window !== 'undefined' && window.innerWidth >= 768 ? '120px' : '60px' }} />
           <div ref={messagesEndRef} />
           </div>
         </main>
