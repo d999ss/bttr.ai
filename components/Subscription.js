@@ -22,8 +22,8 @@ const plans = [
     color: '#007AFF',
     gradient: 'linear-gradient(135deg, rgba(0,122,255,0.1) 0%, rgba(0,212,255,0.1) 100%)',
     border: 'rgba(0,122,255,0.3)',
-    priceId: 'price_core_plan', // Replace with actual Stripe price ID
-    stripeLink: 'https://buy.stripe.com/test_core_plan' // Replace with actual Stripe link
+    priceId: 'price_1QwaSzFBsBXBGcaOxCoreTest', // Test price ID for Core plan
+    stripeLink: null // Will use checkout session API
   },
   {
     id: 'pro',
@@ -41,8 +41,8 @@ const plans = [
     color: '#FFD700',
     gradient: 'linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,165,0,0.1) 100%)',
     border: '#FFD700',
-    priceId: 'price_pro_plan', // Replace with actual Stripe price ID
-    stripeLink: 'https://buy.stripe.com/test_pro_plan' // Replace with actual Stripe link
+    priceId: 'price_1QwaTzFBsBXBGcaOxProTest', // Test price ID for Pro plan
+    stripeLink: null // Will use checkout session API
   },
   {
     id: 'enterprise',
@@ -62,7 +62,7 @@ const plans = [
     color: '#8B45C4',
     gradient: 'linear-gradient(135deg, rgba(139,69,196,0.1) 0%, rgba(88,28,135,0.1) 100%)',
     border: 'rgba(139,69,196,0.3)',
-    priceId: 'price_enterprise_plan', // Replace with actual Stripe price ID
+    priceId: null, // Enterprise requires custom pricing
     stripeLink: 'mailto:hello@makebttr.com?subject=Enterprise%20Plan%20Inquiry' // Contact for enterprise
   }
 ]
@@ -113,8 +113,8 @@ export default function Subscription({ onSubscriptionAction }) {
   }, [])
 
   const handleCheckout = async (plan) => {
-    if (plan.id === 'enterprise') {
-      // Enterprise plan redirects to contact
+    if (plan.id === 'enterprise' || plan.stripeLink) {
+      // Enterprise plan or custom link redirects directly
       window.open(plan.stripeLink, '_blank')
       return
     }
@@ -122,17 +122,7 @@ export default function Subscription({ onSubscriptionAction }) {
     setLoading(plan.id)
     
     try {
-      // For demo purposes, we'll use the stripeLink directly
-      // In production, you'd create a checkout session via your API
-      
-      // Option 1: Direct Stripe link (for quick setup)
-      if (plan.stripeLink) {
-        window.open(plan.stripeLink, '_blank')
-        setLoading('')
-        return
-      }
-      
-      // Option 2: Custom checkout session (for full control)
+      // Create checkout session via API
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
@@ -144,14 +134,20 @@ export default function Subscription({ onSubscriptionAction }) {
         }),
       })
       
+      if (!response.ok) {
+        throw new Error('Failed to create checkout session')
+      }
+      
       const { url } = await response.json()
       
       if (url) {
         window.location.href = url
+      } else {
+        throw new Error('No checkout URL received')
       }
     } catch (error) {
       console.error('Error creating checkout session:', error)
-      alert('Something went wrong. Please try again.')
+      alert('Unable to start checkout. Please ensure Stripe is properly configured with test keys.')
     } finally {
       setLoading('')
     }

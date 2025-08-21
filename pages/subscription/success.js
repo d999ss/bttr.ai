@@ -303,6 +303,7 @@ export default function SubscriptionSuccess() {
               </a>
             </p>
           </div>
+          </div>
         </main>
       </div>
     </>

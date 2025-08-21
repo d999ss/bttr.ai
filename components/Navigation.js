@@ -448,7 +448,9 @@ export default function Navigation({
       
       {/* Subscription Section */}
       {showSubscription && (
-        <div className="portfolio-enter" id="subscription-root">
+        <div className="portfolio-enter" id="subscription-root" style={{
+          paddingTop: 'calc(var(--nav-h, 80px) + 24px)'
+        }}>
           <Subscription onSubscriptionAction={onSubscriptionAction} />
         </div>
       )}

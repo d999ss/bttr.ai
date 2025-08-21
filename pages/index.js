@@ -2541,7 +2541,10 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           
           {/* Subscription Section */}
           {showSubscription && (
-            <div className="portfolio-enter" id="subscription-root">
+            <div className="message-container portfolio-enter" id="subscription-root" style={{ 
+              marginTop: '24px',
+              marginBottom: '40px'
+            }}>
               <Subscription onSubscriptionAction={handleSubscriptionAction} />
             </div>
           )}
