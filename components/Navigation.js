@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import Portfolio from './Portfolio'
 import News from './News'
 import Subscription from './Subscription'
@@ -19,10 +19,49 @@ export default function Navigation({
   onNewsClick,
   onSubscriptionAction
 }) {
+  const desktopHeaderRef = useRef(null)
+  const mobileHeaderRef = useRef(null)
+
+  useLayoutEffect(() => {
+    const setHeaderHeight = () => {
+      // Check which header is currently visible
+      const desktopHeader = desktopHeaderRef.current
+      const mobileHeader = mobileHeaderRef.current
+      
+      let activeHeader = null
+      if (desktopHeader && window.getComputedStyle(desktopHeader).display !== 'none') {
+        activeHeader = desktopHeader
+      } else if (mobileHeader && window.getComputedStyle(mobileHeader).display !== 'none') {
+        activeHeader = mobileHeader
+      }
+      
+      if (activeHeader) {
+        document.documentElement.style.setProperty(
+          '--nav-h',
+          `${activeHeader.getBoundingClientRect().height}px`
+        )
+      }
+    }
+    
+    setHeaderHeight()
+    
+    // Create ResizeObserver for both headers
+    const ro = new ResizeObserver(setHeaderHeight)
+    if (desktopHeaderRef.current) ro.observe(desktopHeaderRef.current)
+    if (mobileHeaderRef.current) ro.observe(mobileHeaderRef.current)
+    
+    window.addEventListener('resize', setHeaderHeight)
+    
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', setHeaderHeight)
+    }
+  }, [])
+
   return (
     <>
       {/* Desktop Navigation Header */}
-      <header className="mobile-hide" role="banner" style={{
+      <header ref={desktopHeaderRef} className="mobile-hide" role="banner" style={{
         position: 'fixed',
         top: 0,
         left: 0,
@@ -196,7 +235,7 @@ export default function Navigation({
       </header>
 
       {/* Mobile Navigation Header */}
-      <header className="mobile-header mobile-show" role="banner" style={{
+      <header ref={mobileHeaderRef} className="mobile-header mobile-show" role="banner" style={{
         justifyContent: 'space-between',
         alignItems: 'center',
         boxSizing: 'border-box',
@@ -409,7 +448,7 @@ export default function Navigation({
       
       {/* Subscription Section */}
       {showSubscription && (
-        <div className="message-container portfolio-enter" style={{ paddingTop: '120px', marginTop: '0px' }}>
+        <div className="portfolio-enter" id="subscription-root">
           <Subscription onSubscriptionAction={onSubscriptionAction} />
         </div>
       )}

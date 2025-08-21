@@ -155,13 +155,20 @@ export default function SubscriptionSuccess() {
         />
 
         {/* Success Content */}
-        <div style={{
-          maxWidth: '800px',
-          margin: '0 auto',
-          padding: '140px 20px 80px',
-          textAlign: 'center',
-          animation: 'fadeInUp 0.6s ease-out'
-        }}>
+        <main 
+          id="page"
+          style={{
+            paddingTop: 'calc(var(--nav-h, 96px) + env(safe-area-inset-top) + 40px)',
+            paddingBottom: '80px'
+          }}
+        >
+          <div style={{
+            maxWidth: '800px',
+            margin: '0 auto',
+            padding: '0 20px',
+            textAlign: 'center',
+            animation: 'fadeInUp 0.6s ease-out'
+          }}>
           <div style={{
             background: 'linear-gradient(135deg, rgba(0,122,255,0.1) 0%, rgba(0,212,255,0.1) 100%)',
             border: '1px solid rgba(0,122,255,0.3)',
@@ -296,7 +303,7 @@ export default function SubscriptionSuccess() {
               </a>
             </p>
           </div>
-        </div>
+        </main>
       </div>
     </>
   )

@@ -159,7 +159,14 @@ export default function BrandTransformationGuide() {
         />
 
         {/* Article */}
-        <article style={{ maxWidth: '800px', margin: '0 auto', padding: '100px 20px 80px' }}>
+        <main 
+          id="page"
+          style={{
+            paddingTop: 'calc(var(--nav-h, 96px) + env(safe-area-inset-top) + 40px)',
+            paddingBottom: '80px'
+          }}
+        >
+          <article style={{ maxWidth: '800px', margin: '0 auto', padding: '0 20px' }}>
           {/* Header */}
           <header style={{ marginBottom: '48px' }}>
             <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
@@ -336,6 +343,7 @@ export default function BrandTransformationGuide() {
             </div>
           </section>
         </article>
+        </main>
       </div>
     </>
   )

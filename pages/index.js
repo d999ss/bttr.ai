@@ -2363,40 +2363,44 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
         )}
 
         {/* SCROLLABLE CHAT CONTENT */}
-        <main className="mobile-content mobile-fullscreen" role="region" aria-label="Chat messages" style={{
-          flex: '1 1 auto',
-          overflowY: 'auto',
-          WebkitOverflowScrolling: 'touch',
-          scrollBehavior: 'smooth',
-          touchAction: 'pan-y',
-          overscrollBehavior: 'contain',
-          WebkitOverscrollBehavior: 'contain',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          
-          /* Dynamic spacing based on content type and device */
-          ...(messages.length === 0 && !showPortfolio && !showNews && !showSubscription ? {
-            /* Welcome message: True viewport centering */
-            justifyContent: 'center',
+        <main 
+          id="page"
+          className="mobile-content mobile-fullscreen" 
+          role="region" 
+          aria-label="Chat messages" 
+          style={{
+            flex: '1 1 auto',
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            scrollBehavior: 'smooth',
+            touchAction: 'pan-y',
+            overscrollBehavior: 'contain',
+            WebkitOverscrollBehavior: 'contain',
+            display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
-            minHeight: '100vh',
-            padding: '20px 0'
-          } : typeof window !== 'undefined' && window.innerWidth >= 768 ? {
-            /* Desktop: Vertically centered with space for inline input */
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 'calc(100vh - 140px)', // Account for header
-            paddingTop: '60px',
-            paddingBottom: '60px' // Less bottom padding since input is inline
-          } : {
-            /* Mobile: Top-aligned with fixed bottom input */
-            justifyContent: 'flex-start',
-            paddingTop: showMobileMenu ? 'calc(140px + max(env(safe-area-inset-top), 44px))' : 'calc(60px + max(env(safe-area-inset-top), 44px))',
-            paddingBottom: '160px', // Space for fixed bottom input
-            minHeight: 'calc(100dvh - 200px)'
-          })
-        }}>
+            paddingTop: 'calc(var(--nav-h, 96px) + env(safe-area-inset-top))',
+            
+            /* Dynamic spacing based on content type and device */
+            ...(messages.length === 0 && !showPortfolio && !showNews && !showSubscription ? {
+              /* Welcome message: True viewport centering */
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '100vh',
+              paddingBottom: '20px'
+            } : typeof window !== 'undefined' && window.innerWidth >= 768 ? {
+              /* Desktop: Vertically centered with space for inline input */
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: 'calc(100vh - 140px)', // Account for header
+              paddingBottom: '60px' // Less bottom padding since input is inline
+            } : {
+              /* Mobile: Top-aligned with fixed bottom input */
+              justifyContent: 'flex-start',
+              paddingBottom: '160px', // Space for fixed bottom input
+              minHeight: 'calc(100dvh - 200px)'
+            })
+          }}>
           <div style={{
             width: '100%',
             maxWidth: '864px',
@@ -2537,7 +2541,7 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
           
           {/* Subscription Section */}
           {showSubscription && (
-            <div className="message-container portfolio-enter" style={{ marginTop: '24px' }}>
+            <div className="portfolio-enter" id="subscription-root">
               <Subscription onSubscriptionAction={handleSubscriptionAction} />
             </div>
           )}
