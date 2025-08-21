@@ -1654,12 +1654,30 @@ export default function Home() {
               padding-left: 32px !important;
               padding-right: 32px !important;
             }
+            
+            /* Desktop subscription positioning - ensure proper positioning */
+            #subscription-root {
+              margin-top: 200px !important;
+              margin-bottom: 120px !important;
+              margin-left: 0 !important;
+              margin-right: 0 !important;
+              max-width: 100% !important;
+            }
           }
           
           @media (min-width: 1400px) {
             .desktop-constrained {
               padding-left: 64px !important;
               padding-right: 64px !important;
+            }
+            
+            /* Large desktop subscription positioning */
+            #subscription-root {
+              margin-top: 250px !important;
+              margin-bottom: 140px !important;
+              max-width: 1400px !important;
+              margin-left: auto !important;
+              margin-right: auto !important;
             }
           }
           
@@ -1742,6 +1760,13 @@ export default function Home() {
             animation: fadeInUp 0.4s ease-out;
           }
           
+          /* Simple subscription positioning - inline styles take precedence */
+          #subscription-root {
+            animation: fadeInUp 0.4s ease-out;
+            padding-top: 80px !important;
+            margin-bottom: 80px !important;
+          }
+          
           /* Mobile Portfolio and News spacing - with proper margins */
           @media (max-width: 767px) {
             .message-container.portfolio-enter {
@@ -1757,6 +1782,14 @@ export default function Home() {
               padding-bottom: 20px !important;
               margin-left: 0 !important;
               margin-right: 0 !important;
+            }
+            
+            /* Mobile subscription positioning - use ID selector for specificity */
+            #subscription-root {
+              padding-top: 60px !important;
+              margin-bottom: 60px !important;
+              padding-left: 20px !important;
+              padding-right: 20px !important;
             }
           }
           
@@ -1787,6 +1820,15 @@ export default function Home() {
               white-space: normal !important;
               width: 100% !important;
               box-sizing: border-box !important;
+            }
+            
+            /* Desktop subscription positioning - use ID selector for specificity */
+            #subscription-root {
+              padding-top: 80px !important;
+              margin-bottom: 80px !important;
+              max-width: 1200px !important;
+              margin-left: auto !important;
+              margin-right: auto !important;
             }
           }
           
@@ -2539,13 +2581,59 @@ We've helped brands like Ikon Pass, Air Company, and GE achieve breakthrough res
             </div>
           )}
           
-          {/* Subscription Section */}
+          {/* Subscription Section - Full Screen Takeover */}
           {showSubscription && (
-            <div className="message-container portfolio-enter" id="subscription-root" style={{ 
-              marginTop: '24px',
-              marginBottom: '40px'
-            }}>
-              <Subscription onSubscriptionAction={handleSubscriptionAction} />
+            <div 
+              id="subscription-root" 
+              style={{ 
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                width: '100vw',
+                height: '100vh',
+                zIndex: 9999,
+                background: '#0a0a0a',
+                overflowY: 'auto',
+                padding: '20px'
+              }}
+            >
+              <div style={{ 
+                position: 'relative', 
+                maxWidth: '1200px', 
+                margin: '0 auto',
+                paddingTop: '40px'
+              }}>
+                <button 
+                  onClick={() => {
+                    setShowSubscription(false)
+                  }}
+                  style={{
+                    position: 'absolute',
+                    top: '20px',
+                    right: '20px',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '8px',
+                    color: 'white',
+                    padding: '12px 20px',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    fontWeight: '500',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.2)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.1)'
+                  }}
+                >
+                  ✕ Close
+                </button>
+                <Subscription onSubscriptionAction={handleSubscriptionAction} />
+              </div>
             </div>
           )}
           
