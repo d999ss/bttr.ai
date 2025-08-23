@@ -1381,11 +1381,12 @@ export default function Home() {
           .nav-content-container {
             width: 100%;
             max-width: 864px;
-            padding: 8px 32px;
+            padding: 12px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-sizing: border-box;
+            min-height: 56px;
           }
           
           @media (min-width: 1400px) {
@@ -1396,7 +1397,7 @@ export default function Home() {
             }
             
             .nav-content-container {
-              padding: 8px 64px;
+              padding: 12px 64px;
             }
             
             .input-bar {
@@ -2030,7 +2031,7 @@ export default function Home() {
         }}>
           {/* Nav content container - matches conversation/input width */}
           <div className="nav-content-container">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '100%' }}>
             <h1 
               onClick={handleNameClick}
               style={{ 
@@ -2042,7 +2043,10 @@ export default function Home() {
                 fontWeight: 'normal',
                 fontFamily: 'inherit',
                 cursor: 'pointer',
-                transition: 'opacity 0.2s ease'
+                transition: 'opacity 0.2s ease',
+                display: 'inline-flex',
+                alignItems: 'center',
+                height: 'auto'
               }}
               onMouseEnter={(e) => e.target.style.opacity = '0.7'}
               onMouseLeave={(e) => e.target.style.opacity = '1'}
@@ -2052,7 +2056,7 @@ export default function Home() {
             </div>
             
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', height: '100%' }}>
             <button 
               style={{ 
                 color: '#FFFFFF', 
@@ -2062,8 +2066,11 @@ export default function Home() {
                 textDecoration: 'none',
                 background: 'none',
                 border: 'none',
-                padding: 0,
-                fontFamily: 'inherit'
+                padding: '4px 0',
+                fontFamily: 'inherit',
+                display: 'inline-flex',
+                alignItems: 'center',
+                height: 'auto'
               }}
               onClick={() => {
                 // Toggle portfolio and hide news/subscription
@@ -2085,8 +2092,11 @@ export default function Home() {
                 textDecoration: 'none',
                 background: 'none',
                 border: 'none',
-                padding: 0,
-                fontFamily: 'inherit'
+                padding: '4px 0',
+                fontFamily: 'inherit',
+                display: 'inline-flex',
+                alignItems: 'center',
+                height: 'auto'
               }}
               onClick={() => {
                 // Hide portfolio, news, and subscription if showing and start catalyst chat
@@ -2112,8 +2122,11 @@ export default function Home() {
                 textDecoration: 'none',
                 background: 'none',
                 border: 'none',
-                padding: 0,
-                fontFamily: 'inherit'
+                padding: '4px 0',
+                fontFamily: 'inherit',
+                display: 'inline-flex',
+                alignItems: 'center',
+                height: 'auto'
               }}
               onClick={() => {
                 // Toggle news and hide portfolio
@@ -2135,8 +2148,11 @@ export default function Home() {
                 textDecoration: 'none',
                 background: 'none',
                 border: 'none',
-                padding: 0,
-                fontFamily: 'inherit'
+                padding: '4px 0',
+                fontFamily: 'inherit',
+                display: 'inline-flex',
+                alignItems: 'center',
+                height: 'auto'
               }}
               onClick={() => {
                 // Toggle subscription and hide portfolio/news
@@ -2158,8 +2174,11 @@ export default function Home() {
                 textDecoration: 'none',
                 background: 'none',
                 border: 'none',
-                padding: 0,
-                fontFamily: 'inherit'
+                padding: '4px 0',
+                fontFamily: 'inherit',
+                display: 'inline-flex',
+                alignItems: 'center',
+                height: 'auto'
               }}
               onClick={(e) => {
                 e.preventDefault()
